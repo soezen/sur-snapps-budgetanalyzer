@@ -1,0 +1,11 @@
+.DS_Store
+.classpath
+.project
+.settings
+*.iml
+.idea
+/lib
+/pkg
+/s3cfg
+target
+/java

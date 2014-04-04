@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2010-2014, CloudBees Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+-->
+
+<!-- Application context definition for the application -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:jee="http://www.springframework.org/schema/jee" xmlns:jd="http://www.springframework.org/schema/jdbc"
+    xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/jdbc
+         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/jee
+         http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+    <!-- ========================= DATASOURCE DEFINITION ========================= -->
+    <context:property-placeholder
+        system-properties-mode="OVERRIDE" location="classpath:app.properties" />
+
+    <!-- JNDI DataSource for JEE environments -->
+    <!-- use relative jndi-name + resource-ref=true for https://jira.springsource.org/browse/SPR-4585 -->
+    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/mydb"
+        resource-ref="true" />
+
+    <!-- Testing "dataSource" configuration using an in-memory database (for 
+        unit tests, ...) -->
+    <!-- To enable, declare "-Dspring.profiles.active=dev-hsql" or @ActiveProfiles("dev-hsql") -->
+    <beans profile="dev-hsql">
+        <jdbc:embedded-database id="dataSource"
+            type="HSQL">
+            <jdbc:script location="classpath:db/hsqldb/initDB.sql" />
+            <jdbc:script location="classpath:db/hsqldb/populateDB.sql" />
+        </jdbc:embedded-database>
+    </beans>
+
+    <!-- Testing "dataSource" configuration connected to a MySQL DB -->
+    <!-- To enable, declare "-Dspring.profiles.active=dev-mysql" or @ActiveProfiles("dev") -->
+    <beans profile="dev-mysql">
+        <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+            p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
+            p:username="${jdbc.username}" p:password="${jdbc.password}" />
+
+        <jdbc:initialize-database data-source="dataSource">
+            <jdbc:script location="classpath:db/mysql/populateDB.sql" />
+        </jdbc:initialize-database>
+    </beans>
+</beans>

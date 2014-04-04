@@ -1,0 +1,26 @@
+{
+    "id": "tomcat7-spring-hibernate-jpa-clickstart",
+    "name": "Tomcat 7 Spring Hibernate JPA ClickStart",
+    "source": "git://github.com/CloudBees-community/tomcat7-spring-hibernate-jpa-clickstart.git",
+    "description" : "Tomcat 7 Spring JPA ClickStart",
+    "doc-url" : "https://github.com/CloudBees-community/tomcat7-spring-hibernate-jpa-clickstart/blob/master/README.md",
+    "icon" : "https://raw.github.com/CloudBees-community/tomcat7-spring-hibernate-jpa-clickstart/master/icon.png",
+    "app-package" : "https://repository-community.forge.cloudbees.com/release/localdomain/localhost/tomcat7-spring-hibernate-jpa-clickstart/1.1/tomcat7-spring-hibernate-jpa-clickstart-1.1.war",
+    "supported-by" : "cloudbees",
+    "order" : 100,
+
+    "runtime": {
+        "type": "tomcat7"
+    },
+    "databases": [
+        {
+            "type": "mysql",
+            "alias": "mydb"
+        }
+    ],
+    "build-with-jenkins": {
+        "template": {
+            "type": "maven"
+        }
+    }
+}
