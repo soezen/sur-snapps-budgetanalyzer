@@ -16,7 +16,7 @@
     <mvc:default-servlet-handler />
 
     <context:annotation-config />
-    <context:component-scan base-package="localdomain.localhost" />
+    <context:component-scan base-package="sur.snapps.budgetanalyzer" />
     <context:property-placeholder
         system-properties-mode="OVERRIDE" location="classpath:app.properties" />
 
@@ -44,7 +44,7 @@
         </property>
 
         <property name="persistenceUnitName" value="product" />
-        <property name="packagesToScan" value="localdomain.localhost" />
+        <property name="packagesToScan" value="sur.snapps" />
         <property name="jpaPropertyMap">
             <map>
                 <entry key="javax.persistence.validation.factory"
@@ -66,5 +66,5 @@
 
     <!-- Initialize data in the case Product table is empty -->
     <bean id="SampleDataCreatorContextListenerBean" lazy-init="false"
-        class="localdomain.localhost.service.SampleDataCreatorInitializer"></bean>
+        class="sur.snapps.budgetanalyzer.web.service.SampleDataCreatorInitializer"></bean>
 </beans>

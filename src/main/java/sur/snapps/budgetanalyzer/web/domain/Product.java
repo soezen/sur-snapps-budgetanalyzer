@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package localdomain.localhost.domain;
+package sur.snapps.budgetanalyzer.web.domain;
 
 import javax.persistence.*;
 

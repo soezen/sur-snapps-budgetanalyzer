@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package localdomain.localhost.service;
+package sur.snapps.budgetanalyzer.web.service;
 
-import localdomain.localhost.domain.Product;
+import sur.snapps.budgetanalyzer.web.domain.Product;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

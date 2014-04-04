@@ -1,11 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>localdomain.localhost</groupId>
-    <artifactId>tomcat7-spring-hibernate-jpa-clickstart</artifactId>
-    <name>tomcat7-spring-hibernate-jpa</name>
-    <description>Spring Hibernate JPA demo</description>
+    <groupId>sur.snapps</groupId>
+    <artifactId>budgetanalyzer</artifactId>
+    <name>Budget Analyzer</name>
     <packaging>war</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <properties>
         <org.springframework.version>3.2.4.RELEASE</org.springframework.version>
@@ -129,7 +128,7 @@
         </extensions>
     </build>
      <scm>
-        <connection>scm:git:https://github.com/CloudBees-community/tomcat7-spring-hibernate-jpa-clickstart.git</connection>
+        <connection>ssh://git@git.cloudbees.com/snapps/budgetanalyzer.git</connection>
         <tag>HEAD</tag>
     </scm>
     <distributionManagement>
@@ -145,15 +144,8 @@
     <developers>
         <developer>
             <id>1</id>
-            <name>Félix Belzunce Arcos</name>
-            <email>felix@cloudbees.com</email>
+            <name>Rogge Suzan</name>
+            <email>rogge.suzan@gmail.com</email>
         </developer>
     </developers>
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
 </project>

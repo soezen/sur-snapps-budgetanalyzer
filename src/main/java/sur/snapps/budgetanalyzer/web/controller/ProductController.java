@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package localdomain.localhost.controller;
+package sur.snapps.budgetanalyzer.web.controller;
 
-import localdomain.localhost.domain.Product;
+import sur.snapps.budgetanalyzer.web.domain.Product;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
