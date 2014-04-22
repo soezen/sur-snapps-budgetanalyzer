@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * UserDashboardController
+ *
  * User: SUR
  * Date: 22/04/14
  * Time: 19:43
