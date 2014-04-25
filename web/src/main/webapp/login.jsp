@@ -15,7 +15,7 @@
 
 <body>
 <div id="main_wrapper">
-
+<!-- TODO use template -->
 <h1>Login</h1>
 
 <c:if test="${!empty param.login_error}">

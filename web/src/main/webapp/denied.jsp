@@ -18,8 +18,8 @@
 <h1>Access Denied</h1>
 
 <p>Sorry, Access Denied</p>
-<p><a href="../index.html">Return to Home Page</a> or</p>
-<p><a href="../j_spring_security_logout">Logout</a></p>
+<p><a href="/web">Return to Home Page</a> or</p>
+<p><a href="/web/j_spring_security_logout">Logout</a></p>
 
 </div>
 </body>

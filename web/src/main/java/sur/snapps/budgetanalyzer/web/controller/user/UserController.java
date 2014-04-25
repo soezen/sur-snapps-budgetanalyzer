@@ -1,18 +1,16 @@
 package sur.snapps.budgetanalyzer.web.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.servlet.ModelAndView;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.user.User;
+import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 
 /**
  * User: SUR
@@ -20,7 +18,7 @@ import sur.snapps.budgetanalyzer.domain.user.User;
  * Time: 10:41
  */
 @Controller
-public class UserController {
+public class UserController extends AbstractController {
 
     @Autowired
     private UserManager userManager;
@@ -32,19 +30,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/postUserRegistration", method = RequestMethod.POST)
-    public String userRegistration(User user, BindingResult bindingResult, SessionStatus sessionStatus) {
+    public String userRegistration(User user, BindingResult bindingResult) {
         validateUserRegistrationInput(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "userRegistration";
+            return "user_registration";
         }
-
         userManager.createUser(user);
-        sessionStatus.setComplete();
         return "redirect:/budgetanalyzer/user/dashboard";
     }
 
     private void validateUserRegistrationInput(User user, Errors errors) {
-
+        if (userManager.isUsernameUsed(user.getUsername())) {
+            errors.rejectValue("username", "error.user_registration.username_already_used");
+        }
     }
 }

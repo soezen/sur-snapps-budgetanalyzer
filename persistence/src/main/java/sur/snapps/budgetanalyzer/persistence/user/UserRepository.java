@@ -1,10 +1,23 @@
 package sur.snapps.budgetanalyzer.persistence.user;
 
+import org.hibernate.criterion.Projections;
+import org.hibernate.ejb.criteria.expression.EntityTypeExpression;
+import org.hibernate.ejb.criteria.expression.function.AggregationFunction;
+import org.hibernate.sql.Select;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import sur.snapps.budgetanalyzer.domain.user.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
+import java.util.List;
 
 /**
  * User: SUR
@@ -20,5 +33,28 @@ public class UserRepository {
     public User save(User user) {
         entityManager.persist(user);
         return user;
+    }
+
+    public User findByUsername(String username) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+        Predicate condition = builder.equal(
+                // TODO use User_ class instead
+                query.from(User.class).get("username"),
+                username);
+        query.where(condition);
+
+        return entityManager.createQuery(query).getSingleResult();
+    }
+
+    public boolean isUsernameUsed(String username) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+
+        Root<User> userRoot = query.from(User.class);
+        Expression<Long> count = builder.count(userRoot);
+        query.select(count).where(builder.equal(userRoot.get("username"), username));
+
+        return entityManager.createQuery(query).getSingleResult() > 0;
     }
 }

@@ -10,14 +10,16 @@ CREATE TABLE product
 DROP TABLE users IF EXISTS;
 
 create table users (
-  username VARCHAR(100),
-  password VARCHAR(100),
-  enabled  BOOLEAN
+  username VARCHAR(100) NOT NULL,
+  password VARCHAR(100) NOT NULL,
+  enabled  BOOLEAN NOT NULL,
+  PRIMARY KEY (username)
 );
 
 drop table authorities if exists;
 
 create table authorities (
-  username  VARCHAR (100),
-  authority VARCHAR (25)
+  username  VARCHAR (100) NOT NULL,
+  authority VARCHAR (25) NOT NULL,
+  PRIMARY KEY (username, authority)
 )

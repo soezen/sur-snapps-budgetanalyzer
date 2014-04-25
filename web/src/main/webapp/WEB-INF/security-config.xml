@@ -17,6 +17,9 @@
 
 	<security:authentication-manager>
 		<security:authentication-provider>
+            <security:password-encoder hash="md5">
+                <security:salt-source system-wide="BUDGET-ANALYZER" />
+            </security:password-encoder>
             <security:jdbc-user-service data-source-ref="dataSource" />
 		</security:authentication-provider>
 	</security:authentication-manager>

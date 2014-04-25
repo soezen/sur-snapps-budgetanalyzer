@@ -1,5 +1,7 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -26,6 +28,7 @@ public class User {
     @ElementCollection
     @CollectionTable(name = "AUTHORITIES", joinColumns = @JoinColumn(name = "USERNAME"))
     @Column(name = "AUTHORITY")
+    // TODO add guava library
     private List<String> authorities = new ArrayList<>();
 
     public String getUsername() {
@@ -62,5 +65,11 @@ public class User {
 
     public void addAuthority(String authority) {
         authorities.add(authority);
+    }
+
+    public void encodePassword() {
+        Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+        String encodedPassword = passwordEncoder.encodePassword(password, "BUDGET-ANALYZER");
+        setPassword(encodedPassword);
     }
 }

@@ -20,8 +20,13 @@ public class UserManager {
 
     @Transactional
     public User createUser(User user) {
+        user.encodePassword();
         user.setEnabled(true);
         user.addAuthority("ROLE_USER");
         return userRepository.save(user);
+    }
+
+    public boolean isUsernameUsed(String username) {
+        return userRepository.isUsernameUsed(username);
     }
 }

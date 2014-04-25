@@ -22,7 +22,7 @@
 	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 	<!--                   Application configuration                   -->
 	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-	<import resource="classpath:budgetanalyzer-app-config.xml"/>
+	<import resource="classpath:business-config.xml"/>
 
 	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 	<!--        Security configuration - the point of this lab         -->

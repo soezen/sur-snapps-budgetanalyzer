@@ -6,9 +6,6 @@ body, div, td {
 
 body {
   background-color: #fff;
-  background-image: url(../images/springsource_banner.png);
-  background-position: top center;
-  background-repeat: no-repeat;
   text-align:center;
   min-width:600px;
   margin-left: auto;

@@ -12,29 +12,40 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Budget Analyzer - User Registration</title>
+    <!-- TODO add to resources -->
+    <link rel="stylesheet" href="/web/styles/springsource.css" type="text/css"/>
 </head>
 <body>
-<h1>User Registration</h1>
-<p>
-    <form:form modelAttribute="user" action="postUserRegistration" method="post">
-        <table>
-            <tr>
-                <td>Username</td>
-                <td><form:input path="username" /></td>
-                <td><form:errors path="username" /></td>
-            </tr>
-            <tr>
-                <td>Password</td>
-                <td><form:password path="password" /></td>
-                <td><form:errors path="password" /></td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <input type="submit" value="Create" />
-                </td>
-            </tr>
-        </table>
-    </form:form>
-</p>
+    <!-- TODO min requirements on password -->
+    <div id="main_wrapper">
+        <h1>User Registration</h1>
+        <p>
+            <form:form modelAttribute="user" action="postUserRegistration" method="post">
+                <table>
+                    <tr>
+                        <td>Username</td>
+                        <td>
+                            <form:input path="username" />
+                            <br />
+                            <form:errors path="username" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td>
+                            <form:password path="password" />
+                            <br />
+                            <form:errors path="password" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" value="Create" />
+                        </td>
+                    </tr>
+                </table>
+            </form:form>
+        </p>
+    </div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package sur.snapps.budgetanalyzer.web.controller.user;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 
 /**
  * UserDashboardController
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/user")
-public class UserDashboardController {
+public class UserDashboardController extends AbstractController {
 
     @RequestMapping("/dashboard")
     public String openUserDashboard() {
