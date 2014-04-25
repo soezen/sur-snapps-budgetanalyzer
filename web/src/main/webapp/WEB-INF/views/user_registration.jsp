@@ -23,7 +23,9 @@
             <form:form modelAttribute="user" action="postUserRegistration" method="post">
                 <table>
                     <tr>
-                        <td>Username</td>
+                        <td>
+                            <form:label path="username">Username</form:label>
+                        </td>
                         <td>
                             <form:input path="username" />
                             <br />
@@ -31,7 +33,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Password</td>
+                        <td>
+                            <form:label path="password">Password</form:label>
+                        </td>
                         <td>
                             <form:password path="password" />
                             <br />
@@ -39,7 +43,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td>
+                            <a href="<c:url value="/"/>">Cancel</a>
+                        </td>
+                        <td>
                             <input type="submit" value="Create" />
                         </td>
                     </tr>

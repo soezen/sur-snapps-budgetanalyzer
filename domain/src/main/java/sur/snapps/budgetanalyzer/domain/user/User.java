@@ -23,7 +23,9 @@ public class User {
 
     @Id
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private boolean enabled;
     @ElementCollection
     @CollectionTable(name = "AUTHORITIES", joinColumns = @JoinColumn(name = "USERNAME"))

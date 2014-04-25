@@ -6,11 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.user.User;
+import sur.snapps.budgetanalyzer.domain.util.validators.UserValidator;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
+
+import javax.validation.Valid;
 
 /**
  * User: SUR
@@ -20,8 +25,16 @@ import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 @Controller
 public class UserController extends AbstractController {
 
+    // TODO selenium tests
+
     @Autowired
     private UserManager userManager;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        super.initBinder(binder);
+        binder.setValidator(new UserValidator());
+    }
 
     @RequestMapping("/userRegistration")
     public String openUserRegistrationPage(Model model) {
@@ -30,7 +43,7 @@ public class UserController extends AbstractController {
     }
 
     @RequestMapping(value = "/postUserRegistration", method = RequestMethod.POST)
-    public String userRegistration(User user, BindingResult bindingResult) {
+    public String userRegistration(@Valid User user, BindingResult bindingResult) {
         validateUserRegistrationInput(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
