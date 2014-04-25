@@ -1,11 +1,5 @@
 package sur.snapps.budgetanalyzer.persistence.user;
 
-import org.hibernate.criterion.Projections;
-import org.hibernate.ejb.criteria.expression.EntityTypeExpression;
-import org.hibernate.ejb.criteria.expression.function.AggregationFunction;
-import org.hibernate.sql.Select;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import sur.snapps.budgetanalyzer.domain.user.User;
 
@@ -16,8 +10,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
-import java.util.List;
 
 /**
  * User: SUR
