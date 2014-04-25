@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="/web/styles/springsource.css" type="text/css"/>
 </head>
 <body>
-    <!-- TODO min requirements on password -->
     <div id="main_wrapper">
         <h1>User Registration</h1>
         <p>
