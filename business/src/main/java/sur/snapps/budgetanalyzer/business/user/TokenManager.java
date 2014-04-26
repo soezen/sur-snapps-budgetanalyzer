@@ -18,15 +18,19 @@ public class TokenManager {
     @Autowired
     private TokenRepository tokenRepository;
 
+    @Autowired
+    private MailService mailService;
+
     @Transactional
-    public void createToken(Entity entity) {
+    public void createToken(Entity entity, String mail) {
         Token token = new Token();
         token.generateToken();
         token.setEntity(entity);
         token.setExpirationDate(DateTime.now().plusDays(7));
         tokenRepository.save(token);
 
-        // TODO send mail
+        mailService.sendUserInvitationMail(token, mail);
+
         // TODO how to delete the expired tokens?
         // TODO add updated tms in db
         // TODO add version in db

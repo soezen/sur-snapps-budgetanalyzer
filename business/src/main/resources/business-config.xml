@@ -9,12 +9,19 @@
 
     <import resource="classpath:persistence-config.xml" />
 
-	<!--  Enable @Autowired and @PersistenceContext -->
+    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="searchSystemEnvironment" value="true" />
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+    </bean>
+
+    <!--  Enable @Autowired and @PersistenceContext -->
 	<context:annotation-config />
 	
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
     <bean id="userManager" class="sur.snapps.budgetanalyzer.business.user.UserManager" />
     <bean id="tokenManager" class="sur.snapps.budgetanalyzer.business.user.TokenManager" />
+
+    <bean id="mailService" class="sur.snapps.budgetanalyzer.business.user.MailService" />
 
 </beans>
