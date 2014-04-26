@@ -1,61 +1,64 @@
 package sur.snapps.budgetanalyzer.web.controller.user;
 
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import sur.snapps.budgetanalyzer.business.user.UserManager;
+import sur.snapps.budgetanalyzer.business.user.TokenManager;
 import sur.snapps.budgetanalyzer.domain.user.User;
-import sur.snapps.budgetanalyzer.domain.util.validators.UserValidator;
+import sur.snapps.budgetanalyzer.domain.util.validators.EmailValidator;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 
-import javax.validation.Valid;
-
 /**
+ * UserDashboardController
+ *
  * User: SUR
- * Date: 6/04/14
- * Time: 10:41
+ * Date: 22/04/14
+ * Time: 19:43
  */
 @Controller
+@RequestMapping("/user")
 public class UserController extends AbstractController {
 
-    // TODO selenium tests
+    @Autowired
+    private TokenManager tokenManager;
 
     @Autowired
-    private UserManager userManager;
+    private LoginContext loginContext;
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        super.initBinder(binder);
-        binder.setValidator(new UserValidator());
+    @RequestMapping("/dashboard")
+    public String openUserDashboard() {
+        return "user/dashboard";
     }
 
-    @RequestMapping("/userRegistration")
-    public String openUserRegistrationPage(Model model) {
+    @RequestMapping("/inviteUser")
+    public String openInviteUserPage(Model model) {
         model.addAttribute("user", new User());
-        return "user_registration";
+        return "user/user_invitation";
     }
 
-    @RequestMapping(value = "/postUserRegistration", method = RequestMethod.POST)
-    public String userRegistration(@Valid User user, BindingResult bindingResult) {
-        validateUserRegistrationInput(user, bindingResult);
+    @RequestMapping(value = "/postInviteUser", method = RequestMethod.POST)
+    public String inviteUser(User user, BindingResult bindingResult) {
+        validateUserInvitation(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "user_registration";
+            return "user/user_invitation";
         }
-        userManager.createUser(user);
+        tokenManager.createToken(loginContext.getCurrentUser().getEntity());
+        // TODO show confirmations message
         return "redirect:/budgetanalyzer/user/dashboard";
     }
 
-    private void validateUserRegistrationInput(User user, Errors errors) {
-        if (userManager.isUsernameUsed(user.getUsername())) {
-            errors.rejectValue("username", "error.user_registration.username_already_used");
+    private void validateUserInvitation(User user, Errors errors) {
+        EmailValidator emailValidator = new EmailValidator();
+        if (Strings.isNullOrEmpty(user.getEmail())) {
+            errors.rejectValue("email", "error.field.required");
+        } else if (!emailValidator.validate(user.getEmail())) {
+            errors.rejectValue("email", "error.email.invalid");
         }
     }
 }

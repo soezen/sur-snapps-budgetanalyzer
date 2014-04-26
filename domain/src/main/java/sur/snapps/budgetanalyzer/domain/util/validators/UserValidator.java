@@ -23,11 +23,18 @@ public class UserValidator implements Validator {
         User user = (User) obj;
         rejectIfEmptyOrWhitespace(errors, "username", "error.field.required");
         rejectIfEmptyOrWhitespace(errors, "password", "error.field.required");
+        rejectIfEmptyOrWhitespace(errors, "email", "error.field.required");
 
         if (!errors.hasFieldErrors("password")) {
             PasswordValidator passwordValidator = new PasswordValidator();
             if (!passwordValidator.validate(user.getPassword())) {
                 errors.rejectValue("password", "error.user.password.incorrect_pattern");
+            }
+        }
+        if (!errors.hasFieldErrors("email")) {
+            EmailValidator emailValidator = new EmailValidator();
+            if (!emailValidator.validate(user.getEmail())) {
+                errors.rejectValue("email", "error.email.invalid");
             }
         }
     }

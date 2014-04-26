@@ -39,16 +39,8 @@ a:hover{color:#456314; text-decoration:underline; font-size:13px;}
 a:active{color:#7db223; text-decoration:underline; font-size:13px;}
 a:visited{color:#7db223; text-decoration:underline; font-size:13px;}
 
-ul {
-  list-style: disc url(images/bullet.gif);
-}
-
 li {
   padding-top:5px;
-}
-
-li ul {
-  list-style: square url(images/sub-bullet.gif);
 }
 
 li ul li ul {

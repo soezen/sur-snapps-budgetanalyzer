@@ -20,7 +20,7 @@
             <security:password-encoder hash="md5">
                 <security:salt-source system-wide="BUDGET-ANALYZER" />
             </security:password-encoder>
-            <security:jdbc-user-service data-source-ref="dataSource" />
+            <security:jdbc-user-service data-source-ref="dataSource" authorities-by-username-query="select u.username, a.authority from users u join authorities a on a.user_id = u.id where u.username = ?" />
 		</security:authentication-provider>
 	</security:authentication-manager>
 

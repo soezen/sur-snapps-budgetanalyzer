@@ -10,6 +10,8 @@
 <t:template>
     <jsp:attribute name="title">Dashboard</jsp:attribute>
     <jsp:body>
-        <a href="<c:url value="/j_spring_security_logout" />">Logout</a>
+        <ul>
+            <li><a href="<c:url value="/budgetanalyzer/user/inviteUser" />">Invite User</a></li>
+        </ul>
     </jsp:body>
 </t:template>

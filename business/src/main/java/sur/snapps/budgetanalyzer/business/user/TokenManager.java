@@ -1,0 +1,37 @@
+package sur.snapps.budgetanalyzer.business.user;
+
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import sur.snapps.budgetanalyzer.domain.user.Entity;
+import sur.snapps.budgetanalyzer.domain.user.Token;
+import sur.snapps.budgetanalyzer.persistence.user.TokenRepository;
+
+/**
+ * User: SUR
+ * Date: 26/04/14
+ * Time: 15:51
+ */
+public class TokenManager {
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @Transactional
+    public void createToken(Entity entity) {
+        Token token = new Token();
+        token.generateToken();
+        token.setEntity(entity);
+        token.setExpirationDate(DateTime.now().plusDays(7));
+        tokenRepository.save(token);
+
+        // TODO send mail
+        // TODO how to delete the expired tokens?
+        // TODO add updated tms in db
+        // TODO add version in db
+
+
+    }
+
+}

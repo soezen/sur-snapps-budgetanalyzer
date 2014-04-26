@@ -26,6 +26,16 @@
                 </tr>
                 <tr>
                     <td>
+                        <f:label path="email">Email</f:label>
+                    </td>
+                    <td>
+                        <f:input path="email" type="email" />
+                        <br />
+                        <f:errors path="email" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <f:label path="password">Password</f:label>
                     </td>
                     <td>

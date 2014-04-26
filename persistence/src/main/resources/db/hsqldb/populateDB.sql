@@ -1,8 +1,4 @@
-INSERT INTO PRODUCT VALUES (1, 'Long Island Iced Tea', ' Type of alcoholic mixed drink made with, among other ingredients, vodka, gin, tequila, and rum');
-INSERT INTO PRODUCT VALUES (2, 'Sex on the beach', 'Made from vodka, peach schnapps, orange juice, and cranberry juice');
+insert into entities values (1, 'Suzan en Kim', true, false);
 
-INSERT INTO USERS VALUES ('sur', '872fdc2a08772ba2c7c1cddd081bfd96', true);
-insert into authorities values ('sur', 'ROLE_USER');
-
-insert into users values ('test', '872fdc2a08772ba2c7c1cddd081bfd96', true);
-insert into authorities values ('test', 'OTHER');
+INSERT INTO USERS VALUES (1, 'sur', '872fdc2a08772ba2c7c1cddd081bfd96', 'rogge.suzan@gmail.com', true, true, 1);
+insert into authorities values (1, 'ROLE_USER');

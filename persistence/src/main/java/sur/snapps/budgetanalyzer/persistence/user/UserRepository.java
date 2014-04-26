@@ -1,6 +1,5 @@
 package sur.snapps.budgetanalyzer.persistence.user;
 
-import org.springframework.stereotype.Repository;
 import sur.snapps.budgetanalyzer.domain.user.User;
 
 import javax.persistence.EntityManager;
@@ -16,7 +15,6 @@ import javax.persistence.criteria.Root;
  * Date: 22/04/14
  * Time: 19:24
  */
-@Repository
 public class UserRepository {
 
     @PersistenceContext
