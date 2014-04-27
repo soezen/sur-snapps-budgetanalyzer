@@ -48,7 +48,8 @@ public class UserController extends AbstractController {
         if (bindingResult.hasErrors()) {
             return "user/user_invitation";
         }
-        tokenManager.createToken(loginContext.getCurrentUser().getEntity(), user.getEmail());
+        // TODO add name to user (and use that everywhere to display (mail and webapp))
+        tokenManager.createToken(loginContext.getCurrentUser().getEntity(), user.getEmail(), user.getUsername());
         // TODO show confirmations message
         return "redirect:/budgetanalyzer/user/dashboard";
     }

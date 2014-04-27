@@ -22,14 +22,14 @@ public class TokenManager {
     private MailService mailService;
 
     @Transactional
-    public void createToken(Entity entity, String mail) {
+    public void createToken(Entity entity, String mail, String inviter) {
         Token token = new Token();
         token.generateToken();
         token.setEntity(entity);
         token.setExpirationDate(DateTime.now().plusDays(7));
         tokenRepository.save(token);
 
-        mailService.sendUserInvitationMail(token, mail);
+        mailService.sendUserInvitationMail(token, mail, inviter);
 
         // TODO how to delete the expired tokens?
         // TODO add updated tms in db
