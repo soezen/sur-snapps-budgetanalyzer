@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>budgetanalyzer-application-domain</artifactId>
+            <artifactId>budgetanalyzer-application-business</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
