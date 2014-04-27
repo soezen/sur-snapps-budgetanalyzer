@@ -7,10 +7,9 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>domain</module>
-        <module>persistence</module>
-        <module>business</module>
-        <module>web</module>
+        <module>application</module>
+        <module>tests</module>
+        <module>application</module>
     </modules>
 
     <build>
