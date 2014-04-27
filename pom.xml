@@ -9,7 +9,6 @@
     <modules>
         <module>application</module>
         <module>tests</module>
-        <module>application</module>
     </modules>
 
     <build>

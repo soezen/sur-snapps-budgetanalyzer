@@ -12,5 +12,11 @@
     <artifactId>budgetanalyzer-application</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>domain</module>
+        <module>persistence</module>
+        <module>business</module>
+        <module>web</module>
+    </modules>
 
 </project>
