@@ -32,4 +32,11 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>Sauce Maven Repository</id>
+            <url>https://repository-saucelabs.forge.cloudbees.com/release</url>
+        </repository>
+    </repositories>
+
 </project>
