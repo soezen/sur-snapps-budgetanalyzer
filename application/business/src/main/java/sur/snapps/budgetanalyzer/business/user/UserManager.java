@@ -25,8 +25,8 @@ public class UserManager {
 
         user.encodePassword();
         user.setEnabled(true);
-        user.setEntity(entity);
         user.setAdmin(true);
+        user.setEntity(entity);
         user.addAuthority("ROLE_USER");
         return userRepository.save(user);
     }
