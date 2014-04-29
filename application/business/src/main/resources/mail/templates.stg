@@ -1,0 +1,7 @@
+user_invitation(token, inviter) ::= <<
+
+\<h1\>Invitation to BudgetAnalyzer\</h1\>
+\<p\><inviter> has invited you to register yourself with the application BudgetAnalyzer\</p\>
+\<p\><token>\</p\>
+
+>>

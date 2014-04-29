@@ -13,12 +13,8 @@ import sur.snapps.budgetanalyzer.persistence.user.UserRepository;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.unitils.easymock.EasyMockUnitils.replay;
 
 /**
  * User: SUR
@@ -47,7 +43,7 @@ public class UserManagerTest {
         user.encodePassword();
         user.setEnabled(true);
         user.setAdmin(true);
-        user.addAuthority("ROLE_USER");
+        user.addAuthority(UserManager.ROLE_USER);
         user.setEntity(capture(entityCapture));
         expect(repository.save(user)).andReturn(user);
         replay();
@@ -60,5 +56,24 @@ public class UserManagerTest {
         assertEquals(username, entity.getName());
         assertTrue(entity.isOwned());
         assertFalse(entity.isShared());
+    }
+
+    @Test
+    public void testIsUsernameUsed() {
+        String username = "username";
+        expect(repository.isUsernameUsed(username)).andReturn(true);
+        replay();
+
+        assertTrue(manager.isUsernameUsed(username));
+    }
+
+    @Test
+    public void testFindByUsername() {
+        String username = "username";
+
+        expect(repository.findByUsername(username)).andReturn(user);
+        replay();
+
+        assertSame(user, manager.findByUsername(username));
     }
 }

@@ -25,37 +25,63 @@ public class Token {
     private int id;
 
     @Column(nullable = false)
-    private String token;
+    private String value;
     @ManyToOne
     @JoinColumn(columnDefinition = "ENTITY_ID", nullable = false)
     private Entity entity;
     @Column(name = "EXPIRATION_DATE", nullable = false)
     private Date expirationDate;
 
-    public String getToken() {
-        return token;
+    private Token(Builder builder) {
+        value = builder.token;
+        entity = builder.entity;
+        expirationDate = builder.expirationDate;
     }
 
-    public void generateToken() {
-        token = UUID.randomUUID().toString();
+    public static Token.Builder createUserInvitationToken() {
+        return new Builder().daysValid(7);
     }
 
-    public Entity getEntity() {
+    public static class Builder {
+
+        private String token;
+        private Entity entity;
+        private Date expirationDate;
+
+        public Token build() {
+            return new Token(this);
+        }
+
+        public Builder generateToken() {
+            token = UUID.randomUUID().toString();
+            return this;
+        }
+
+        public Builder token(String token) {
+            this.token = token;
+            return this;
+        }
+
+        public Builder entity(Entity entity) {
+            this.entity = entity;
+            return this;
+        }
+
+        public Builder daysValid(int days) {
+            this.expirationDate = new Date(DateTime.now().plusDays(days).getMillis());
+            return this;
+        }
+    }
+
+    public String value() {
+        return value;
+    }
+
+    public Entity entity() {
         return entity;
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
-    }
-
-    public DateTime getExpirationDate() {
+    public DateTime expirationDate() {
         return new DateTime(expirationDate);
-    }
-
-    public void setExpirationDate(DateTime expirationDate) {
-        if (expirationDate == null) {
-            this.expirationDate = null;
-        }
-        this.expirationDate = new Date(expirationDate.getMillis());
     }
 }

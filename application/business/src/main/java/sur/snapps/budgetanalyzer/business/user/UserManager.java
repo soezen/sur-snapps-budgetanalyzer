@@ -13,6 +13,8 @@ import sur.snapps.budgetanalyzer.persistence.user.UserRepository;
  */
 public class UserManager {
 
+    public static final String ROLE_USER = "ROLE_USER";
+
     @Autowired
     private UserRepository userRepository;
 
@@ -27,7 +29,7 @@ public class UserManager {
         user.setEnabled(true);
         user.setAdmin(true);
         user.setEntity(entity);
-        user.addAuthority("ROLE_USER");
+        user.addAuthority(ROLE_USER);
         return userRepository.save(user);
     }
 

@@ -17,16 +17,16 @@
     <!-- Testing "dataSource" configuration using an in-memory database (for
         unit tests, ...) -->
     <!-- To enable, declare "-Dspring.profiles.active=dev-hsql" or @ActiveProfiles("dev-hsql") -->
-    <jdbc:embedded-database id="dataSource" type="HSQL">
-        <jdbc:script location="classpath:db/hsqldb/initDB.sql" />
-        <jdbc:script location="classpath:db/hsqldb/populateDB.sql" />
-    </jdbc:embedded-database>
+    <!--<jdbc:embedded-database id="dataSource" type="HSQL">-->
+        <!--<jdbc:script location="classpath:db/hsqldb/initDB.sql" />-->
+        <!--<jdbc:script location="classpath:db/hsqldb/populateDB.sql" />-->
+    <!--</jdbc:embedded-database>-->
 
     <!-- JNDI DataSource for JEE environments -->
-    <!-- TODO find solution -->
+    <!-- TODO find solution for datasources -->
     <!-- use relative jndi-name + resource-ref=true for https://jira.springsource.org/browse/SPR-4585 -->
-    <!--<jee:jndi-lookup id="dataSource" jndi-name="jdbc/mydb"-->
-        <!--resource-ref="true" />-->
+    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/mydb"
+        resource-ref="true" />
 
 	<!-- Translates ORM exceptions to Spring Data Access Exceptions -->
 	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
