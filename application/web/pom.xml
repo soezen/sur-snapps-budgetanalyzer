@@ -16,6 +16,7 @@
         <spring.version>3.2.8.RELEASE</spring.version>
         <spring.security.version>3.2.3.RELEASE</spring.security.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <webXmlPath>path/to/default/webXml</webXmlPath>
     </properties>
 
 
@@ -111,9 +112,34 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <webXmlPath>src/env/local/web.xml</webXmlPath>
+            </properties>
+        </profile>
+        <profile>
+            <id>cloudbees</id>
+            <properties>
+                <webXmlPath>src/env/cloudbees/web.xml</webXmlPath>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>web</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webXml>${webXmlPath}</webXml>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
