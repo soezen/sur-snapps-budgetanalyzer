@@ -18,11 +18,14 @@ public class TokenManager {
     private TokenRepository tokenRepository;
 
     @Transactional
-    public void createToken(Entity entity, String mail, String inviter) {
+    public void createToken(Entity entity, String mail, String inviter, String host, int port, String context) {
         Token token = tokenRepository.save(Token.createUserInvitationToken().generateToken().entity(entity).build());
 
         // TODO handle exceptions
         UserInvitationMailSender.newMail()
+                .host(host)
+                .port(port)
+                .context(context)
                 .token(token.value())
                 .inviter(inviter)
                 .sendTo(mail);

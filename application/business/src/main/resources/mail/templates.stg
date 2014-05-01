@@ -1,7 +1,7 @@
-user_invitation(token, inviter) ::= <<
+user_invitation(url, inviter) ::= <<
 
-\<h1\>Invitation to BudgetAnalyzer\</h1\>
-\<p\><inviter> has invited you to register yourself with the application BudgetAnalyzer\</p\>
-\<p\><token>\</p\>
+\<h1>Invitation to BudgetAnalyzer\</h1>
+\<p><inviter> has invited you to register yourself with the application BudgetAnalyzer\</p>
+\<p>\<a href="<url>">Register with BudgetAnalyzer\</a>\</p>
 
 >>

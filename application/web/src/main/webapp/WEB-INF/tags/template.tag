@@ -11,7 +11,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <link rel="stylesheet" href="<c:url value="/styles/springsource.css" />" type="text/css"/>
+        <link rel="stylesheet" href="<c:url value="/styles/application.css" />" type="text/css"/>
         <title>BudgetAnalyzer - <jsp:invoke fragment="title" /></title>
     </head>
 

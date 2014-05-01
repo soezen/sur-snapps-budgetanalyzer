@@ -53,7 +53,7 @@ public class TokenManagerTest {
         expect(repository.save(capture(tokenCapture))).andReturn(token);
         replay();
 
-        manager.createToken(entity, mail, inviter);
+        manager.createToken(entity, mail, inviter, "host", 1, "/web");
 
         Token token = tokenCapture.getValue();
         assertSame(entity, token.entity());

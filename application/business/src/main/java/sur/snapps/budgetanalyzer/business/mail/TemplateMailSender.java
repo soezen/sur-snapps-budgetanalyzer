@@ -12,8 +12,6 @@ import org.stringtemplate.v4.STGroupFile;
  */
 public abstract class TemplateMailSender {
 
-    // TODO css does not work on cloudbees (link includes web)
-
     protected abstract ST getTemplate();
     protected abstract String getSubject();
 

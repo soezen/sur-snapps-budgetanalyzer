@@ -13,6 +13,8 @@ import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.domain.util.validators.EmailValidator;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * UserDashboardController
  *
@@ -42,14 +44,14 @@ public class UserController extends AbstractController {
     }
 
     @RequestMapping(value = "/postInviteUser", method = RequestMethod.POST)
-    public String inviteUser(User user, BindingResult bindingResult) {
+    public String inviteUser(User user, BindingResult bindingResult, HttpServletRequest request) {
         validateUserInvitation(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "user/user_invitation";
         }
         // TODO add name to user (and use that everywhere to display (mail and webapp))
-        tokenManager.createToken(loginContext.getCurrentUser().getEntity(), user.getEmail(), user.getUsername());
+        tokenManager.createToken(loginContext.getCurrentUser().getEntity(), user.getEmail(), user.getUsername(), request.getServerName(), request.getLocalPort(), request.getContextPath());
         // TODO show confirmations message
         return "redirect:/budgetanalyzer/user/dashboard";
     }
