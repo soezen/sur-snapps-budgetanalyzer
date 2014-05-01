@@ -28,8 +28,6 @@ public class UserInvitationMailSender extends TemplateMailSender {
         return this;
     }
 
-    // TODO fix problem with permgen space (you have overriden the default java opts)
-
     @Override
     protected ST getTemplate() {
         MailProperties mailProperties = MailProperties.getInstance();

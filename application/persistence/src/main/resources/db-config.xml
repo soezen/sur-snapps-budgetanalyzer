@@ -51,11 +51,9 @@
     </beans>
 
     <!-- JNDI DataSource for JEE environments -->
-    <!-- TODO find solution for datasources -->
     <!-- use relative jndi-name + resource-ref=true for https://jira.springsource.org/browse/SPR-4585 -->
     <beans profile="cloudbees">
-        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/mydb"
-                         resource-ref="true" />
+        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/mydb" resource-ref="true" />
     </beans>
 
 </beans>
