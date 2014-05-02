@@ -49,6 +49,7 @@ public class Token {
         private Date expirationDate;
 
         public Token build() {
+            // TODO add validation
             return new Token(this);
         }
 

@@ -1,6 +1,8 @@
 package sur.snapps.budgetanalyzer.business.mail;
 
 import com.github.sendgrid.SendGrid;
+import org.springframework.beans.factory.annotation.Value;
+import sur.snapps.budgetanalyzer.domain.mail.TemplateMail;
 
 /**
  * User: SUR
@@ -9,48 +11,26 @@ import com.github.sendgrid.SendGrid;
  */
 public class SendGridMailSender {
 
+    @Value("${mail.from_address}")
     private String fromEmail;
+    @Value("${mail.from_name}")
     private String fromName;
-    private String toEmail;
-    private String subject;
-    private String html;
+
     private SendGrid sendGrid;
 
-    private SendGridMailSender(SendGrid sendGrid) {
+    public SendGridMailSender() {}
+
+    public SendGridMailSender(SendGrid sendGrid) {
         this.sendGrid = sendGrid;
     }
 
-    public void send() {
-        sendGrid.addTo(toEmail);
-        sendGrid.setFrom(fromEmail);
-        sendGrid.setFromName(fromName);
-        sendGrid.setSubject(subject);
-        sendGrid.setHtml(html);
-        sendGrid.send();
-    }
-
-    public static SendGridMailSender newMail(SendGrid sendGrid) {
-        return new SendGridMailSender(sendGrid);
-    }
-
-    public SendGridMailSender from(String email, String name) {
-        fromEmail = email;
-        fromName = name;
-        return this;
-    }
-
-    public SendGridMailSender to(String email) {
-        toEmail = email;
-        return this;
-    }
-
-    public SendGridMailSender subject(String subject) {
-        this.subject = subject;
-        return this;
-    }
-
-    public SendGridMailSender html(String html) {
-        this.html = html;
-        return this;
+    public void send(TemplateMail mail) {
+        String result = sendGrid.addTo(mail.to())
+                .setFrom(fromEmail)
+                .setFromName(fromName)
+                .setSubject(mail.subject())
+                .setHtml(mail.template().render())
+                .send();
+        System.out.println(result);
     }
 }

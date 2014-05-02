@@ -3,6 +3,7 @@ package sur.snapps.budgetanalyzer.business.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.business.mail.MailFactory;
+import sur.snapps.budgetanalyzer.business.mail.SendGridMailSender;
 import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.mail.UserInvitationMail;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
@@ -22,9 +23,16 @@ public class TokenManager {
     @Autowired
     private MailFactory mailFactory;
 
+    @Autowired
+    private SendGridMailSender mailSender;
+
     @Transactional
     public void createToken(Entity entity, String mail, String inviter, Url url) {
-        Token token = tokenRepository.save(Token.createUserInvitationToken().generateToken().entity(entity).build());
+        Token token = Token.createUserInvitationToken()
+                .generateToken()
+                .entity(entity)
+                .build();
+        token = tokenRepository.save(token);
 
         UserInvitationMail userInvitationMail = mailFactory.createUserInvitationMail()
                 .host(url.getServerName())
@@ -33,7 +41,7 @@ public class TokenManager {
                 .token(token.value())
                 .inviter(inviter)
                 .to(mail);
-        mailFactory.sendMail(userInvitationMail);
+        mailSender.send(userInvitationMail);
 
         // TODO add updated tms in db
         // TODO add version in db

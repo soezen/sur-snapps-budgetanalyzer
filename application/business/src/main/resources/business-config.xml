@@ -31,4 +31,11 @@
 
     <bean id="mailFactory" class="sur.snapps.budgetanalyzer.business.mail.MailFactory" />
 
+    <bean id="sendGrid" class="com.github.sendgrid.SendGrid">
+        <constructor-arg name="username" value="#{systemProperties.SENDGRID_USERNAME}" />
+        <constructor-arg name="password" value="#{systemProperties.SENDGRID_PASSWORD}" />
+    </bean>
+    <bean id="sendGridMailSender" class="sur.snapps.budgetanalyzer.business.mail.SendGridMailSender">
+        <constructor-arg name="sendGrid" ref="sendGrid" />
+    </bean>
 </beans>
