@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.user.User;
-import sur.snapps.budgetanalyzer.domain.util.validators.UserValidator;
+import sur.snapps.budgetanalyzer.util.validators.UserValidator;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 
 import javax.validation.Valid;

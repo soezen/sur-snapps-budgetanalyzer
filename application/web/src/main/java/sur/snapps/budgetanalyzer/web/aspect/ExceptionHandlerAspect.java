@@ -3,15 +3,14 @@ package sur.snapps.budgetanalyzer.web.aspect;
 import com.google.common.base.Predicates;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
-import sur.snapps.budgetanalyzer.domain.exception.BusinessException;
+import sur.snapps.budgetanalyzer.util.Logger;
+import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
@@ -27,8 +26,6 @@ import java.util.List;
 @Component
 public class ExceptionHandlerAspect {
 
-    private static final Log LOG = LogFactory.getLog(ExceptionHandlerAspect.class);
-
     @Around("execution(java.lang.String sur.snapps.budgetanalyzer.web.controller..*.*(.., org.springframework.validation.BindingResult, ..)) && args(.., bindingResult)")
     public String copyExceptionMessage(ProceedingJoinPoint joinPoint, BindingResult bindingResult) throws Throwable {
         try {
@@ -38,7 +35,7 @@ public class ExceptionHandlerAspect {
             Throwable throwable = Iterables.find(causalChain, Predicates.instanceOf(BusinessException.class));
             if (throwable != null) {
                 BusinessException businessException = (BusinessException) throwable;
-                LOG.error(businessException.getMessage());
+                Logger.error(businessException.getMessage());
                 bindingResult.reject(businessException.getErrorCode());
 
                 MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();

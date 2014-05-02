@@ -29,8 +29,4 @@ public class LoginContext {
         user = userManager.findByUsername(username);
         return user;
     }
-
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
 }

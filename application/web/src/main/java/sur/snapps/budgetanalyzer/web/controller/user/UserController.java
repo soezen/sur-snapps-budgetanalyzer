@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
 import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.user.User;
-import sur.snapps.budgetanalyzer.domain.util.validators.EmailValidator;
+import sur.snapps.budgetanalyzer.util.validators.EmailValidator;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;

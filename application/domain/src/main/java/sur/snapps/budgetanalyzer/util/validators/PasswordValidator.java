@@ -1,6 +1,5 @@
-package sur.snapps.budgetanalyzer.domain.util.validators;
+package sur.snapps.budgetanalyzer.util.validators;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**

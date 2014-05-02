@@ -1,4 +1,4 @@
-package sur.snapps.budgetanalyzer.domain.exception;
+package sur.snapps.budgetanalyzer.util.exception;
 
 /**
  * User: SUR

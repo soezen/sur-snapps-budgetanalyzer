@@ -1,4 +1,4 @@
-package sur.snapps.budgetanalyzer.domain.util.validators;
+package sur.snapps.budgetanalyzer.util.validators;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

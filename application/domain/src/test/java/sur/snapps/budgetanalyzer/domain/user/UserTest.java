@@ -1,22 +1,24 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.unitils.UnitilsJUnit4TestClassRunner;
+import org.unitils.inject.annotation.TestedObject;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-
-import org.junit.Assert;
-import org.junit.Test;
-import sur.snapps.budgetanalyzer.domain.user.User;
 
 /**
  * User: SUR
  * Date: 25/04/14
  * Time: 7:18
  */
+@RunWith(UnitilsJUnit4TestClassRunner.class)
 public class UserTest {
 
-    // TODO use unitils injection
     // TODO test getters and setters automatically
-    private User user = new User();
+    @TestedObject
+    private User user;
 
     @Test
     public void testGetUsername() {

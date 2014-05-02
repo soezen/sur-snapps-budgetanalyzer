@@ -42,6 +42,11 @@ public class SendGridMailSenderTest {
     }
 
     @Test
+    public void testNoArgConstructor() {
+        mailSender = new SendGridMailSender();
+    }
+
+    @Test
     public void testSend() {
         expect(mail.to()).andReturn("toEmail");
         expect(sendGrid.addTo("toEmail")).andReturn(sendGrid);
