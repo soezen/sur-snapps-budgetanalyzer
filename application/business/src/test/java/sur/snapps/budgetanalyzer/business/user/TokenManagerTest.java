@@ -10,6 +10,7 @@ import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.InjectIntoByType;
 import org.unitils.inject.annotation.TestedObject;
 import org.unitils.mock.annotation.Dummy;
+import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.persistence.user.TokenRepository;
@@ -40,6 +41,8 @@ public class TokenManagerTest {
     private Token token;
     @Dummy
     private Entity entity;
+    @Dummy
+    private Url url;
 
     @Test
     @Ignore
@@ -53,7 +56,7 @@ public class TokenManagerTest {
         expect(repository.save(capture(tokenCapture))).andReturn(token);
         replay();
 
-        manager.createToken(entity, mail, inviter, "host", 1, "/web");
+        manager.createToken(entity, mail, inviter, url);
 
         Token token = tokenCapture.getValue();
         assertSame(entity, token.entity());

@@ -24,6 +24,10 @@
     <jsp:attribute name="title">Invite User</jsp:attribute>
     <jsp:body>
         <f:form modelAttribute="user" action="postInviteUser" method="post">
+            <f:errors />
+
+            <!-- TODO create form template -->
+
             <table>
                 <tr>
                     <td>

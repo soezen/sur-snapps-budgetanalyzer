@@ -57,4 +57,8 @@ public class UserRegistrationController extends AbstractController {
             errors.rejectValue("username", "error.user_registration.username_already_used");
         }
     }
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
 }

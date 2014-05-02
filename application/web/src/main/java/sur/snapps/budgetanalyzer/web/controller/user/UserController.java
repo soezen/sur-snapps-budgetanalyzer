@@ -9,11 +9,16 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
+import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.domain.util.validators.EmailValidator;
+import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
+import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * UserDashboardController
@@ -44,16 +49,24 @@ public class UserController extends AbstractController {
     }
 
     @RequestMapping(value = "/postInviteUser", method = RequestMethod.POST)
-    public String inviteUser(User user, BindingResult bindingResult, HttpServletRequest request) {
+    @NavigateTo(PageLinks.INVITE_USER)
+    public String inviteUser(HttpServletRequest request, User user, BindingResult bindingResult) {
         validateUserInvitation(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "user/user_invitation";
+            return PageLinks.INVITE_USER.page();
         }
         // TODO add name to user (and use that everywhere to display (mail and webapp))
-        tokenManager.createToken(loginContext.getCurrentUser().getEntity(), user.getEmail(), user.getUsername(), request.getServerName(), request.getLocalPort(), request.getContextPath());
+        Url url = new Url();
+        url.setServerName(request.getServerName());
+        url.setServerPort(request.getServerPort());
+        url.setContextPath(request.getContextPath());
+        checkNotNull(tokenManager);
+        checkNotNull(loginContext);
+        tokenManager.createToken(loginContext.getCurrentUser().getEntity(), user.getEmail(), user.getUsername(), url);
+
         // TODO show confirmations message
-        return "redirect:/budgetanalyzer/user/dashboard";
+        return PageLinks.INVITE_USER.page();
     }
 
     private void validateUserInvitation(User user, Errors errors) {
@@ -63,5 +76,13 @@ public class UserController extends AbstractController {
         } else if (!emailValidator.validate(user.getEmail())) {
             errors.rejectValue("email", "error.email.invalid");
         }
+    }
+
+    public void setTokenManager(TokenManager tokenManager) {
+        this.tokenManager = tokenManager;
+    }
+
+    public void setLoginContext(LoginContext loginContext) {
+        this.loginContext = loginContext;
     }
 }

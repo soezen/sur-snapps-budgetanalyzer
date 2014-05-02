@@ -14,10 +14,13 @@ public class SendGridMailSender {
     private String toEmail;
     private String subject;
     private String html;
+    private SendGrid sendGrid;
 
-    private SendGridMailSender() { }
+    private SendGridMailSender(SendGrid sendGrid) {
+        this.sendGrid = sendGrid;
+    }
 
-    public void send(SendGrid sendGrid) {
+    public void send() {
         sendGrid.addTo(toEmail);
         sendGrid.setFrom(fromEmail);
         sendGrid.setFromName(fromName);
@@ -26,8 +29,8 @@ public class SendGridMailSender {
         sendGrid.send();
     }
 
-    public static SendGridMailSender newMail() {
-        return new SendGridMailSender();
+    public static SendGridMailSender newMail(SendGrid sendGrid) {
+        return new SendGridMailSender(sendGrid);
     }
 
     public SendGridMailSender from(String email, String name) {
