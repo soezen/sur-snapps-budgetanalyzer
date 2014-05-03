@@ -1,25 +1,18 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
 import com.google.common.collect.Lists;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
-import org.springframework.stereotype.Component;
-import sur.snapps.budgetanalyzer.domain.product.Budget;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import sur.snapps.budgetanalyzer.domain.user.Entity;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +35,8 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
     private boolean enabled;
     @Column(nullable = false)
     private boolean admin;
@@ -54,6 +49,14 @@ public class User implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ENTITY_ID")
     private Entity entity;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getEmail() {
         return email;

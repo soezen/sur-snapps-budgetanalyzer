@@ -15,7 +15,7 @@
         <!--<aop:include name="exceptionHandlerAspect" />-->
     <!--</aop:aspectj-autoproxy>-->
 
-    <!--<bean id="exceptionHandlerAspect" class="sur.snapps.budgetanalyzer.web.aspect.ExceptionHandlerAspect" />-->
+    <!--<bean id="exceptionHandlerAspect" class="sur.snapps.budgetanalyzer.web.exceptionion.ExceptionHandlerAspect" />-->
 
     <!--<bean id="loginContext" class="sur.snapps.budgetanalyzer.web.controller.user.LoginContext">-->
         <!--<property name="userManager" ref="userManager" />-->

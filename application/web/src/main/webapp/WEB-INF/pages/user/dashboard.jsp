@@ -11,7 +11,7 @@
     <jsp:attribute name="title">Dashboard</jsp:attribute>
     <jsp:body>
         <ul>
-            <li><a href="<c:url value="/budgetanalyzer/user/inviteUser" />">Invite User</a></li>
+            <li><a href="<c:url value="/budgetanalyzer/user/manageUsers" />">Manage Users</a></li>
         </ul>
     </jsp:body>
 </t:template>

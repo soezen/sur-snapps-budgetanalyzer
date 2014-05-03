@@ -1,4 +1,4 @@
-package sur.snapps.budgetanalyzer.web.aspect;
+package sur.snapps.budgetanalyzer.web.exception;
 
 import com.google.common.base.Predicates;
 import com.google.common.base.Throwables;
@@ -44,7 +44,7 @@ public class ExceptionHandlerAspect {
                 if (method.isAnnotationPresent(NavigateTo.class)) {
                     NavigateTo annotation = method.getAnnotation(NavigateTo.class);
                     PageLinks link = annotation.value();
-                    return link.page();
+                    return link.error();
                 }
             }
         }

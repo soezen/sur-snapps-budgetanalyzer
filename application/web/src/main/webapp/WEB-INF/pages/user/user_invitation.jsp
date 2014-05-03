@@ -41,7 +41,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <a href="<c:url value="/budgetanalyzer/user/dashboard"/>">Cancel</a>
+                        <a href="<c:url value="/budgetanalyzer/user/manageUsers"/>">Cancel</a>
                     </td>
                     <td>
                         <input type="submit" value="Invite" />

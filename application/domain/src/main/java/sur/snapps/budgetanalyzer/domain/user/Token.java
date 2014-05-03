@@ -1,6 +1,6 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
-import org.joda.time.DateTime;
+import sur.snapps.budgetanalyzer.util.DateUtil;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -31,15 +31,25 @@ public class Token {
     private Entity entity;
     @Column(name = "EXPIRATION_DATE", nullable = false)
     private Date expirationDate;
+    @Column(nullable = false, unique = true)
+    private String email;
+    @Column(nullable = false)
+    private TokenStatus status;
+
+    protected Token() {
+        // for hibernate
+    }
 
     private Token(Builder builder) {
         value = builder.token;
         entity = builder.entity;
         expirationDate = builder.expirationDate;
+        email = builder.email;
+        status = builder.status;
     }
 
     public static Token.Builder createUserInvitationToken() {
-        return new Builder().daysValid(7);
+        return new Builder().daysValid(7).status(TokenStatus.VALID);
     }
 
     public static class Builder {
@@ -47,10 +57,24 @@ public class Token {
         private String token;
         private Entity entity;
         private Date expirationDate;
+        private String email;
+        private TokenStatus status;
 
         public Token build() {
             // TODO add validation
+            // if status is valid, expiration date has to be after now
+            // (automatically change it or throw error)
             return new Token(this);
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder status(TokenStatus status) {
+            this.status = status;
+            return this;
         }
 
         public Builder generateToken() {
@@ -69,7 +93,9 @@ public class Token {
         }
 
         public Builder daysValid(int days) {
-            this.expirationDate = new Date(DateTime.now().plusDays(days).getMillis());
+            java.util.Date now = DateUtil.now();
+            now = DateUtil.removeTime(now);
+            this.expirationDate = new Date(DateUtil.addDays(now, days).getTime());
             return this;
         }
     }
@@ -78,11 +104,26 @@ public class Token {
         return value;
     }
 
+    public TokenStatus getStatus() {
+        if (status.isValid() && hasExpired()) {
+            status = TokenStatus.EXPIRED;
+        }
+        return status;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean hasExpired() {
+        return getExpirationDate().before(new java.util.Date());
+    }
+
     public Entity entity() {
         return entity;
     }
 
-    public DateTime expirationDate() {
-        return new DateTime(expirationDate);
+    public java.util.Date getExpirationDate() {
+        return new java.util.Date(expirationDate.getTime());
     }
 }

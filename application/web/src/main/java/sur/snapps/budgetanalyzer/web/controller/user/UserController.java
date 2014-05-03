@@ -9,11 +9,13 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
+import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.mail.Url;
+import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.util.validators.EmailValidator;
-import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
+import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class UserController extends AbstractController {
 
     @Autowired
+    private UserManager userManager;
+    @Autowired
     private TokenManager tokenManager;
 
     @Autowired
@@ -39,13 +43,21 @@ public class UserController extends AbstractController {
 
     @RequestMapping("/dashboard")
     public String openUserDashboard() {
-        return "user/dashboard";
+        return PageLinks.DASHBOARD.page();
     }
 
     @RequestMapping("/inviteUser")
     public String openInviteUserPage(Model model) {
         model.addAttribute("user", new User());
-        return "user/user_invitation";
+        return PageLinks.INVITE_USER.page();
+    }
+
+    @RequestMapping("/manageUsers")
+    public String openManageUsersPage(Model model) {
+        Entity entity = loginContext.getCurrentUser().getEntity();
+//        model.addAttribute("users", userManager.findUsersOfEntity(entity));
+        model.addAttribute("tokens", tokenManager.findTokensForEntity(entity));
+        return PageLinks.MANAGE_USERS.page();
     }
 
     @RequestMapping(value = "/postInviteUser", method = RequestMethod.POST)
@@ -54,7 +66,7 @@ public class UserController extends AbstractController {
         validateUserInvitation(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return PageLinks.INVITE_USER.page();
+            return PageLinks.INVITE_USER.error();
         }
         // TODO add name to user (and use that everywhere to display (mail and webapp))
         Url url = new Url();
@@ -66,7 +78,7 @@ public class UserController extends AbstractController {
         tokenManager.createToken(loginContext.getCurrentUser().getEntity(), user.getEmail(), user.getUsername(), url);
 
         // TODO show confirmations message
-        return PageLinks.INVITE_USER.page();
+        return PageLinks.INVITE_USER.confirmation();
     }
 
     private void validateUserInvitation(User user, Errors errors) {
@@ -78,11 +90,4 @@ public class UserController extends AbstractController {
         }
     }
 
-    public void setTokenManager(TokenManager tokenManager) {
-        this.tokenManager = tokenManager;
-    }
-
-    public void setLoginContext(LoginContext loginContext) {
-        this.loginContext = loginContext;
-    }
 }

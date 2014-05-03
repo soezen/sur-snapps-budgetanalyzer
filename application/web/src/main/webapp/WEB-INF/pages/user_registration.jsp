@@ -16,7 +16,17 @@
             <table>
                 <tr>
                     <td>
-                        <f:label path="username">Username</f:label>
+                        <f:label path="name">Name</f:label>
+                    </td>
+                    <td>
+                        <f:input path="name" />
+                        <br />
+                        <f:errors path="name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <f:label path="username">Login</f:label>
                     </td>
                     <td>
                         <f:input path="username" />

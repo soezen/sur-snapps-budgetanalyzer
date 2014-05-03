@@ -10,6 +10,8 @@ import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.persistence.user.TokenRepository;
 
+import java.util.List;
+
 /**
  * User: SUR
  * Date: 26/04/14
@@ -26,11 +28,16 @@ public class TokenManager {
     @Autowired
     private SendGridMailSender mailSender;
 
+    public List<Token> findTokensForEntity(Entity entity) {
+        return tokenRepository.findTokensForEntity(entity);
+    }
+
     @Transactional
     public void createToken(Entity entity, String mail, String inviter, Url url) {
         Token token = Token.createUserInvitationToken()
                 .generateToken()
                 .entity(entity)
+                .email(mail)
                 .build();
         token = tokenRepository.save(token);
 

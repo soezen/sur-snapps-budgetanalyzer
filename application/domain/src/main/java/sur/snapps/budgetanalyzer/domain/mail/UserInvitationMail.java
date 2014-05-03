@@ -9,7 +9,6 @@ import org.stringtemplate.v4.ST;
  */
 public class UserInvitationMail extends TemplateMail<UserInvitationMail> {
 
-    // TODO relative path needs to be dynamic
     private static final String URL_PATTERN = "http://%1$s:%2$s%3$s/userRegistrationWithToken?token=%4$s";
 
     private String token;

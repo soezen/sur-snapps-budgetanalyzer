@@ -13,6 +13,7 @@ import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.util.validators.UserValidator;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
+import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
 import javax.validation.Valid;
 
@@ -38,7 +39,7 @@ public class UserRegistrationController extends AbstractController {
     @RequestMapping("/userRegistration")
     public String openUserRegistrationPage(Model model) {
         model.addAttribute("user", new User());
-        return "user_registration";
+        return PageLinks.USER_REGISTRATION.page();
     }
 
     @RequestMapping(value = "/postUserRegistration", method = RequestMethod.POST)
@@ -46,19 +47,15 @@ public class UserRegistrationController extends AbstractController {
         validateUserRegistrationInput(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "user_registration";
+            return PageLinks.USER_REGISTRATION.error();
         }
         userManager.createUser(user);
-        return "redirect:/budgetanalyzer/user/dashboard";
+        return "redirect:" + PageLinks.USER_REGISTRATION.confirmation();
     }
 
     private void validateUserRegistrationInput(User user, Errors errors) {
         if (userManager.isUsernameUsed(user.getUsername())) {
             errors.rejectValue("username", "error.user_registration.username_already_used");
         }
-    }
-
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
     }
 }

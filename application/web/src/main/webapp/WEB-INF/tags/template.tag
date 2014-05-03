@@ -22,6 +22,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
         <s:authentication property="principal" var="principal" scope="page" />
         <c:if test="${principal != 'anonymousUser'}">
+            <!-- TODO try to get name instead of username -->
             <p>Logged in as ${principal.username} (<a href="<c:url value="/j_spring_security_logout"/>">Logout</a>)</p>
         </c:if>
 

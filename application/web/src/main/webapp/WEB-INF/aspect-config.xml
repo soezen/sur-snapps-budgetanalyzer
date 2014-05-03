@@ -10,7 +10,7 @@
 
     <bean id="exceptionWrapperAspect" class="sur.snapps.budgetanalyzer.business.exception.ExceptionWrapperAspect" />
 
-    <bean id="exceptionHandlerAspect" class="sur.snapps.budgetanalyzer.web.aspect.ExceptionHandlerAspect" />
+    <bean id="exceptionHandlerAspect" class="sur.snapps.budgetanalyzer.web.exception.ExceptionHandlerAspect" />
 
 
 </beans>
