@@ -12,21 +12,8 @@
 
 	<mvc:annotation-driven />
     <aop:aspectj-autoproxy />
-        <!--<aop:include name="exceptionHandlerAspect" />-->
-    <!--</aop:aspectj-autoproxy>-->
 
-    <!--<bean id="exceptionHandlerAspect" class="sur.snapps.budgetanalyzer.web.exceptionion.ExceptionHandlerAspect" />-->
-
-    <!--<bean id="loginContext" class="sur.snapps.budgetanalyzer.web.controller.user.LoginContext">-->
-        <!--<property name="userManager" ref="userManager" />-->
-    <!--</bean>-->
-    <!--<bean id="userController" class="sur.snapps.budgetanalyzer.web.controller.user.UserController">-->
-        <!--<property name="tokenManager" ref="tokenManager" />-->
-        <!--<property name="loginContext" ref="loginContext" />-->
-    <!--</bean>-->
-    <!--<bean id="userRegistrationController" class="sur.snapps.budgetanalyzer.web.controller.user.UserRegistrationController">-->
-        <!--<property name="userManager" ref="userManager" />-->
-    <!--</bean>-->
+    <bean id="userValidator" class="sur.snapps.budgetanalyzer.util.validators.UserValidator" />
 
     <!-- Resolves logical view names to JSP views -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

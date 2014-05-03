@@ -18,7 +18,7 @@ create table users (
   name      VARCHAR(100) NOT NULL,
   enabled   BOOLEAN NOT NULL,
   admin     boolean not null,
-  entity_id INT NOT NULL,
+  entity_id INT not null,
   PRIMARY KEY (id)
 );
 

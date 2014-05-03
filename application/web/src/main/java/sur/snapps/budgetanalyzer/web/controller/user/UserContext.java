@@ -1,6 +1,8 @@
 package sur.snapps.budgetanalyzer.web.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -13,7 +15,8 @@ import sur.snapps.budgetanalyzer.domain.user.User;
  * Time: 20:27
  */
 @Component
-public class LoginContext {
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class UserContext {
 
     @Autowired
     private UserManager userManager;
@@ -29,4 +32,5 @@ public class LoginContext {
         user = userManager.findByUsername(username);
         return user;
     }
+
 }

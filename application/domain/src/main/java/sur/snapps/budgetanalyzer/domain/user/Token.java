@@ -3,11 +3,14 @@ package sur.snapps.budgetanalyzer.domain.user;
 import sur.snapps.budgetanalyzer.util.DateUtil;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.UUID;
 
@@ -18,7 +21,7 @@ import java.util.UUID;
  */
 @javax.persistence.Entity
 @Table(name = "TOKENS")
-public class Token {
+public class Token implements Serializable {
 
     @Id
     @GeneratedValue
@@ -34,6 +37,7 @@ public class Token {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TokenStatus status;
 
     protected Token() {

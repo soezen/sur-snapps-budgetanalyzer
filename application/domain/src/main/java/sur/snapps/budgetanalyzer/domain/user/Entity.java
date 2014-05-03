@@ -24,6 +24,11 @@ public class Entity implements Serializable {
     private boolean shared;
 
 //    private List<Account> accounts;
+
+    public int getId() {
+        return id;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

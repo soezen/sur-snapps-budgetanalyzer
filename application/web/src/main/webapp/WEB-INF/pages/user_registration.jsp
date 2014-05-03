@@ -13,6 +13,8 @@
     <jsp:attribute name="title">User Registration</jsp:attribute>
     <jsp:body>
         <f:form modelAttribute="user" action="postUserRegistration" method="post">
+            <f:errors />
+            <f:hidden path="tokenValue" />
             <table>
                 <tr>
                     <td>

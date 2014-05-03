@@ -3,8 +3,11 @@ package sur.snapps.budgetanalyzer.business.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
+import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.UserRepository;
+
+import java.util.List;
 
 /**
  * User: SUR
@@ -17,20 +20,27 @@ public class UserManager {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenManager tokenManager;
 
     @Transactional
     public User createUser(User user) {
-        Entity entity = new Entity();
-        entity.setName(user.getUsername());
-        entity.setOwned(true);
-        entity.setShared(false);
-
+        if (user.isAdmin()) {
+            user.getEntity().setName(user.getName());
+        } else {
+            Token token = tokenManager.findTokenByValue(user.getTokenValue());
+            user.setEntity(token.entity());
+            tokenManager.delete(token);
+        }
         user.encodePassword();
         user.setEnabled(true);
-        user.setAdmin(true);
-        user.setEntity(entity);
         user.addAuthority(ROLE_USER);
         return userRepository.save(user);
+    }
+
+    public List<User> findUsersOfEntity(Entity entity) {
+        System.out.println("ENTITY: " + entity.getId() + " - " + entity.getName());
+        return userRepository.findUsersOfEntity(entity);
     }
 
     public boolean isUsernameUsed(String username) {

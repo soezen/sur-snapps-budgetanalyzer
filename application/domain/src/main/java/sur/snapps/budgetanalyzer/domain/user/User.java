@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -41,14 +42,25 @@ public class User implements Serializable {
     @Column(nullable = false)
     private boolean admin;
 
+    @Transient
+    private String tokenValue;
+
     @ElementCollection
     @CollectionTable(name = "AUTHORITIES", joinColumns = @JoinColumn(name = "USER_ID"))
     @Column(name = "AUTHORITY")
     private List<String> authorities = Lists.newArrayList();
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ENTITY_ID")
     private Entity entity;
+
+    public String getTokenValue() {
+        return tokenValue;
+    }
+
+    public void setTokenValue(String tokenValue) {
+        this.tokenValue = tokenValue;
+    }
 
     public String getName() {
         return name;

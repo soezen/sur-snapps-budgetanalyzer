@@ -14,7 +14,7 @@ import sur.snapps.budgetanalyzer.util.Logger;
  * Date: 29/04/14
  * Time: 20:07
  */
-public class SendGridMailSender {
+public class SendGridMailSender implements MailSender {
 
     @Value("${mail.from_address}")
     private String fromEmail;
@@ -29,6 +29,7 @@ public class SendGridMailSender {
         this.sendGrid = sendGrid;
     }
 
+    @Override
     public void send(TemplateMail mail) {
         String result = sendGrid.addTo(mail.to())
                 .setFrom(fromEmail)

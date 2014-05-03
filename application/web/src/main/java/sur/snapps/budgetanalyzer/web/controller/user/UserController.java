@@ -20,8 +20,6 @@ import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * UserDashboardController
  *
@@ -39,7 +37,7 @@ public class UserController extends AbstractController {
     private TokenManager tokenManager;
 
     @Autowired
-    private LoginContext loginContext;
+    private UserContext userContext;
 
     @RequestMapping("/dashboard")
     public String openUserDashboard() {
@@ -54,8 +52,8 @@ public class UserController extends AbstractController {
 
     @RequestMapping("/manageUsers")
     public String openManageUsersPage(Model model) {
-        Entity entity = loginContext.getCurrentUser().getEntity();
-//        model.addAttribute("users", userManager.findUsersOfEntity(entity));
+        Entity entity = userContext.getCurrentUser().getEntity();
+        model.addAttribute("users", userManager.findUsersOfEntity(entity));
         model.addAttribute("tokens", tokenManager.findTokensForEntity(entity));
         return PageLinks.MANAGE_USERS.page();
     }
@@ -68,14 +66,13 @@ public class UserController extends AbstractController {
         if (bindingResult.hasErrors()) {
             return PageLinks.INVITE_USER.error();
         }
-        // TODO add name to user (and use that everywhere to display (mail and webapp))
         Url url = new Url();
         url.setServerName(request.getServerName());
         url.setServerPort(request.getServerPort());
         url.setContextPath(request.getContextPath());
-        checkNotNull(tokenManager);
-        checkNotNull(loginContext);
-        tokenManager.createToken(loginContext.getCurrentUser().getEntity(), user.getEmail(), user.getUsername(), url);
+
+        User currentUser = userContext.getCurrentUser();
+        tokenManager.createToken(currentUser.getEntity(), user.getEmail(), currentUser.getName(), url);
 
         // TODO show confirmations message
         return PageLinks.INVITE_USER.confirmation();

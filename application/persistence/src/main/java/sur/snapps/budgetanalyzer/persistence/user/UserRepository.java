@@ -1,5 +1,6 @@
 package sur.snapps.budgetanalyzer.persistence.user;
 
+import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.User;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  * User: SUR
@@ -23,6 +25,14 @@ public class UserRepository {
     public User save(User user) {
         entityManager.persist(user);
         return user;
+    }
+
+    public List<User> findUsersOfEntity(Entity entity) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+        Predicate condition = builder.equal(query.from(User.class).get("entity"), entity);
+        query.where(condition);
+        return entityManager.createQuery(query).getResultList();
     }
 
     public User findByUsername(String username) {

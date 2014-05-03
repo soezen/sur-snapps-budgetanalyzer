@@ -9,7 +9,7 @@ import org.stringtemplate.v4.ST;
  */
 public class UserInvitationMail extends TemplateMail<UserInvitationMail> {
 
-    private static final String URL_PATTERN = "http://%1$s:%2$s%3$s/userRegistrationWithToken?token=%4$s";
+    private static final String URL_PATTERN = "http://%1$s:%2$s%3$s/budgetanalyzer/userRegistrationWithToken?value=%4$s";
 
     private String token;
     private String inviter;

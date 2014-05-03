@@ -3,7 +3,7 @@ package sur.snapps.budgetanalyzer.business.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.business.mail.MailFactory;
-import sur.snapps.budgetanalyzer.business.mail.SendGridMailSender;
+import sur.snapps.budgetanalyzer.business.mail.MailSender;
 import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.mail.UserInvitationMail;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
@@ -26,7 +26,15 @@ public class TokenManager {
     private MailFactory mailFactory;
 
     @Autowired
-    private SendGridMailSender mailSender;
+    private MailSender mailSender;
+
+    public Token findTokenByValue(String tokenValue) {
+        return tokenRepository.findTokenByValue(tokenValue);
+    }
+
+    public void delete(Token token) {
+        tokenRepository.delete(token);
+    }
 
     public List<Token> findTokensForEntity(Entity entity) {
         return tokenRepository.findTokensForEntity(entity);

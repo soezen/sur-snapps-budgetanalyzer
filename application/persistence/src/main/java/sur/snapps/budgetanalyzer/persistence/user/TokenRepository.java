@@ -25,6 +25,20 @@ public class TokenRepository {
         return token;
     }
 
+    public void delete(Token token) {
+        entityManager.remove(token);
+    }
+
+    public Token findTokenByValue(String tokenValue) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Token> query = builder.createQuery(Token.class);
+        Predicate condition = builder.equal(
+                query.from(Token.class).get("value"),
+                tokenValue);
+        query.where(condition);
+        return entityManager.createQuery(query).getSingleResult();
+    }
+
     public List<Token> findTokensForEntity(Entity entity) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Token> query = builder.createQuery(Token.class);

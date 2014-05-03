@@ -1,6 +1,7 @@
 package sur.snapps.budgetanalyzer.util;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * User: SUR
@@ -9,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
  */
 public final class Logger {
 
-    private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger("SUR-SNAPPS");
+    private static final Log LOG = LogFactory.getLog("SUR-SNAPPS");
 
     private Logger() { }
 

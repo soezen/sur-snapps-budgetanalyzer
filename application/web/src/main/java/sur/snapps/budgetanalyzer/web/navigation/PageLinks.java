@@ -7,7 +7,7 @@ package sur.snapps.budgetanalyzer.web.navigation;
  */
 public enum PageLinks {
 
-    USER_REGISTRATION("user/user_registration", "user/dashboard", "user_registration"),
+    USER_REGISTRATION("user_registration", "user/dashboard", "user_registration"),
 
     DASHBOARD("user/dashboard", null, null),
 

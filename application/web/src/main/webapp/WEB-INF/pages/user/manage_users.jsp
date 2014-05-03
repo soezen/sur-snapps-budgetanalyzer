@@ -34,6 +34,7 @@
             </tbody>
         </table>
 
+        <!-- TODO reload button? -->
         <!-- list of invitations + status + actions -->
         <!-- TODO stylesheet -->
         <table>
@@ -44,16 +45,19 @@
                     <th>Status</th>
                     <th></th>
                 </tr>
+            </thead>
+            <tbody>
                 <c:forEach var="token" items="#{tokens}">
                     <tr>
                         <td><c:out value="${token.email}" /></td>
-                        <!-- TODO format date and enum -->
                         <td><fmt:formatDate value="${token.expirationDate}" pattern="dd-MM-yyyy" /></td>
                         <td><c:out value="${token.status}" /></td>
-                        <td></td>
+                        <td>
+                            <!-- TODO actions: resend, revoke, extend -->
+                        </td>
                     </tr>
                 </c:forEach>
-            </thead>
+            </tbody>
             <tfoot>
                 <tr>
                     <td colspan="3">
