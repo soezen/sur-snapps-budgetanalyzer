@@ -42,23 +42,24 @@
         <!-- TODO reload button? -->
         <!-- list of invitations + status + actions -->
         <!-- TODO stylesheet -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Expiration Date</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="token" items="#{tokens}">
+        <!-- TODO put this in separate file? -->
+        <sec:authorize ifAllGranted="ROLE_ADMIN">
+            <table>
+                <thead>
                     <tr>
-                        <!-- TODO add default ordering and perhaps allow user to order on different columns -->
-                        <td><c:out value="${token.email}" /></td>
-                        <td><fmt:formatDate value="${token.expirationDate}" pattern="dd-MM-yyyy" /></td>
-                        <td><c:out value="${token.status}" /></td>
-                        <sec:authorize ifAllGranted="ROLE_ADMIN">
+                        <th>Email</th>
+                        <th>Expiration Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="token" items="#{tokens}">
+                        <tr>
+                            <!-- TODO add default ordering and perhaps allow user to order on different columns -->
+                            <td><c:out value="${token.email}" /></td>
+                            <td><fmt:formatDate value="${token.expirationDate}" pattern="dd-MM-yyyy" /></td>
+                            <td><c:out value="${token.status}" /></td>
                             <td>
                                 <c:if test="${token.status.valid}">
                                     <a href="<c:url value="/budgetanalyzer/user/admin/resendInvitation/${token.id}" />">Resend invitation</a><br />
@@ -69,11 +70,9 @@
                                     <a href="<c:url value="/budgetanalyzer/user/admin/restoreInvitation/${token.id}" />">Restore invitation</a>
                                 </c:if>
                             </td>
-                        </sec:authorize>
-                    </tr>
-                </c:forEach>
-            </tbody>
-            <sec:authorize ifAllGranted="ROLE_ADMIN">
+                        </tr>
+                    </c:forEach>
+                </tbody>
                 <tfoot>
                     <tr>
                         <!-- TODO refresh button -->
@@ -82,7 +81,7 @@
                         </td>
                     </tr>
                 </tfoot>
-            </sec:authorize>
-        </table>
+            </table>
+        </sec:authorize>
     </jsp:body>
 </t:template>
