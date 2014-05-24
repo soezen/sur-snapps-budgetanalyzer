@@ -64,7 +64,7 @@ public class UserController extends AbstractController {
         validateUserInvitation(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return PageLinks.INVITE_USER.error();
+            return PageLinks.INVITE_USER.page();
         }
         Url url = new Url();
         url.setServerName(request.getServerName());
@@ -72,10 +72,10 @@ public class UserController extends AbstractController {
         url.setContextPath(request.getContextPath());
 
         User currentUser = userContext.getCurrentUser();
-        tokenManager.createToken(currentUser.getEntity(), user.getEmail(), currentUser.getName(), url);
+        tokenManager.create(currentUser.getEntity(), user.getEmail(), currentUser.getName(), url);
 
         // TODO show confirmations message
-        return PageLinks.INVITE_USER.confirmation();
+        return PageLinks.DASHBOARD.redirect();
     }
 
     private void validateUserInvitation(User user, Errors errors) {

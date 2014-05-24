@@ -8,7 +8,9 @@ import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.mail.UserInvitationMail;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
+import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.TokenRepository;
+import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 
 import java.util.List;
 
@@ -20,6 +22,8 @@ import java.util.List;
 public class TokenManager {
 
     @Autowired
+    private UserManager userManager;
+    @Autowired
     private TokenRepository tokenRepository;
 
     @Autowired
@@ -27,6 +31,10 @@ public class TokenManager {
 
     @Autowired
     private MailSender mailSender;
+
+    public Token findTokenById(int tokenId) {
+        return tokenRepository.findTokenById(tokenId);
+    }
 
     public Token findTokenByValue(String tokenValue) {
         return tokenRepository.findTokenByValue(tokenValue);
@@ -41,7 +49,23 @@ public class TokenManager {
     }
 
     @Transactional
-    public void createToken(Entity entity, String mail, String inviter, Url url) {
+    public void extend(int userId, int tokenId) {
+        Token token = findTokenById(tokenId);
+        if (!token.getStatus().isValid()) {
+            throw new BusinessException("token invalid state for extend action");
+        }
+
+        User user = userManager.findById(userId);
+        if (!user.hasAccessTo(token)) {
+            throw new BusinessException("user has no access to specified token");
+        }
+
+        token.extendWithDays(5);
+        tokenRepository.save(token);
+    }
+
+    @Transactional
+    public void create(Entity entity, String mail, String inviter, Url url) {
         Token token = Token.createUserInvitationToken()
                 .generateToken()
                 .entity(entity)

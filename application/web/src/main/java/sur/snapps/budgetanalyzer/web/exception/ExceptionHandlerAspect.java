@@ -54,7 +54,7 @@ public class ExceptionHandlerAspect {
         if (method.isAnnotationPresent(NavigateTo.class)) {
             NavigateTo annotation = method.getAnnotation(NavigateTo.class);
             PageLinks link = annotation.value();
-            return link.error();
+            return link.page();
         }
         return "redirect:" + PageLinks.DASHBOARD.page();
     }

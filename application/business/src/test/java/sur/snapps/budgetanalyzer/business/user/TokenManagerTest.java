@@ -82,7 +82,7 @@ public class TokenManagerTest {
         mailSender.send(userInvitationMail);
         replay();
 
-        manager.createToken(entity, mail, inviter, url);
+        manager.create(entity, mail, inviter, url);
 
         Token token = tokenCapture.getValue();
         assertSame(entity, token.entity());

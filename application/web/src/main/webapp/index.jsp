@@ -4,6 +4,6 @@
 <t:template>
     <jsp:attribute name="title">Home</jsp:attribute>
     <jsp:body>
-        <p><a href="budgetanalyzer/user/dashboard.htm">User Dashboard</a></p>
+        <p><a id="btn_open_user_dashboard" href="budgetanalyzer/user/dashboard.htm">User Dashboard</a></p>
     </jsp:body>
 </t:template>

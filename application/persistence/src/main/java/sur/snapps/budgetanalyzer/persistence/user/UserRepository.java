@@ -35,6 +35,10 @@ public class UserRepository {
         return entityManager.createQuery(query).getResultList();
     }
 
+    public User findById(int userId) {
+        return entityManager.find(User.class, userId);
+    }
+
     public User findByUsername(String username) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);

@@ -21,12 +21,17 @@ public class TokenRepository {
     private EntityManager entityManager;
 
     public Token save(Token token) {
+        token = entityManager.merge(token);
         entityManager.persist(token);
         return token;
     }
 
     public void delete(Token token) {
         entityManager.remove(token);
+    }
+
+    public Token findTokenById(int tokenId) {
+        return entityManager.find(Token.class, tokenId);
     }
 
     public Token findTokenByValue(String tokenValue) {

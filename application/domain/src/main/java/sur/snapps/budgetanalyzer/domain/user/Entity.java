@@ -25,36 +25,60 @@ public class Entity implements Serializable {
 
 //    private List<Account> accounts;
 
-    public int getId() {
-        return id;
+    protected Entity() {
+        // for hibernate
     }
 
-    public void setId(int id) {
-        this.id = id;
+    private Entity(Builder builder) {
+        this.name = builder.name;
+        this.shared = builder.shared;
+        this.owned = builder.owned;
+    }
+
+    public static Builder newOwnedEntity() {
+        return new Builder().owned(true).shared(false);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public boolean isOwned() {
         return owned;
-    }
-
-    public void setOwned(boolean owned) {
-        this.owned = owned;
     }
 
     public boolean isShared() {
         return shared;
     }
 
-    public void setShared(boolean shared) {
-        this.shared = shared;
-    }
+    public static class Builder {
 
+        private String name;
+        private boolean owned;
+        private boolean shared;
+
+        public Entity build() {
+            return new Entity(this);
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder shared(boolean shared) {
+            this.shared = shared;
+            return this;
+        }
+
+        public Builder owned(boolean owned) {
+            this.owned = owned;
+            return this;
+        }
+
+    }
 }

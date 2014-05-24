@@ -1,6 +1,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@tag description="Overall Page template" pageEncoding="UTF-8"%>
 <%@attribute name="title" fragment="true" %>
 
@@ -20,11 +21,22 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <div id="main_wrapper">
         <h1><jsp:invoke fragment="title" /></h1>
 
-        <s:authentication property="principal" var="principal" scope="page" />
-        <c:if test="${principal != 'anonymousUser'}">
+        <c:if test="${not empty success}">
+            <fmt:message key="${success_message}" />
+        </c:if>
+        <c:if test="${not empty errors}">
+            <ul>
+                <c:forEach var="error" items="${errors}">
+                    <li><fmt:message key="${error}" /></li>
+                </c:forEach>
+            </ul>
+        </c:if>
+
+        <s:authorize ifAllGranted="ROLE_USER">
+            <s:authentication property="principal" var="principal" scope="page" />
             <!-- TODO try to get name instead of username -->
             <p>Logged in as ${principal.username} (<a href="<c:url value="/j_spring_security_logout"/>">Logout</a>)</p>
-        </c:if>
+        </s:authorize>
 
     <jsp:doBody/>
     </body>

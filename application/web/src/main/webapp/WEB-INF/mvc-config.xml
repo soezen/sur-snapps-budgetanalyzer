@@ -23,7 +23,7 @@
 
 	<!-- Returns messages based on a reloadable resource bundle -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<property name="basenames" value="/WEB-INF/messages/validation,/WEB-INF/messages/errors" />
+		<property name="basenames" value="/WEB-INF/messages/validation,/WEB-INF/messages/errors, /WEB-INF/messages/info" />
 	</bean>
 
 </beans>

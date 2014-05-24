@@ -56,6 +56,10 @@ public class Token implements Serializable {
         return new Builder().daysValid(7).status(TokenStatus.VALID);
     }
 
+    public void extendWithDays(int days) {
+        this.expirationDate = new Date(DateUtil.addDays(expirationDate, days).getTime());
+    }
+
     public static class Builder {
 
         private String token;
@@ -102,6 +106,10 @@ public class Token implements Serializable {
             this.expirationDate = new Date(DateUtil.addDays(now, days).getTime());
             return this;
         }
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String value() {

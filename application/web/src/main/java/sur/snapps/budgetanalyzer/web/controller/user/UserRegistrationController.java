@@ -8,10 +8,11 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
-import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
+import sur.snapps.budgetanalyzer.domain.user.TokenStatus;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.util.validators.UserValidator;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
@@ -26,12 +27,9 @@ import javax.validation.Valid;
  * Time: 10:41
  */
 @Controller
-//@Session
 public class UserRegistrationController extends AbstractController {
 
     // TODO selenium tests
-    @Autowired
-    private UserContext userContext;
 
     @Autowired
     private UserManager userManager;
@@ -43,23 +41,26 @@ public class UserRegistrationController extends AbstractController {
 
     @RequestMapping("/userRegistration")
     public String openUserRegistrationPage(Model model) {
-        User user = new User();
-        Entity entity = new Entity();
-        entity.setOwned(true);
-        entity.setShared(false);
-        user.setEntity(entity);
-        user.setAdmin(true);
-        model.addAttribute("user", user);
+        model.addAttribute("user", new User());
         return PageLinks.USER_REGISTRATION.page();
+    }
+
+    @RequestMapping("/userRegistrationSuccess")
+    public String openUserRegistrationSuccessPage() {
+        return PageLinks.USER_REGISTRATION_SUCCESS.page();
     }
 
     @RequestMapping(value = "/userRegistrationWithToken")
     public String openUserRegistrationWithTokenPage(Model model, @RequestParam String value) {
         Token token = tokenManager.findTokenByValue(value);
-        // TODO check if token valid
+
+        TokenStatus status = token.getStatus();
+        if (!status.isValid()) {
+            // TODO show on page
+            return "invalid_token" + status;
+        }
 
         User user = new User();
-        // TODO make read only
         user.setEmail(token.getEmail());
         user.setTokenValue(value);
 
@@ -69,14 +70,16 @@ public class UserRegistrationController extends AbstractController {
 
     @RequestMapping(value = "/postUserRegistration", method = RequestMethod.POST)
     @NavigateTo(PageLinks.USER_REGISTRATION)
-    public String userRegistration(@Valid User user, BindingResult bindingResult) {
+    public String userRegistration(RedirectAttributes redirectAttributes, @Valid User user, BindingResult bindingResult) {
         validateUserRegistrationInput(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return PageLinks.USER_REGISTRATION.error();
+            return PageLinks.USER_REGISTRATION.page();
         }
-        userManager.createUser(user);
-        return PageLinks.USER_REGISTRATION.confirmation();
+        userManager.create(user);
+        redirectAttributes.addFlashAttribute("success", "true");
+        redirectAttributes.addFlashAttribute("success_message", "User Created, wait for email.");
+        return PageLinks.USER_REGISTRATION_SUCCESS.redirect();
     }
 
     private void validateUserRegistrationInput(User user, Errors errors) {

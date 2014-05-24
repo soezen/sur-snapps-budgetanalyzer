@@ -1,5 +1,6 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 
@@ -25,6 +26,9 @@ import java.util.List;
 @Table(name = "USERS")
 public class User implements Serializable {
 
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     @Id
     @GeneratedValue
     private int id;
@@ -39,8 +43,6 @@ public class User implements Serializable {
     private String name;
     @Column(nullable = false)
     private boolean enabled;
-    @Column(nullable = false)
-    private boolean admin;
 
     @Transient
     private String tokenValue;
@@ -53,6 +55,15 @@ public class User implements Serializable {
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ENTITY_ID")
     private Entity entity;
+
+    public boolean hasAccessTo(Token token) {
+        return isAdmin()
+            && token.entity().equals(entity);
+    }
+
+    public int getId() {
+        return id;
+    }
 
     public String getTokenValue() {
         return tokenValue;
@@ -79,11 +90,7 @@ public class User implements Serializable {
     }
 
     public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
+        return Iterables.contains(authorities, ROLE_ADMIN);
     }
 
     public Entity getEntity() {

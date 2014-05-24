@@ -42,13 +42,12 @@ public class UserManagerTest {
         expect(user.getUsername()).andReturn(username);
         user.encodePassword();
         user.setEnabled(true);
-        user.setAdmin(true);
-        user.addAuthority(UserManager.ROLE_USER);
+        user.addAuthority(User.ROLE_USER);
         user.setEntity(capture(entityCapture));
         expect(repository.save(user)).andReturn(user);
         replay();
 
-        User result = manager.createUser(user);
+        User result = manager.create(user);
 
         assertNotNull(result);
         assertSame(user, result);

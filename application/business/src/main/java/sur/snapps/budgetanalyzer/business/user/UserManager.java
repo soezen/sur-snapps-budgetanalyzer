@@ -16,17 +16,16 @@ import java.util.List;
  */
 public class UserManager {
 
-    public static final String ROLE_USER = "ROLE_USER";
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private TokenManager tokenManager;
 
     @Transactional
-    public User createUser(User user) {
-        if (user.isAdmin()) {
-            user.getEntity().setName(user.getName());
+    public User create(User user) {
+        if (user.getTokenValue() == null) {
+            user.setEntity(Entity.newOwnedEntity().name(user.getName()).build());
+            user.addAuthority(User.ROLE_ADMIN);
         } else {
             Token token = tokenManager.findTokenByValue(user.getTokenValue());
             user.setEntity(token.entity());
@@ -34,12 +33,15 @@ public class UserManager {
         }
         user.encodePassword();
         user.setEnabled(true);
-        user.addAuthority(ROLE_USER);
+        user.addAuthority(User.ROLE_USER);
         return userRepository.save(user);
     }
 
+    public User findById(int userId) {
+        return userRepository.findById(userId);
+    }
+
     public List<User> findUsersOfEntity(Entity entity) {
-        System.out.println("ENTITY: " + entity.getId() + " - " + entity.getName());
         return userRepository.findUsersOfEntity(entity);
     }
 

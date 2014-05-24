@@ -20,34 +20,18 @@
 <!-- -> if user already has an account: give user option to not create a new user but join his existing entity with the other one: who will be admin then, -->
 <!-- -> this will also mean that other user now also has access to new users accounts -->
 
+<!-- TODO form template with java classes -->
 <t:template>
     <jsp:attribute name="title">Invite User</jsp:attribute>
     <jsp:body>
-        <f:form modelAttribute="user" action="postInviteUser" method="post">
-            <f:errors />
-
-            <!-- TODO create form template -->
-
-            <table>
-                <tr>
-                    <td>
-                        <f:label path="email">Email</f:label>
-                    </td>
-                    <td>
-                        <f:input path="email" type="email" />
-                        <br />
-                        <f:errors path="email" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="<c:url value="/budgetanalyzer/user/manageUsers"/>">Cancel</a>
-                    </td>
-                    <td>
-                        <input type="submit" value="Invite" />
-                    </td>
-                </tr>
-            </table>
-        </f:form>
+        <t:form modelAttribute="user" action="postInviteUser" method="post">
+            <t:inputFields>
+                <f:input path="email" type="email" />
+            </t:inputFields>
+            <t:actions>
+                <a href="<c:url value="/budgetanalyzer/user/manageUsers"/>">Cancel</a>
+                <input type="submit" value="Invite" />
+            </t:actions>
+        </t:form>
     </jsp:body>
 </t:template>

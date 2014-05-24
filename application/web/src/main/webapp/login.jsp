@@ -11,20 +11,20 @@
             <table>
                 <tr>
                     <td>Username:</td>
-                    <td><input type="text" name="j_username"/></td>
+                    <td><input type="text" name="j_username" id="username" /></td>
                 </tr>
                 <tr>
                     <td>Password:</td>
-                    <td><input type="password" name="j_password"/></td>
+                    <td><input type="password" name="j_password" id="password" /></td>
                 </tr>
                 <tr>
-                    <td colspan='2'><input name="submit" type="submit" value="Login"/></td>
+                    <td colspan='2'><input id="btn_login" name="submit" type="submit" value="Login"/></td>
                 </tr>
             </table>
         </form>
 
         <p>If you do not have a user account yet, please register
-            <a href="budgetanalyzer/userRegistration.htm">here</a>.
+            <a href="budgetanalyzer/userRegistration.htm" id="btn_open_registration_page">here</a>.
         </p>
 
     </jsp:body>
