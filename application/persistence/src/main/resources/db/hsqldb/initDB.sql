@@ -38,6 +38,7 @@ create table tokens (
   email           varchar(250) not null,
   expiration_date DATETIME not null,
   status          varchar(20) not null,
+  type            varchar(20) not null,
   primary key (id),
   unique (email)
 );

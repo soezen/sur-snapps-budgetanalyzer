@@ -84,8 +84,17 @@ public class TokenManager {
 
         // TODO add updated tms in db
         // TODO add version in db
-
-
     }
 
+    public void resend(int tokenId, String inviter, Url url) {
+        Token token = findTokenById(tokenId);
+        UserInvitationMail userInvitationMail = mailFactory.createUserInvitationMail()
+                .host(url.getServerName())
+                .port(url.getServerPort())
+                .context(url.getContextPath())
+                .token(token.value())
+                .inviter(inviter)
+                .to(token.getEmail());
+        mailSender.send(userInvitationMail);
+    }
 }

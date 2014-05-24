@@ -72,13 +72,16 @@
                     </tr>
                 </c:forEach>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3">
-                        <a href="<c:url value="/budgetanalyzer/user/inviteUser" />">Invite new user</a>
-                    </td>
-                </tr>
-            </tfoot>
+            <sec:authorize ifAllGranted="ROLE_ADMIN">
+                <tfoot>
+                    <tr>
+                        <!-- TODO refresh button -->
+                        <td colspan="3">
+                            <a href="<c:url value="/budgetanalyzer/user/admin/inviteUser" />">Invite new user</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </sec:authorize>
         </table>
     </jsp:body>
 </t:template>

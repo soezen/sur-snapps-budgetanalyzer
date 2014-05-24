@@ -39,6 +39,8 @@ public class Token implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TokenStatus status;
+    @Enumerated(EnumType.STRING)
+    private TokenType type;
 
     protected Token() {
         // for hibernate
@@ -50,10 +52,18 @@ public class Token implements Serializable {
         expirationDate = builder.expirationDate;
         email = builder.email;
         status = builder.status;
+        type = builder.type;
+    }
+
+    public boolean isUserInvitationToken() {
+        return type == TokenType.USER_INVITATION;
     }
 
     public static Token.Builder createUserInvitationToken() {
-        return new Builder().daysValid(7).status(TokenStatus.VALID);
+        return new Builder()
+                .type(TokenType.USER_INVITATION)
+                .daysValid(7)
+                .status(TokenStatus.VALID);
     }
 
     public void extendWithDays(int days) {
@@ -67,12 +77,18 @@ public class Token implements Serializable {
         private Date expirationDate;
         private String email;
         private TokenStatus status;
+        private TokenType type;
 
         public Token build() {
             // TODO add validation
             // if status is valid, expiration date has to be after now
             // (automatically change it or throw error)
             return new Token(this);
+        }
+
+        public Builder type(TokenType type) {
+            this.type = type;
+            return this;
         }
 
         public Builder email(String email) {

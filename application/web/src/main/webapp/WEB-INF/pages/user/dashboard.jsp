@@ -11,6 +11,8 @@
     <jsp:attribute name="title">Dashboard</jsp:attribute>
     <jsp:body>
         <ul>
+            <!-- TODO other link name for non-admin users -->
+            <!-- TODO use message properties for text -->
             <li><a href="<c:url value="/budgetanalyzer/user/manageUsers" />">Manage Users</a></li>
         </ul>
     </jsp:body>

@@ -13,7 +13,7 @@ public enum PageLinks {
     DASHBOARD("user/dashboard", "user/dashboard"),
 
     MANAGE_USERS("user/manage_users", "user/manageUsers"),
-    INVITE_USER("user/user_invitation", "user/inviteUser");
+    INVITE_USER("user/admin/user_invitation", "user/admin/inviteUser");
 
     private static final String REDIRECT = "redirect:";
     private static final String CONTEXT = "/budgetanalyzer/";
