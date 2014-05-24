@@ -49,15 +49,39 @@ public class TokenManager {
     }
 
     @Transactional
-    public void extend(int userId, int tokenId) {
+    public void restore(int userId, int tokenId, Url url) {
         Token token = findTokenById(tokenId);
-        if (!token.getStatus().isValid()) {
-            throw new BusinessException("token invalid state for extend action");
-        }
-
         User user = userManager.findById(userId);
         if (!user.hasAccessTo(token)) {
             throw new BusinessException("user has no access to specified token");
+        }
+        if (!token.getStatus().isExpired() && !token.getStatus().isRevoked()) {
+            throw new BusinessException("token invalid state for restore action");
+        }
+
+        token.restore();
+        tokenRepository.save(token);
+
+        // TODO send different or same mail as user invitation?
+        UserInvitationMail userInvitationMail = mailFactory.createUserInvitationMail()
+                .host(url.getServerName())
+                .port(url.getServerPort())
+                .context(url.getContextPath())
+                .token(token.value())
+                .inviter(user.getName())
+                .to(token.getEmail());
+        mailSender.send(userInvitationMail);
+    }
+
+    @Transactional
+    public void extend(int userId, int tokenId) {
+        Token token = findTokenById(tokenId);
+        User user = userManager.findById(userId);
+        if (!user.hasAccessTo(token)) {
+            throw new BusinessException("user has no access to specified token");
+        }
+        if (!token.getStatus().isValid()) {
+            throw new BusinessException("token invalid state for extend action");
         }
 
         token.extendWithDays(5);
@@ -86,15 +110,39 @@ public class TokenManager {
         // TODO add version in db
     }
 
-    public void resend(int tokenId, String inviter, Url url) {
+    @Transactional
+    public void resend(int userId, int tokenId, Url url) {
         Token token = findTokenById(tokenId);
+        User user = userManager.findById(userId);
+        if (!user.hasAccessTo(token)) {
+            throw new BusinessException("user has no access to specified token");
+        }
+        if (!token.getStatus().isValid()) {
+            throw new BusinessException("token invalid state for resend action");
+        }
+
         UserInvitationMail userInvitationMail = mailFactory.createUserInvitationMail()
                 .host(url.getServerName())
                 .port(url.getServerPort())
                 .context(url.getContextPath())
                 .token(token.value())
-                .inviter(inviter)
+                .inviter(user.getName())
                 .to(token.getEmail());
         mailSender.send(userInvitationMail);
+    }
+
+    @Transactional
+    public void revoke(int userId, int tokenId) {
+        Token token = findTokenById(tokenId);
+        User user = userManager.findById(userId);
+        if (!user.hasAccessTo(token)) {
+            throw new BusinessException("user has no access to specified token");
+        }
+        if (!token.getStatus().isValid()) {
+            throw new BusinessException("token invalid state for revoke action");
+        }
+
+        token.revoke();
+        tokenRepository.save(token);
     }
 }

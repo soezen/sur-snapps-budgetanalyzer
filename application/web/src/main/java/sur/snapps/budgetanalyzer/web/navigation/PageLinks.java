@@ -9,6 +9,7 @@ public enum PageLinks {
 
     USER_REGISTRATION("user_registration", "userRegistration"),
     USER_REGISTRATION_SUCCESS("user_registration_success", "userRegistrationSuccess"),
+    INVALID_TOKEN("invalid_token", "invalidToken"),
 
     DASHBOARD("user/dashboard", "user/dashboard"),
 

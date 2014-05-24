@@ -55,10 +55,6 @@ public class Token implements Serializable {
         type = builder.type;
     }
 
-    public boolean isUserInvitationToken() {
-        return type == TokenType.USER_INVITATION;
-    }
-
     public static Token.Builder createUserInvitationToken() {
         return new Builder()
                 .type(TokenType.USER_INVITATION)
@@ -68,6 +64,17 @@ public class Token implements Serializable {
 
     public void extendWithDays(int days) {
         this.expirationDate = new Date(DateUtil.addDays(expirationDate, days).getTime());
+    }
+
+    public void revoke() {
+        this.status = TokenStatus.REVOKED;
+    }
+
+    public void restore() {
+        if (hasExpired()) {
+            this.expirationDate = new Date(DateUtil.addDays(DateUtil.now(), 7).getTime());
+        }
+        this.status = TokenStatus.VALID;
     }
 
     public static class Builder {

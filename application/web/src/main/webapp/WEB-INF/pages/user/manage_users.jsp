@@ -54,6 +54,7 @@
             <tbody>
                 <c:forEach var="token" items="#{tokens}">
                     <tr>
+                        <!-- TODO add default ordering and perhaps allow user to order on different columns -->
                         <td><c:out value="${token.email}" /></td>
                         <td><fmt:formatDate value="${token.expirationDate}" pattern="dd-MM-yyyy" /></td>
                         <td><c:out value="${token.status}" /></td>

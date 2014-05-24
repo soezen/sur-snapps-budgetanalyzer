@@ -57,7 +57,8 @@ public class UserRegistrationController extends AbstractController {
         TokenStatus status = token.getStatus();
         if (!status.isValid()) {
             // TODO show on page
-            return "invalid_token" + status;
+            model.addAttribute("tokenStatus", status);
+            return PageLinks.INVALID_TOKEN.page();
         }
 
         User user = new User();

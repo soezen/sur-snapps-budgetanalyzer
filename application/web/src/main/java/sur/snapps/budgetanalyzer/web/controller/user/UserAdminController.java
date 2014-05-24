@@ -70,37 +70,34 @@ public class UserAdminController {
         // TODO do not remove admin user
         // TODO validate that logged in user has access to that user
         // TODO implement removeUser
+        // set status to inactive, confirm that user cannot login anymore (should it still be visible in page?)
         System.out.println("Removing user: " + userId);
-        return PageLinks.MANAGE_USERS.page();
+        return PageLinks.MANAGE_USERS.redirect();
     }
 
-    @RequestMapping("/restoreInvitation/${tokenId}")
-    public String restoreInvitation(@PathVariable int tokenId) {
-        // TODO implement restoreInvitation (only when status revoked or expired)
-        System.out.println("Restore invitation: " + tokenId);
-        return PageLinks.MANAGE_USERS.page();
+    @RequestMapping("/restoreInvitation/{tokenId}")
+    public String restoreInvitation(@PathVariable int tokenId, HttpServletRequest request) {
+        tokenManager.restore(userContext.getCurrentUser().getId(), tokenId, HttpServletRequestUtil.createUrl(request));
+        return PageLinks.MANAGE_USERS.redirect();
     }
 
     @RequestMapping("/extendInvitation/{tokenId}")
     @NavigateTo(PageLinks.MANAGE_USERS)
     public String extendInvitation(@PathVariable int tokenId) {
-        PageLinks pageLink = PageLinks.MANAGE_USERS;
-        User user = userContext.getCurrentUser();
-
-        tokenManager.extend(user.getId(), tokenId);
-        return pageLink.page();
+        // TODO send email to user informing his invitation was extended? depends on whether we set time invitation valid in user invitation mail
+        tokenManager.extend(userContext.getCurrentUser().getId(), tokenId);
+        return PageLinks.MANAGE_USERS.redirect();
     }
 
     @RequestMapping("/resendInvitation/{tokenId}")
     public String resendInvitation(@PathVariable int tokenId, HttpServletRequest request) {
-        tokenManager.resend(tokenId, userContext.getCurrentUser().getName(), HttpServletRequestUtil.createUrl(request));
+        tokenManager.resend(userContext.getCurrentUser().getId(), tokenId, HttpServletRequestUtil.createUrl(request));
         return PageLinks.MANAGE_USERS.redirect();
     }
 
     @RequestMapping("/revokeInvitation/{tokenId}")
     public String revokeInvitation(@PathVariable int tokenId) {
-        // TODO implement revokeInvitation
-        System.out.println("Revoke invitation: " + tokenId);
-        return PageLinks.MANAGE_USERS.page();
+        tokenManager.revoke(userContext.getCurrentUser().getId(), tokenId);
+        return PageLinks.MANAGE_USERS.redirect();
     }
 }
