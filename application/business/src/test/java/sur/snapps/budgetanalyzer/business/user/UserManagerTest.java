@@ -7,7 +7,9 @@ import org.unitils.UnitilsJUnit4TestClassRunner;
 import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.InjectIntoByType;
 import org.unitils.inject.annotation.TestedObject;
+import org.unitils.mock.annotation.Dummy;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
+import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.UserRepository;
 
@@ -32,17 +34,27 @@ public class UserManagerTest {
     private UserRepository repository;
 
     @Mock
+    @InjectIntoByType
+    private TokenManager tokenManager;
+
+    @Mock
     private User user;
+    @Mock
+    private Token token;
+    @Dummy
+    private Entity entity;
 
     @Test
-    public void testCreateUser() {
+    public void testCreateUserAdmin() {
         Capture<Entity> entityCapture = new Capture<>();
         String username = "username";
 
-        expect(user.getUsername()).andReturn(username);
+        expect(user.getTokenValue()).andReturn(null);
+        expect(user.getName()).andReturn(username);
         user.encodePassword();
         user.setEnabled(true);
         user.addAuthority(User.ROLE_USER);
+        user.addAuthority(User.ROLE_ADMIN);
         user.setEntity(capture(entityCapture));
         expect(repository.save(user)).andReturn(user);
         replay();
@@ -55,6 +67,25 @@ public class UserManagerTest {
         assertEquals(username, entity.getName());
         assertTrue(entity.isOwned());
         assertFalse(entity.isShared());
+    }
+
+    @Test
+    public void testCreateUserNotAdmin() {
+        expect(user.getTokenValue()).andReturn("token");
+        expect(tokenManager.findTokenByValue("token")).andReturn(token);
+        expect(token.entity()).andReturn(entity);
+        user.setEntity(entity);
+        tokenManager.delete(token);
+        user.encodePassword();
+        user.setEnabled(true);
+        user.addAuthority(User.ROLE_USER);
+        expect(repository.save(user)).andReturn(user);
+        replay();
+
+        User result = manager.create(user);
+
+        assertNotNull(result);
+        assertSame(user, result);
     }
 
     @Test

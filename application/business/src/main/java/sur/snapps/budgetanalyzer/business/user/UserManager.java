@@ -23,11 +23,12 @@ public class UserManager {
 
     @Transactional
     public User create(User user) {
-        if (user.getTokenValue() == null) {
+        String tokenValue = user.getTokenValue();
+        if (tokenValue == null) {
             user.setEntity(Entity.newOwnedEntity().name(user.getName()).build());
             user.addAuthority(User.ROLE_ADMIN);
         } else {
-            Token token = tokenManager.findTokenByValue(user.getTokenValue());
+            Token token = tokenManager.findTokenByValue(tokenValue);
             user.setEntity(token.entity());
             tokenManager.delete(token);
         }

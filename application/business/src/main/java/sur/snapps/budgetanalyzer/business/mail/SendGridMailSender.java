@@ -31,7 +31,8 @@ public class SendGridMailSender implements MailSender {
 
     @Override
     public void send(TemplateMail mail) {
-        String result = sendGrid.addTo(mail.to())
+        String to = mail.to();
+        String result = sendGrid.addTo(to)
                 .setFrom(fromEmail)
                 .setFromName(fromName)
                 .setSubject(mail.subject())
@@ -43,10 +44,10 @@ public class SendGridMailSender implements MailSender {
             JSONObject json = (JSONObject) parser.parse(result);
             String message = (String) json.get("message");
             if ("success".equals(message)) {
-                Logger.info("user invitation mail sent to " + mail.to());
+                Logger.info("user invitation mail sent to " + to);
             } else {
                 JSONArray errors = (JSONArray) json.get("errors");
-                StringBuilder builder = new StringBuilder("error sending user invitation mail:\n");
+                StringBuilder builder = new StringBuilder("error sending invitation mail to " + to + ":\n");
                 for (Object error : errors) {
                     builder.append("\t - ").append(error).append("\n");
                 }

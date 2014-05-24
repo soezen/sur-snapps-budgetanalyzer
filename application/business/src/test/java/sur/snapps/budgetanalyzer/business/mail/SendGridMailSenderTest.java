@@ -57,7 +57,7 @@ public class SendGridMailSenderTest {
         expect(mail.template()).andReturn(template);
         expect(template.render()).andReturn("html");
         expect(sendGrid.setHtml("html")).andReturn(sendGrid);
-        expect(sendGrid.send()).andReturn("success");
+        expect(sendGrid.send()).andReturn("{\"message\": \"success\"}");
         replay();
 
         mailSender.send(mail);
