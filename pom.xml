@@ -61,7 +61,7 @@
         </extensions>
     </build>
      <scm>
-        <connection>scm:git:https://github.com/CloudBees-community/tomcat7-spring-hibernate-jpa-clickstart.git</connection>
+        <connection>scm:git:https://github.com/soezen/sur-snapps-budgetanalyzer.git</connection>
         <tag>v0.0.1</tag>
     </scm>
     <distributionManagement>
