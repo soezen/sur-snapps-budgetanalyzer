@@ -39,6 +39,7 @@ public class SeleniumModule implements Module {
 
     @Override
     public void init(Properties properties) {
+        System.out.println("HIER");
         this.configuration = new SeleniumConfiguration(properties);
     }
 
@@ -52,12 +53,14 @@ public class SeleniumModule implements Module {
     }
 
     private void createAndInjectWebDriver(Object testObject) {
+        System.out.println("HIER");
         Class<?> testClass = testObject.getClass();
         Set<Field> fields = ReflectionUtils.getAllFields(testClass);
         for (Field field : fields) {
             if (field.isAnnotationPresent(SeleniumWebDriver.class)) {
                 if (field.getType().equals(WebDriver.class)) {
                     driver = createWebDriver();
+                    System.out.println("driver = " + driver);
                     driver.get(configuration.baseUrl());
                     setFieldValue(testObject, field, driver);
                 }

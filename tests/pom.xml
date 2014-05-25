@@ -36,16 +36,19 @@
             <groupId>org.unitils</groupId>
             <artifactId>unitils-core</artifactId>
             <version>3.4</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-support</artifactId>
             <version>${selenium.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-api</artifactId>
             <version>${selenium.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
