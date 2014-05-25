@@ -4,7 +4,7 @@
     <artifactId>budgetanalyzer</artifactId>
     <name>Budget Analyzer</name>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
 
     <modules>
         <module>application</module>
@@ -62,7 +62,7 @@
     </build>
      <scm>
         <connection>scm:git:https://git.cloudbees.com/snapps/budgetanalyzer.git</connection>
-         <tag>HEAD</tag>
+         <tag>v0.0.1</tag>
     </scm>
     <distributionManagement>
         <repository>
