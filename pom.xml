@@ -4,7 +4,7 @@
     <artifactId>budgetanalyzer</artifactId>
     <name>Budget Analyzer</name>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <modules>
         <module>application</module>
@@ -69,17 +69,9 @@
             <id>community-release</id>
             <url>dav:https://repository-community.forge.cloudbees.com/release/</url>
         </repository>
-        <repository>
-            <id>snapps-release</id>
-            <url>https://repository-snapps.forge.cloudbees.com/release/</url>
-        </repository>
         <snapshotRepository>
             <id>community-snapshot</id>
             <url>dav:https://repository-community.forge.cloudbees.com/snapshot/</url>
-        </snapshotRepository>
-        <snapshotRepository>
-            <id>snapps-release</id>
-            <url>https://repository-snapps.forge.cloudbees.com/snapshot/</url>
         </snapshotRepository>
     </distributionManagement>
     <developers>
