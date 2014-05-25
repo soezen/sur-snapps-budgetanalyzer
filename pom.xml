@@ -67,12 +67,12 @@
     </scm>
     <distributionManagement>
         <repository>
-            <id>community-release</id>
-            <url>dav:https://repository-community.forge.cloudbees.com/release/</url>
+            <id>snapps-release</id>
+            <url>git:https://repository-snapps.forge.cloudbees.com/release/</url>
         </repository>
         <snapshotRepository>
-            <id>community-snapshot</id>
-            <url>dav:https://repository-community.forge.cloudbees.com/snapshot/</url>
+            <id>snapps-snapshot</id>
+            <url>git:https://repository-snapps.forge.cloudbees.com/snapshot/</url>
         </snapshotRepository>
     </distributionManagement>
     <developers>
