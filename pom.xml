@@ -61,7 +61,8 @@
         </extensions>
     </build>
      <scm>
-        <connection>scm:git:https://git.cloudbees.com/snapps/budgetanalyzer.git</connection>
+         <connection>scm:git:https://git.cloudbees.com/snapps/budgetanalyzer.git</connection>
+         <developerConnection>ssh://git@git.cloudbees.com/snapps/budgetanalyzer.git</developerConnection>
          <tag>HEAD</tag>
     </scm>
     <distributionManagement>
