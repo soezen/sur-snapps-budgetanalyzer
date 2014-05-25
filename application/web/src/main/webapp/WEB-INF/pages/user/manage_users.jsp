@@ -14,7 +14,9 @@
 <t:template>
     <jsp:attribute name="title">Manage Users</jsp:attribute>
     <jsp:body>
+        <a href="<c:url value="/budgetanalyzer/user/manageUsers" />">Reload page</a>
         <!-- list of users + actions -->
+        <p>Users connected to this account</p>
         <table>
             <thead>
                 <tr>
@@ -39,11 +41,11 @@
             </tbody>
         </table>
 
-        <!-- TODO reload button? -->
         <!-- list of invitations + status + actions -->
         <!-- TODO stylesheet -->
         <!-- TODO put this in separate file? -->
         <sec:authorize ifAllGranted="ROLE_ADMIN">
+            <p>List of users invited to join this account</p>
             <table>
                 <thead>
                     <tr>
@@ -75,7 +77,6 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <!-- TODO refresh button -->
                         <td colspan="3">
                             <a href="<c:url value="/budgetanalyzer/user/admin/inviteUser" />">Invite new user</a>
                         </td>

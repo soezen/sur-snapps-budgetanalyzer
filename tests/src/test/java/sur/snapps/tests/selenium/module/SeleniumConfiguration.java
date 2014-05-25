@@ -15,7 +15,7 @@ import static org.unitils.util.PropertyUtils.getString;
  */
 public class SeleniumConfiguration {
 
-    private static final String PREFIX = "sur.snapps.selenium.";
+    private static final String PREFIX = "sur.snapps.module.selenium.";
     private static final String ANNOTATION_BASED = PREFIX + "annotation_only";
     private static final String BASE_URL = PREFIX + "base_url";
     private static final String DRIVER_TYPE = PREFIX + "driver";

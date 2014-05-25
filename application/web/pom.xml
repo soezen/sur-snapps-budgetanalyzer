@@ -135,6 +135,12 @@
                 <webXmlPath>src/env/cloudbees/web.xml</webXmlPath>
             </properties>
         </profile>
+        <profile>
+            <id>prd</id>
+            <properties>
+                <webXmlPath>src/env/prd/web.xml</webXmlPath>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
