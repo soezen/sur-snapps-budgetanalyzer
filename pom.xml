@@ -4,11 +4,11 @@
     <artifactId>budgetanalyzer</artifactId>
     <name>Budget Analyzer</name>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
 
     <modules>
         <module>application</module>
-        <module>tests</module>
+        <!--<module>tests</module>-->
     </modules>
 
     <build>
@@ -22,7 +22,7 @@
                         <format>xml</format>
                         <format>html</format>
                     </formats>
-                    <check/>
+                    <check />
                 </configuration>
                 <executions>
                     <execution>
@@ -62,7 +62,7 @@
     </build>
      <scm>
         <connection>scm:git:https://github.com/CloudBees-community/tomcat7-spring-hibernate-jpa-clickstart.git</connection>
-        <tag>HEAD</tag>
+        <tag>v0.0.1</tag>
     </scm>
     <distributionManagement>
         <repository>
