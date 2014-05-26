@@ -13,7 +13,7 @@
         <ul>
             <!-- TODO other link name for non-admin users -->
             <!-- TODO use message properties for text -->
-            <li><a href="<c:url value="/budgetanalyzer/user/manageUsers" />">Manage Users</a></li>
+            <li><a id="btn_manage_users" href="<c:url value="/budgetanalyzer/user/manageUsers" />">Manage Users</a></li>
         </ul>
     </jsp:body>
 </t:template>

@@ -14,10 +14,10 @@
 <t:template>
     <jsp:attribute name="title">Manage Users</jsp:attribute>
     <jsp:body>
-        <a href="<c:url value="/budgetanalyzer/user/manageUsers" />">Reload page</a>
+        <a id="btn_reload_page" href="<c:url value="/budgetanalyzer/user/manageUsers" />">Reload page</a>
         <!-- list of users + actions -->
         <p>Users connected to this account</p>
-        <table>
+        <table id="users">
             <thead>
                 <tr>
                     <th>User</th>
@@ -26,8 +26,10 @@
                 </tr>
             </thead>
             <tbody>
+                <c:set var="index" value="0" />
                 <c:forEach var="user" items="${users}">
-                    <tr>
+                    <c:set var="index" value="${index + 1}" />
+                    <tr id="row_${index}">
                         <td><c:out value="${user.name}" /></td>
                         <td><c:out value="${user.email}" /></td>
 
@@ -46,7 +48,7 @@
         <!-- TODO put this in separate file? -->
         <sec:authorize ifAllGranted="ROLE_ADMIN">
             <p>List of users invited to join this account</p>
-            <table>
+            <table id="tokens">
                 <thead>
                     <tr>
                         <th>Email</th>

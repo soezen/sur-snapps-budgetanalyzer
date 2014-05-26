@@ -38,6 +38,6 @@ public class FormResponse {
     }
 
     public boolean hasFieldError(String fieldName) {
-        return errorFields.contains(fieldName);
+        return errorFields.contains(fieldName + ".errors");
     }
 }

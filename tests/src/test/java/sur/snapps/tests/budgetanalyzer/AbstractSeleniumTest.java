@@ -7,8 +7,12 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.unitils.UnitilsJUnit4TestClassRunner;
-import sur.snapps.tests.selenium.module.SauceTestWatcher;
-import sur.snapps.tests.selenium.module.SeleniumWebDriver;
+import sur.snapps.tests.budgetanalyzer.pages.DashboardPage;
+import sur.snapps.tests.budgetanalyzer.pages.HomePage;
+import sur.snapps.tests.budgetanalyzer.pages.LoginPage;
+import sur.snapps.unitils.modules.selenium.SauceTestWatcher;
+import sur.snapps.unitils.modules.selenium.SeleniumWebDriver;
+import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 
 /**
  * User: SUR
@@ -27,6 +31,13 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
     protected WebDriver driver;
 
 
+    @WebPage
+    protected HomePage homePage;
+    @WebPage
+    protected LoginPage loginPage;
+    @WebPage
+    protected DashboardPage dashboardPage;
+
     @Before
     public void setUp() throws Exception {
         this.sessionId = ((RemoteWebDriver)driver).getSessionId().toString();
@@ -34,7 +45,6 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
 
     @Override
     public String getSessionId() {
-        System.out.println("GET SESSION ID: " + sessionId);
         return sessionId;
     }
 }
