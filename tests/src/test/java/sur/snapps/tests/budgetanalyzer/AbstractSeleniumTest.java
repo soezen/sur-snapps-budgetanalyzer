@@ -1,6 +1,7 @@
 package sur.snapps.tests.budgetanalyzer;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
+import com.saucelabs.junit.SauceOnDemandTestWatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -10,7 +11,6 @@ import org.unitils.UnitilsJUnit4TestClassRunner;
 import sur.snapps.tests.budgetanalyzer.pages.DashboardPage;
 import sur.snapps.tests.budgetanalyzer.pages.HomePage;
 import sur.snapps.tests.budgetanalyzer.pages.LoginPage;
-import sur.snapps.unitils.modules.selenium.SauceTestWatcher;
 import sur.snapps.unitils.modules.selenium.SeleniumWebDriver;
 import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 
@@ -23,7 +23,7 @@ import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProvider {
 
     @Rule
-    public SauceTestWatcher testRule = new SauceTestWatcher();
+    public SauceOnDemandTestWatcher testRule = new SauceOnDemandTestWatcher(this);
 
     private String sessionId;
 
