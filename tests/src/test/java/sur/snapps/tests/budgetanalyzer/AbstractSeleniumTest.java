@@ -23,7 +23,7 @@ import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProvider {
 
     @Rule
-    public SauceOnDemandTestWatcher testRule = new SauceOnDemandTestWatcher(this);
+    public SauceOnDemandTestWatcher testRule = new SauceOnDemandTestWatcher(this, true);
 
     private String sessionId;
 
