@@ -1,16 +1,15 @@
 package sur.snapps.budgetanalyzer.tests;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
-import com.saucelabs.junit.SauceOnDemandTestWatcher;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.unitils.UnitilsJUnit4TestClassRunner;
 import sur.snapps.budgetanalyzer.tests.pages.DashboardPage;
 import sur.snapps.budgetanalyzer.tests.pages.HomePage;
 import sur.snapps.budgetanalyzer.tests.pages.LoginPage;
+import sur.snapps.unitils.modules.selenium.SauceTestWatcher;
+import sur.snapps.unitils.modules.selenium.SeleniumTestRule;
 import sur.snapps.unitils.modules.selenium.SeleniumWebDriver;
 import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 
@@ -19,11 +18,14 @@ import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
  * Date: 27/04/14
  * Time: 14:24
  */
-@RunWith(UnitilsJUnit4TestClassRunner.class)
+//@RunWith(UnitilsJUnit4TestClassRunner.class)
 public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProvider {
 
     @Rule
-    public SauceOnDemandTestWatcher testRule = new SauceOnDemandTestWatcher(this, true);
+    public SauceTestWatcher sauceTestWatcher = new SauceTestWatcher(this, true);
+
+    @Rule
+    public SeleniumTestRule seleniumTestRule = new SeleniumTestRule(this);
 
     private String sessionId;
 

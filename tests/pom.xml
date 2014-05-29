@@ -11,6 +11,7 @@
 
     <properties>
         <selenium.version>2.41.0</selenium.version>
+        <jetta-version>0.0.5-SNAPSHOT</jetta-version>
     </properties>
 
     <dependencies>
@@ -51,15 +52,21 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>sur.snapps.unitils</groupId>
-            <artifactId>unitils-selenium</artifactId>
-            <version>0.0.5-SNAPSHOT</version>
+            <groupId>sur.snapps.jetta</groupId>
+            <artifactId>jetta-selenium</artifactId>
+            <version>${jetta-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>sur.snapps.unitils</groupId>
-            <artifactId>unitils-database</artifactId>
-            <version>0.0.5-SNAPSHOT</version>
+            <groupId>sur.snapps.jetta</groupId>
+            <artifactId>jetta-database</artifactId>
+            <version>${jetta-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>sur.snapps.jetta</groupId>
+            <artifactId>jetta-core</artifactId>
+            <version>${jetta-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

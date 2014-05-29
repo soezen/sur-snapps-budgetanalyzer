@@ -32,6 +32,11 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     private UserRegistrationPage userRegistrationPage;
 
     @Test
+    public void success() {
+
+    }
+
+    @Test
     public void adminSuccess() {
         homePage.openUserDashboard();
         loginPage.openRegistrationPage();

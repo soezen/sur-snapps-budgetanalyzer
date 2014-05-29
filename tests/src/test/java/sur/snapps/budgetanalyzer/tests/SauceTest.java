@@ -10,10 +10,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.unitils.UnitilsJUnit4TestClassRunner;
 import org.unitils.util.ReflectionUtils;
 
 import java.net.URL;
@@ -23,6 +25,7 @@ import java.net.URL;
  * Date: 29/05/14
  * Time: 15:49
  */
+@RunWith(UnitilsJUnit4TestClassRunner.class)
 public class SauceTest implements SauceOnDemandSessionIdProvider {
 
         private SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication("cloudbees_snapps", "f35becaf-bd5c-4e27-a615-86871f1582b8");
