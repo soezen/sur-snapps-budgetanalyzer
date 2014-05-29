@@ -53,12 +53,12 @@
         <dependency>
             <groupId>sur.snapps.unitils</groupId>
             <artifactId>unitils-selenium</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
+            <version>0.0.2</version>
         </dependency>
         <dependency>
             <groupId>sur.snapps.unitils</groupId>
             <artifactId>unitils-database</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
+            <version>0.0.2</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -76,6 +76,10 @@
         <repository>
             <id>Sauce Maven Repository</id>
             <url>https://repository-saucelabs.forge.cloudbees.com/release</url>
+        </repository>
+        <repository>
+            <id>snapps-release-repository</id>
+            <url>https://repository-snapps.forge.cloudbees.com/release/</url>
         </repository>
     </repositories>
 
