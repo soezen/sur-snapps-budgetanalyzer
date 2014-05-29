@@ -18,7 +18,6 @@ import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
  * Date: 27/04/14
  * Time: 14:24
  */
-//@RunWith(UnitilsJUnit4TestClassRunner.class)
 public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProvider {
 
     @Rule
