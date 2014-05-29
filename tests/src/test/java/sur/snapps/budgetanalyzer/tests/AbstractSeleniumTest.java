@@ -1,4 +1,4 @@
-package sur.snapps.tests.budgetanalyzer;
+package sur.snapps.budgetanalyzer.tests;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.unitils.UnitilsJUnit4TestClassRunner;
-import sur.snapps.tests.budgetanalyzer.pages.DashboardPage;
-import sur.snapps.tests.budgetanalyzer.pages.HomePage;
-import sur.snapps.tests.budgetanalyzer.pages.LoginPage;
+import sur.snapps.budgetanalyzer.tests.pages.DashboardPage;
+import sur.snapps.budgetanalyzer.tests.pages.HomePage;
+import sur.snapps.budgetanalyzer.tests.pages.LoginPage;
 import sur.snapps.unitils.modules.selenium.SeleniumWebDriver;
 import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 

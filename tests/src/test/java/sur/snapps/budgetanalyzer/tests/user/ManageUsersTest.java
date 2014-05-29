@@ -1,8 +1,8 @@
-package sur.snapps.tests.budgetanalyzer.user;
+package sur.snapps.budgetanalyzer.tests.user;
 
 import org.junit.Test;
-import sur.snapps.tests.budgetanalyzer.AbstractSeleniumTest;
-import sur.snapps.tests.budgetanalyzer.pages.user.ManageUsersPage;
+import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
+import sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage;
 import sur.snapps.unitils.modules.database.Script;
 import sur.snapps.unitils.modules.selenium.SeleniumTestCase;
 import sur.snapps.unitils.modules.selenium.Table;
@@ -11,7 +11,7 @@ import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static sur.snapps.tests.budgetanalyzer.pages.user.ManageUsersPage.*;
+import static sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage.*;
 
 
 /**

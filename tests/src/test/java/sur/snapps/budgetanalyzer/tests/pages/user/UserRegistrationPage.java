@@ -1,9 +1,9 @@
-package sur.snapps.tests.budgetanalyzer.pages.user;
+package sur.snapps.budgetanalyzer.tests.pages.user;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import sur.snapps.tests.budgetanalyzer.FormResponse;
-import sur.snapps.tests.budgetanalyzer.pages.AbstractWebPage;
+import sur.snapps.budgetanalyzer.tests.FormResponse;
+import sur.snapps.budgetanalyzer.tests.pages.AbstractWebPage;
 
 /**
  * User: SUR

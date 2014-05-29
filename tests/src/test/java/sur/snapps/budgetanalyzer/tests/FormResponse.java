@@ -1,4 +1,4 @@
-package sur.snapps.tests.budgetanalyzer;
+package sur.snapps.budgetanalyzer.tests;
 
 import com.google.common.collect.Lists;
 

@@ -1,4 +1,4 @@
-package sur.snapps.tests.budgetanalyzer.pages;
+package sur.snapps.budgetanalyzer.tests.pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

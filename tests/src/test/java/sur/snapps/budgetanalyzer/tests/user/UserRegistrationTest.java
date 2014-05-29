@@ -1,10 +1,10 @@
-package sur.snapps.tests.budgetanalyzer.user;
+package sur.snapps.budgetanalyzer.tests.user;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.junit.Ignore;
 import org.junit.Test;
-import sur.snapps.tests.budgetanalyzer.AbstractSeleniumTest;
-import sur.snapps.tests.budgetanalyzer.pages.user.UserRegistrationPage;
+import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
+import sur.snapps.budgetanalyzer.tests.pages.user.UserRegistrationPage;
 import sur.snapps.unitils.modules.database.Script;
 import sur.snapps.unitils.modules.selenium.SeleniumTestCase;
 import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
@@ -99,7 +99,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void notAdminSuccess() {
-        driver.get("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=valid_token");
+        driver.get("http://localhost:2001/web/tests/userRegistrationWithToken?value=valid_token");
 
         boolean success = userRegistrationPage
                 .name("HM Murdock")
