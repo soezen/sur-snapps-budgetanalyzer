@@ -1,6 +1,5 @@
 package sur.snapps.tests.budgetanalyzer;
 
-import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 import org.junit.Before;
@@ -24,7 +23,7 @@ import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProvider {
 
     @Rule
-    public SauceOnDemandTestWatcher testRule = new SauceOnDemandTestWatcher(this, new SauceOnDemandAuthentication("cloudbees_snapps", "f35becaf-bd5c-4e27-a615-86871f1582b8"));
+    public SauceOnDemandTestWatcher testRule = new SauceOnDemandTestWatcher(this);
 
     private String sessionId;
 
