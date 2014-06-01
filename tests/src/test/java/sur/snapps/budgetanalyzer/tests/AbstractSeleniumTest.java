@@ -8,10 +8,11 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import sur.snapps.budgetanalyzer.tests.pages.DashboardPage;
 import sur.snapps.budgetanalyzer.tests.pages.HomePage;
 import sur.snapps.budgetanalyzer.tests.pages.LoginPage;
-import sur.snapps.unitils.modules.selenium.SauceTestWatcher;
-import sur.snapps.unitils.modules.selenium.SeleniumTestRule;
-import sur.snapps.unitils.modules.selenium.SeleniumWebDriver;
-import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
+import sur.snapps.jetta.database.DatabaseTestRule;
+import sur.snapps.jetta.selenium.annotations.SeleniumWebDriver;
+import sur.snapps.jetta.selenium.elements.WebPage;
+import sur.snapps.jetta.selenium.SauceTestWatcher;
+import sur.snapps.jetta.selenium.SeleniumTestRule;
 
 /**
  * User: SUR
@@ -21,10 +22,13 @@ import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
 public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProvider {
 
     @Rule
-    public SauceTestWatcher sauceTestWatcher = new SauceTestWatcher(this, true);
+    public SauceTestWatcher sauceTestWatcher = new SauceTestWatcher(this);
 
     @Rule
     public SeleniumTestRule seleniumTestRule = new SeleniumTestRule(this);
+
+    @Rule
+    public DatabaseTestRule databaseTestRule = new DatabaseTestRule(this);
 
     private String sessionId;
 

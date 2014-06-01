@@ -1,13 +1,12 @@
 package sur.snapps.budgetanalyzer.tests.user;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.junit.Ignore;
 import org.junit.Test;
 import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
 import sur.snapps.budgetanalyzer.tests.pages.user.UserRegistrationPage;
-import sur.snapps.unitils.modules.database.Script;
-import sur.snapps.unitils.modules.selenium.SeleniumTestCase;
-import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
+import sur.snapps.jetta.database.script.Script;
+import sur.snapps.jetta.selenium.annotations.SeleniumTestCase;
+import sur.snapps.jetta.selenium.elements.WebPage;
 
 import static org.junit.Assert.assertTrue;
 
@@ -30,11 +29,6 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @WebPage
     private UserRegistrationPage userRegistrationPage;
-
-    @Test
-    public void success() {
-
-    }
 
     @Test
     public void adminSuccess() {
@@ -104,7 +98,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void notAdminSuccess() {
-        driver.get("http://localhost:2001/web/tests/userRegistrationWithToken?value=valid_token");
+        driver.get("http://localhost:2001/web/tests/userRegistrationWithToken?value=token-valid");
 
         boolean success = userRegistrationPage
                 .name("HM Murdock")
@@ -146,17 +140,17 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void notAdminErrorUsernameAlreadyUsed() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Test
     public void notAdminErrorTokenExpired() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Test
     public void notAdminErrorTokenRevoked() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
 }

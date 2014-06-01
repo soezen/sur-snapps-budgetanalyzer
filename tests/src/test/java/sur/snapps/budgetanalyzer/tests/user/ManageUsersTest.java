@@ -3,10 +3,10 @@ package sur.snapps.budgetanalyzer.tests.user;
 import org.junit.Test;
 import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
 import sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage;
-import sur.snapps.unitils.modules.database.Script;
-import sur.snapps.unitils.modules.selenium.SeleniumTestCase;
-import sur.snapps.unitils.modules.selenium.Table;
-import sur.snapps.unitils.modules.selenium.page.elements.WebPage;
+import sur.snapps.jetta.database.script.Script;
+import sur.snapps.jetta.selenium.annotations.SeleniumTestCase;
+import sur.snapps.jetta.selenium.elements.Table;
+import sur.snapps.jetta.selenium.elements.WebPage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,18 +30,18 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     @Test
     public void testManageUsersContentPresentAsAdmin() {
         homePage.openUserDashboard();
-        boolean loginSuccess = loginPage.username("sur").password("test").login().isSuccess();
+        boolean loginSuccess = loginPage.username("hannibal").password("test").login().isSuccess();
         assertTrue(loginSuccess);
         dashboardPage.manageUsers();
 
         assertEquals(2, manageUsersPage.numberOfUsers());
         Table usersTable = manageUsersPage.usersTable();
-        assertEquals("Rogge Suzan", usersTable.cellValue(USERS_COLUMN_NAME, 1));
-        assertEquals("Gert Raeyen", usersTable.cellValue(USERS_COLUMN_NAME, 2));
-        assertEquals("rogge.suzan@gmail.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 1));
-        assertEquals("gert@raeyen.be", usersTable.cellValue(USERS_COLUMN_EMAIL, 2));
+        assertEquals("John Smith", usersTable.cellValue(USERS_COLUMN_NAME, 1));
+        assertEquals("Mary Bold", usersTable.cellValue(USERS_COLUMN_NAME, 2));
+        assertEquals("hannibal@a-team.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 1));
+        assertEquals("mary@a-team.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 2));
         assertEquals(1, usersTable.links(USERS_COLUMN_ACTIONS, 1).size());
-        assertEquals(1, usersTable.links(USERS_COLUMN_ACTIONS, 2).size());
+        assertEquals(2, usersTable.links(USERS_COLUMN_ACTIONS, 2).size());
 
         assertTrue(manageUsersPage.areTokensVisible());
 
@@ -64,16 +64,16 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     @Test
     public void testManageUsersContentPresentAsNonAdmin() {
         homePage.openUserDashboard();
-        boolean loginSuccess = loginPage.username("ger").password("test").login().isSuccess();
+        boolean loginSuccess = loginPage.username("mary").password("test").login().isSuccess();
         assertTrue(loginSuccess);
         dashboardPage.manageUsers();
 
         assertEquals(2, manageUsersPage.numberOfUsers());
         Table usersTable = manageUsersPage.usersTable();
-        assertEquals("Rogge Suzan", usersTable.cellValue(USERS_COLUMN_NAME, 1));
-        assertEquals("Gert Raeyen", usersTable.cellValue(USERS_COLUMN_NAME, 2));
-        assertEquals("rogge.suzan@gmail.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 1));
-        assertEquals("gert@raeyen.be", usersTable.cellValue(USERS_COLUMN_EMAIL, 2));
+        assertEquals("John Smith", usersTable.cellValue(USERS_COLUMN_NAME, 1));
+        assertEquals("Mary Bold", usersTable.cellValue(USERS_COLUMN_NAME, 2));
+        assertEquals("hannibal@a-team.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 1));
+        assertEquals("mary@a-team.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 2));
         assertEquals(0, usersTable.links(USERS_COLUMN_ACTIONS, 1).size());
         assertEquals(0, usersTable.links(USERS_COLUMN_ACTIONS, 2).size());
 

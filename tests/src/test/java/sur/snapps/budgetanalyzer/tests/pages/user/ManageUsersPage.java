@@ -3,9 +3,9 @@ package sur.snapps.budgetanalyzer.tests.pages.user;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import sur.snapps.budgetanalyzer.tests.pages.AbstractWebPage;
-import sur.snapps.unitils.modules.selenium.Table;
-import sur.snapps.unitils.modules.selenium.page.elements.Column;
-import sur.snapps.unitils.modules.selenium.page.elements.WebTable;
+import sur.snapps.jetta.selenium.elements.Table;
+import sur.snapps.jetta.selenium.elements.Column;
+import sur.snapps.jetta.selenium.elements.WebTable;
 
 /**
  * User: SUR
