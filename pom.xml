@@ -26,9 +26,9 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>clean</phase>
+                        <phase>test</phase>
                         <goals>
-                            <goal>cobertura</goal>
+                            <goal>clean</goal>
                         </goals>
                     </execution>
                 </executions>
