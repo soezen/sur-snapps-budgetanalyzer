@@ -4,6 +4,7 @@ import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -41,7 +42,11 @@ public class TokenRepository {
                 query.from(Token.class).get("value"),
                 tokenValue);
         query.where(condition);
-        return entityManager.createQuery(query).getSingleResult();
+        try {
+            return entityManager.createQuery(query).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public List<Token> findTokensForEntity(Entity entity) {

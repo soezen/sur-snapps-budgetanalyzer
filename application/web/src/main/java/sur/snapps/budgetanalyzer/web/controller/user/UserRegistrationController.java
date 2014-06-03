@@ -54,9 +54,8 @@ public class UserRegistrationController extends AbstractController {
     public String openUserRegistrationWithTokenPage(Model model, @RequestParam String value) {
         Token token = tokenManager.findTokenByValue(value);
 
-        TokenStatus status = token.getStatus();
+        TokenStatus status = token == null ? TokenStatus.NOT_EXISTING : token.getStatus();
         if (!status.isValid()) {
-            // TODO show on page
             model.addAttribute("tokenStatus", status);
             return PageLinks.INVALID_TOKEN.page();
         }

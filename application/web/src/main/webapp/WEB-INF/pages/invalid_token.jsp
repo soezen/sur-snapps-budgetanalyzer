@@ -12,5 +12,8 @@
         <c:if test="${tokenStatus.revoked}">
             User invitation has been revoked.
         </c:if>
+        <c:if test="${tokenStatus.notExisting}">
+            User invitation not found for this link.
+        </c:if>
     </jsp:body>
 </t:template>

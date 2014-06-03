@@ -9,7 +9,12 @@ public enum TokenStatus {
 
     VALID,
     REVOKED,
-    EXPIRED;
+    EXPIRED,
+    NOT_EXISTING;
+
+    public boolean isNotExisting() {
+        return this == NOT_EXISTING;
+    }
 
     public boolean isValid() {
         return this == VALID;
