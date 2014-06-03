@@ -172,7 +172,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                         equal(usersTable.column("username"), "'ba'"),
                         equal(usersTable.column("name"), "'Bosco Albert Baracus'"),
                         not(isNull(usersTable.column("password"))),
-                        equal(usersTable.column("email"), "'ba@a-team.com'"),
+                        equal(usersTable.column("email"), "'valid@test.com'"),
                         equal(usersTable.column("enabled"), "1"),
                         equal(usersTable.column("entity_id"), "1")))
                 .get());
