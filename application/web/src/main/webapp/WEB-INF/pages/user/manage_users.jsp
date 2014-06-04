@@ -35,7 +35,7 @@
 
                         <sec:authorize ifAllGranted="ROLE_ADMIN">
                             <td>
-                                <a href="<c:url value="/budgetanalyzer/user/admin/removeUser/${user.id}" />">Remove</a>
+                                <a name="remove_user" href="<c:url value="/budgetanalyzer/user/admin/removeUser/${user.id}" />">Remove</a>
                             </td>
                         </sec:authorize>
                     </tr>
@@ -66,12 +66,12 @@
                             <td><c:out value="${token.status}" /></td>
                             <td>
                                 <c:if test="${token.status.valid}">
-                                    <a href="<c:url value="/budgetanalyzer/user/admin/resendInvitation/${token.id}" />">Resend invitation</a><br />
-                                    <a href="<c:url value="/budgetanalyzer/user/admin/extendInvitation/${token.id}" />">Extend invitation</a><br />
-                                    <a href="<c:url value="/budgetanalyzer/user/admin/revokeInvitation/${token.id}" />">Revoke invitation</a>
+                                    <a name="resend_invitation" href="<c:url value="/budgetanalyzer/user/admin/resendInvitation/${token.id}" />">Resend invitation</a><br />
+                                    <a name="extend_invitation" href="<c:url value="/budgetanalyzer/user/admin/extendInvitation/${token.id}" />">Extend invitation</a><br />
+                                    <a name="revoke_invitation" href="<c:url value="/budgetanalyzer/user/admin/revokeInvitation/${token.id}" />">Revoke invitation</a>
                                 </c:if>
                                 <c:if test="${token.status.revoked or token.status.expired}">
-                                    <a href="<c:url value="/budgetanalyzer/user/admin/restoreInvitation/${token.id}" />">Restore invitation</a>
+                                    <a name="restore_invitation" href="<c:url value="/budgetanalyzer/user/admin/restoreInvitation/${token.id}" />">Restore invitation</a>
                                 </c:if>
                             </td>
                         </tr>

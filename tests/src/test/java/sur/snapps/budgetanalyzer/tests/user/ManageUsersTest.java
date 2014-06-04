@@ -3,15 +3,17 @@ package sur.snapps.budgetanalyzer.tests.user;
 import org.junit.Test;
 import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
 import sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage;
+import sur.snapps.jetta.database.counter.RecordCounter;
+import sur.snapps.jetta.database.counter.table.Table;
 import sur.snapps.jetta.database.script.Script;
 import sur.snapps.jetta.selenium.annotations.SeleniumTestCase;
-import sur.snapps.jetta.selenium.elements.Table;
 import sur.snapps.jetta.selenium.elements.WebPage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage.*;
+import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
+import static sur.snapps.jetta.database.counter.expression.operator.Operators.and;
 
 
 /**
@@ -24,58 +26,114 @@ import static sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage.*;
 @Script("users.sql")
 public class ManageUsersTest extends AbstractSeleniumTest {
 
+    private RecordCounter counter;
+
     @WebPage
     private ManageUsersPage manageUsersPage;
 
     @Test
-    public void testManageUsersContentPresentAsAdmin() {
+    public void revokeInvitation() {
         homePage.openUserDashboard();
-        boolean loginSuccess = loginPage.username("hannibal").password("test").login().isSuccess();
+        boolean loginSuccess = loginPage
+                .username("hannibal")
+                .password("test")
+                .login()
+                .isSuccess();
+        assertTrue(loginSuccess);
+        dashboardPage.manageUsers();
+
+        // TODO add unique constraint on email
+        manageUsersPage.revokeInvitation("valid@test.com");
+
+        assertTrue(manageUsersPage.isRevokedTokenPresent("valid@test.com", "04-07-2014"));
+        assertFalse(manageUsersPage.isValidTokenPresent("valid@test.com", "04-07-2014"));
+
+        Table tokensTable = new Table("tokens");
+        assertEquals(1, counter.count()
+                .from(tokensTable)
+                .where(and(
+                    equal(tokensTable.column("status"), "'REVOKED'"),
+                    equal(tokensTable.column("email"), "'valid@test.com'")))
+                .get());
+        assertEquals(0, counter.count()
+                .from(tokensTable)
+                .where(and(
+                        equal(tokensTable.column("status"), "'VALID'"),
+                        equal(tokensTable.column("email"), "'valid@test.com'")))
+                .get());
+    }
+
+    @Test
+    public void extendInvitation() {
+        homePage.openUserDashboard();
+        boolean loginSuccess = loginPage
+                .username("hannibal")
+                .password("test")
+                .login()
+                .isSuccess();
+        assertTrue(loginSuccess);
+        dashboardPage.manageUsers();
+
+        manageUsersPage.extendInvitation("valid@test.com");
+
+        assertFalse(manageUsersPage.isValidTokenPresent("valid@test.com", "04-07-2014"));
+        assertTrue(manageUsersPage.isValidTokenPresent("valid@test.com", "09-07-2014"));
+
+        Table tokensTable = new Table("tokens");
+        assertEquals(1, counter.count()
+                .from(tokensTable)
+                .where(and(
+                        equal(tokensTable.column("status"), "'VALID'"),
+                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'09-07-2014'"),
+                        equal(tokensTable.column("email"), "'valid@test.com'")))
+                .get());
+        assertEquals(0, counter.count()
+                .from(tokensTable)
+                .where(and(
+                        equal(tokensTable.column("status"), "'VALID'"),
+                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'04-07-2014'"),
+                        equal(tokensTable.column("email"), "'valid@test.com'")))
+                .get());
+    }
+
+
+    @Test
+    public void manageUsersAsAdmin() {
+        homePage.openUserDashboard();
+        boolean loginSuccess = loginPage
+                .username("hannibal")
+                .password("test")
+                .login()
+                .isSuccess();
         assertTrue(loginSuccess);
         dashboardPage.manageUsers();
 
         assertEquals(2, manageUsersPage.numberOfUsers());
-        Table usersTable = manageUsersPage.usersTable();
-        assertEquals("John Smith", usersTable.cellValue(USERS_COLUMN_NAME, 1));
-        assertEquals("Mary Bold", usersTable.cellValue(USERS_COLUMN_NAME, 2));
-        assertEquals("hannibal@a-team.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 1));
-        assertEquals("mary@a-team.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 2));
-        assertEquals(1, usersTable.links(USERS_COLUMN_ACTIONS, 1).size());
-        assertEquals(2, usersTable.links(USERS_COLUMN_ACTIONS, 2).size());
+        assertTrue(manageUsersPage.isUserPresent("John Smith", "hannibal@a-team.com", true));
+        assertTrue(manageUsersPage.isUserPresent("Templeton Peck", "face@a-team.com", true));
 
         assertTrue(manageUsersPage.areTokensVisible());
 
         assertEquals(3, manageUsersPage.numberOfTokens());
-        Table tokensTable = manageUsersPage.tokensTable();
-        assertEquals("valid@test.com", tokensTable.cellValue(TOKENS_COLUMN_EMAIL, 1));
-        assertEquals("revoke@test.com", tokensTable.cellValue(TOKENS_COLUMN_EMAIL, 2));
-        assertEquals("expired@test.com", tokensTable.cellValue(TOKENS_COLUMN_EMAIL, 3));
-        assertEquals("26-06-2014", tokensTable.cellValue(TOKENS_COLUMN_EXPIRATION_DATE, 1));
-        assertEquals("26-06-2014", tokensTable.cellValue(TOKENS_COLUMN_EXPIRATION_DATE, 2));
-        assertEquals("25-05-2014", tokensTable.cellValue(TOKENS_COLUMN_EXPIRATION_DATE, 3));
-        assertEquals("VALID", tokensTable.cellValue(TOKENS_COLUMN_STATUS, 1));
-        assertEquals("REVOKED", tokensTable.cellValue(TOKENS_COLUMN_STATUS, 2));
-        assertEquals("EXPIRED", tokensTable.cellValue(TOKENS_COLUMN_STATUS, 3));
-        assertEquals(3, tokensTable.links(TOKENS_COLUMN_ACTIONS, 1).size());
-        assertEquals(1, tokensTable.links(TOKENS_COLUMN_ACTIONS, 2).size());
-        assertEquals(1, tokensTable.links(TOKENS_COLUMN_ACTIONS, 3).size());
+        assertTrue(manageUsersPage.isValidTokenPresent("valid@test.com", "04-07-2014"));
+        assertTrue(manageUsersPage.isRevokedTokenPresent("revoke@test.com", "04-07-2014"));
+        assertTrue(manageUsersPage.isExpiredTokenPresent("expired@test.com", "03-06-2014"));
     }
 
     @Test
-    public void testManageUsersContentPresentAsNonAdmin() {
+    public void manageUsersAsNotAdmin() {
         homePage.openUserDashboard();
-        boolean loginSuccess = loginPage.username("mary").password("test").login().isSuccess();
+        boolean loginSuccess = loginPage
+                .username("face")
+                .password("test")
+                .login()
+                .isSuccess();
         assertTrue(loginSuccess);
         dashboardPage.manageUsers();
 
         assertEquals(2, manageUsersPage.numberOfUsers());
-        Table usersTable = manageUsersPage.usersTable();
-        assertEquals("John Smith", usersTable.cellValue(USERS_COLUMN_NAME, 1));
-        assertEquals("Mary Bold", usersTable.cellValue(USERS_COLUMN_NAME, 2));
-        assertEquals("hannibal@a-team.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 1));
-        assertEquals("mary@a-team.com", usersTable.cellValue(USERS_COLUMN_EMAIL, 2));
-        assertEquals(0, usersTable.links(USERS_COLUMN_ACTIONS, 1).size());
-        assertEquals(0, usersTable.links(USERS_COLUMN_ACTIONS, 2).size());
+        assertTrue(manageUsersPage.isUserPresent("John Smith", "hannibal@a-team.com", false));
+        assertTrue(manageUsersPage.isUserPresent("Templeton Peck", "face@a-team.com", false));
 
         assertFalse(manageUsersPage.areTokensVisible());
     }
