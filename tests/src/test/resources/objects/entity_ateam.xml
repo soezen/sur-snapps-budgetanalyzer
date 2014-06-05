@@ -1,0 +1,73 @@
+<dummies>
+    <entities>
+        <entity>
+            <id>1</id>
+            <name>the A-Team</name>
+            <owned>1</owned>
+            <shared>0</shared>
+        </entity>
+    </entities>
+    <users>
+        <user>
+            <id>1</id>
+            <username>hannibal</username>
+            <password translation="test">872fdc2a08772ba2c7c1cddd081bfd96</password>
+            <email>hannibal@a-team.com</email>
+            <name>John Smith</name>
+            <enabled>1</enabled>
+            <entity_id>1</entity_id>
+        </user>
+        <user>
+            <id>2</id>
+            <username>face</username>
+            <password translation="test">872fdc2a08772ba2c7c1cddd081bfd96</password>
+            <email>face@a-team.com</email>
+            <name>Templeton Peck</name>
+            <enabled>1</enabled>
+            <entity_id>1</entity_id>
+        </user>
+    </users>
+    <authorities>
+        <authority>
+            <user_id>1</user_id>
+            <authority>ROLE_ADMIN</authority>
+        </authority>
+        <authority>
+            <user_id>1</user_id>
+            <authority>ROLE_USER</authority>
+        </authority>
+        <authority>
+            <user_id>2</user_id>
+            <authority>ROLE_USER</authority>
+        </authority>
+    </authorities>
+    <tokens>
+        <token>
+            <id>1</id>
+            <value>token-valid</value>
+            <entity_id>1</entity_id>
+            <email>valid@test.com</email>
+            <expiration_date>${today + month(1)}</expiration_date>
+            <status>VALID</status>
+            <type>USER_INVITATION</type>
+        </token>
+        <token>
+            <id>2</id>
+            <value>token-revoked</value>
+            <entity_id>1</entity_id>
+            <email>revoked@test.com</email>
+            <expiration_date>${today + month(1)}</expiration_date>
+            <status>REVOKED</status>
+            <type>USER_INVITATION</type>
+        </token>
+        <token>
+            <id>3</id>
+            <value>token-expired</value>
+            <entity_id>1</entity_id>
+            <email>expired@test.com</email>
+            <expiration_date>${today - day(1)}</expiration_date>
+            <status>EXPIRED</status>
+            <type>USER_INVITATION</type>
+        </token>
+    </tokens>
+</dummies>

@@ -3,6 +3,7 @@ package sur.snapps.budgetanalyzer.tests.pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import sur.snapps.budgetanalyzer.tests.FormResponse;
+import sur.snapps.budgetanalyzer.tests.dummy.DummyUser;
 
 /**
  * User: SUR
@@ -32,6 +33,13 @@ public class LoginPage extends AbstractWebPage {
     }
 
     public FormResponse login() {
+        loginButton.click();
+        return createFormResponse();
+    }
+
+    public FormResponse login(DummyUser user) {
+        username(user.username());
+        password(user.password());
         loginButton.click();
         return createFormResponse();
     }
