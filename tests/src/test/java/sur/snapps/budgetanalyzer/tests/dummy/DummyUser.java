@@ -1,6 +1,7 @@
 package sur.snapps.budgetanalyzer.tests.dummy;
 
 import sur.snapps.jetta.database.dummy.Dummy;
+import sur.snapps.jetta.database.dummy.Identifier;
 
 /**
  * User: SUR
@@ -11,6 +12,7 @@ import sur.snapps.jetta.database.dummy.Dummy;
 public class DummyUser {
 
     private int id;
+    @Identifier
     private String username;
     private String password;
     private String email;

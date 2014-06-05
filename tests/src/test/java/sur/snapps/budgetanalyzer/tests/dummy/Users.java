@@ -9,22 +9,21 @@ import sur.snapps.jetta.database.dummy.DummyExtractor;
  */
 public class Users {
 
+    private static DummyExtractor extractor = new DummyExtractor("objects/entity_ateam.xml");
+
     private static DummyUser hannibal;
     private static DummyUser face;
 
     public static DummyUser hannibal() {
         if (hannibal == null) {
-            hannibal = new DummyExtractor("objects/entity_ateam.xml")
-                .get(DummyUser.class,
-                        new String[] {"username", "hannibal"});
+            hannibal = extractor.get(DummyUser.class, "hannibal");
         }
         return hannibal;
     }
 
     public static DummyUser face() {
         if (face == null) {
-            face = new DummyExtractor("objects/entity_ateam.xml")
-                    .get(DummyUser.class, new String[] {"username", "face"});
+            face = extractor.get(DummyUser.class, "face");
         }
         return face;
     }

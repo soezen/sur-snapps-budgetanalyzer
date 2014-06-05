@@ -1,6 +1,7 @@
 package sur.snapps.budgetanalyzer.tests.dummy;
 
 import sur.snapps.jetta.database.dummy.Dummy;
+import sur.snapps.jetta.database.dummy.Identifier;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ import java.util.Date;
 public class DummyToken {
 
     private int id;
+    @Identifier
     private String value;
     private int entityId;
     private String email;

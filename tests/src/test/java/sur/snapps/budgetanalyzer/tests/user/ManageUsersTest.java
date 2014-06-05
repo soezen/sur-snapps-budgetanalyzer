@@ -2,7 +2,6 @@ package sur.snapps.budgetanalyzer.tests.user;
 
 import org.junit.Test;
 import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
-import sur.snapps.budgetanalyzer.tests.dummy.DummyToken;
 import sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage;
 import sur.snapps.jetta.database.counter.RecordCounter;
 import sur.snapps.jetta.database.counter.table.Table;
@@ -16,6 +15,8 @@ import static org.junit.Assert.assertTrue;
 import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.expired;
 import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.revoked;
 import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.valid;
+import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.validExtended;
+import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.validRevoked;
 import static sur.snapps.budgetanalyzer.tests.dummy.Users.face;
 import static sur.snapps.budgetanalyzer.tests.dummy.Users.hannibal;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
@@ -44,26 +45,24 @@ public class ManageUsersTest extends AbstractSeleniumTest {
         dashboardPage.manageUsers();
 
         // TODO add unique constraint on email
-        DummyToken validToken = valid();
-        String email = validToken.email();
 
-        manageUsersPage.revokeInvitation(validToken);
+        manageUsersPage.revokeInvitation(valid());
 
-        assertFalse(manageUsersPage.isTokenPresent(validToken));
-//        assertTrue(manageUsersPage.isTokenPresent(revokedToken));
+        assertFalse(manageUsersPage.isTokenPresent(valid()));
+        assertTrue(manageUsersPage.isTokenPresent(validRevoked()));
 
         Table tokensTable = new Table("tokens");
         assertEquals(1, counter.count()
                 .from(tokensTable)
                 .where(and(
-                        equal(tokensTable.column("status"), "'REVOKED'"),
-                        equal(tokensTable.column("email"), "'" + email + "'")))
+                        equal(tokensTable.column("status"), "'" + validRevoked().status() + "'"),
+                        equal(tokensTable.column("email"), "'" + validRevoked().email() + "'")))
                 .get());
         assertEquals(0, counter.count()
                 .from(tokensTable)
                 .where(and(
-                        equal(tokensTable.column("status"), "'VALID'"),
-                        equal(tokensTable.column("email"), "'" + email + "'")))
+                        equal(tokensTable.column("status"), "'" + valid().status() + "'"),
+                        equal(tokensTable.column("email"), "'" + valid().email() + "'")))
                 .get());
     }
 
@@ -76,21 +75,21 @@ public class ManageUsersTest extends AbstractSeleniumTest {
         manageUsersPage.extendInvitation(valid());
 
         assertFalse(manageUsersPage.isTokenPresent(valid()));
-//        assertTrue(manageUsersPage.isValidTokenPresent("valid@test.com", "09-07-2014"));
+        assertTrue(manageUsersPage.isTokenPresent(validExtended()));
 
         Table tokensTable = new Table("tokens");
         assertEquals(1, counter.count()
                 .from(tokensTable)
                 .where(and(
-                        equal(tokensTable.column("status"), "'VALID'"),
-                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'10-07-2014'"),
-                        equal(tokensTable.column("email"), "'" + valid().email() + "'")))
+                        equal(tokensTable.column("status"), "'" + validExtended().status() + "'"),
+                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'" + validExtended().expirationDate() + "'"),
+                        equal(tokensTable.column("email"), "'" + validExtended().email() + "'")))
                 .get());
         assertEquals(0, counter.count()
                 .from(tokensTable)
                 .where(and(
-                        equal(tokensTable.column("status"), "'VALID'"),
-                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'04-07-2014'"),
+                        equal(tokensTable.column("status"), "'" + valid().status() + "'"),
+                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'" + valid().expirationDate() + "'"),
                         equal(tokensTable.column("email"), "'" + valid().email() + "'")))
                 .get());
     }

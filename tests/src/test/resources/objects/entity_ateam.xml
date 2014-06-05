@@ -6,6 +6,12 @@
             <owned>1</owned>
             <shared>0</shared>
         </entity>
+        <entity transient="true">
+            <id>2</id>
+            <name>Bosco Albert Baracus</name>
+            <owned>1</owned>
+            <shared>0</shared>
+        </entity>
     </entities>
     <users>
         <user>
@@ -25,6 +31,26 @@
             <name>Templeton Peck</name>
             <enabled>1</enabled>
             <entity_id>1</entity_id>
+        </user>
+        <user transient="true">
+            <id>3</id>
+            <username>ba</username>
+            <password translation="TEST$test12" />
+            <email>ba@a-team.com</email>
+            <name>Bosco Albert Baracus</name>
+            <enabled>1</enabled>
+            <entity_id>2</entity_id>
+            <actions>
+                <action id="invalid_email">
+                    <email>invalid</email>
+                </action>
+                <action id="used_username">
+                    <username>face</username>
+                </action>
+                <action id="invalid_password">
+                    <password translation="test" />
+                </action>
+            </actions>
         </user>
     </users>
     <authorities>
@@ -50,6 +76,14 @@
             <expiration_date>${today + month(1)}</expiration_date>
             <status>VALID</status>
             <type>USER_INVITATION</type>
+            <actions>
+                <action id="revoke">
+                    <status>REVOKED</status>
+                </action>
+                <action id="extend">
+                    <expiration_date>${today + month(1) + day(5)}</expiration_date>
+                </action>
+            </actions>
         </token>
         <token>
             <id>2</id>
@@ -59,6 +93,11 @@
             <expiration_date>${today + month(1)}</expiration_date>
             <status>REVOKED</status>
             <type>USER_INVITATION</type>
+            <actions>
+                <action id="restore">
+                    <status>VALID</status>
+                </action>
+            </actions>
         </token>
         <token>
             <id>3</id>
@@ -68,6 +107,12 @@
             <expiration_date>${today - day(1)}</expiration_date>
             <status>EXPIRED</status>
             <type>USER_INVITATION</type>
+            <actions>
+                <action id="restore">
+                    <status>VALID</status>
+                    <expiration_date>${today + day(7)}</expiration_date>
+                </action>
+            </actions>
         </token>
     </tokens>
 </dummies>
