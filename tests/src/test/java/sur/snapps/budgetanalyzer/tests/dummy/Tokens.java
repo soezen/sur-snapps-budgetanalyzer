@@ -15,7 +15,9 @@ public class Tokens {
     private static DummyToken validRevoked;
     private static DummyToken validExtended;
     private static DummyToken expired;
+    private static DummyToken expiredRestored;
     private static DummyToken revoked;
+    private static DummyToken revokedRestored;
 
     public static DummyToken valid() {
         if (valid == null) {
@@ -50,5 +52,19 @@ public class Tokens {
             revoked = extractor.get(DummyToken.class, "token-revoked");
         }
         return revoked;
+    }
+
+    public static DummyToken revokedRestored() {
+        if (revokedRestored == null) {
+            revokedRestored = extractor.doAction(revoked(), "restore");
+        }
+        return revokedRestored;
+    }
+
+    public static DummyToken expiredRestored() {
+        if (expiredRestored == null) {
+            expiredRestored = extractor.doAction(expired(), "restore");
+        }
+        return expiredRestored;
     }
 }

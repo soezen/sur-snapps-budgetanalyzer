@@ -2,6 +2,7 @@ package sur.snapps.budgetanalyzer.tests.user;
 
 import org.junit.Test;
 import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
+import sur.snapps.budgetanalyzer.tests.dummy.DummyToken;
 import sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage;
 import sur.snapps.jetta.database.counter.RecordCounter;
 import sur.snapps.jetta.database.counter.table.Table;
@@ -12,11 +13,7 @@ import sur.snapps.jetta.selenium.elements.WebPage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.expired;
-import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.revoked;
-import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.valid;
-import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.validExtended;
-import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.validRevoked;
+import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.*;
 import static sur.snapps.budgetanalyzer.tests.dummy.Users.face;
 import static sur.snapps.budgetanalyzer.tests.dummy.Users.hannibal;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
@@ -48,22 +45,11 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
         manageUsersPage.revokeInvitation(valid());
 
-        assertFalse(manageUsersPage.isTokenPresent(valid()));
         assertTrue(manageUsersPage.isTokenPresent(validRevoked()));
+        assertFalse(manageUsersPage.isTokenPresent(valid()));
 
-        Table tokensTable = new Table("tokens");
-        assertEquals(1, counter.count()
-                .from(tokensTable)
-                .where(and(
-                        equal(tokensTable.column("status"), "'" + validRevoked().status() + "'"),
-                        equal(tokensTable.column("email"), "'" + validRevoked().email() + "'")))
-                .get());
-        assertEquals(0, counter.count()
-                .from(tokensTable)
-                .where(and(
-                        equal(tokensTable.column("status"), "'" + valid().status() + "'"),
-                        equal(tokensTable.column("email"), "'" + valid().email() + "'")))
-                .get());
+        assertTokenPresentInDatabase(validRevoked(), true);
+        assertTokenPresentInDatabase(valid(), false);
     }
 
     @Test
@@ -74,26 +60,42 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
         manageUsersPage.extendInvitation(valid());
 
-        assertFalse(manageUsersPage.isTokenPresent(valid()));
         assertTrue(manageUsersPage.isTokenPresent(validExtended()));
+        assertFalse(manageUsersPage.isTokenPresent(valid()));
 
-        Table tokensTable = new Table("tokens");
-        assertEquals(1, counter.count()
-                .from(tokensTable)
-                .where(and(
-                        equal(tokensTable.column("status"), "'" + validExtended().status() + "'"),
-                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'" + validExtended().expirationDate() + "'"),
-                        equal(tokensTable.column("email"), "'" + validExtended().email() + "'")))
-                .get());
-        assertEquals(0, counter.count()
-                .from(tokensTable)
-                .where(and(
-                        equal(tokensTable.column("status"), "'" + valid().status() + "'"),
-                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'" + valid().expirationDate() + "'"),
-                        equal(tokensTable.column("email"), "'" + valid().email() + "'")))
-                .get());
+        assertTokenPresentInDatabase(validExtended(), true);
+        assertTokenPresentInDatabase(valid(), false);
     }
 
+    @Test
+    public void restoreRevokedInvitation() {
+        homePage.openUserDashboard();
+        assertTrue(loginPage.login(hannibal()).isSuccess());
+        dashboardPage.manageUsers();
+
+        manageUsersPage.restoreInvitation(revoked());
+
+        assertTrue(manageUsersPage.isTokenPresent(revokedRestored()));
+        assertFalse(manageUsersPage.isTokenPresent(revoked()));
+
+        assertTokenPresentInDatabase(revokedRestored(), true);
+        assertTokenPresentInDatabase(revoked(), false);
+    }
+
+    @Test
+    public void restoreExpiredInvitation() {
+        homePage.openUserDashboard();
+        assertTrue(loginPage.login(hannibal()).isSuccess());
+        dashboardPage.manageUsers();
+
+        manageUsersPage.restoreInvitation(expired());
+
+        assertTrue(manageUsersPage.isTokenPresent(expiredRestored()));
+        assertFalse(manageUsersPage.isTokenPresent(expired()));
+
+        assertTokenPresentInDatabase(expiredRestored(), true);
+        assertTokenPresentInDatabase(expired(), false);
+    }
 
     @Test
     public void manageUsersAsAdmin() {
@@ -124,5 +126,16 @@ public class ManageUsersTest extends AbstractSeleniumTest {
         assertTrue(manageUsersPage.isUserPresent(face(), false));
 
         assertFalse(manageUsersPage.areTokensVisible());
+    }
+
+    private void assertTokenPresentInDatabase(DummyToken token, boolean present) {
+        Table tokensTable = new Table("tokens");
+        assertEquals(present ? 1 : 0, counter.count()
+                .from(tokensTable)
+                .where(and(
+                        equal(tokensTable.column("status"), "'" + token.status() + "'"),
+                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'" + token.expirationDate() + "'"),
+                        equal(tokensTable.column("email"), "'" + token.email() + "'")))
+                .get());
     }
 }
