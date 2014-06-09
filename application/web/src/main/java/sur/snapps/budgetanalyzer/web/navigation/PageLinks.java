@@ -7,13 +7,17 @@ package sur.snapps.budgetanalyzer.web.navigation;
  */
 public enum PageLinks {
 
+    HOMEPAGE("homepage", "homepage"),
+    LOGIN("login", "login"),
+    DENIED("denied", "denied"),
+
     USER_REGISTRATION("user_registration", "userRegistration"),
     USER_REGISTRATION_SUCCESS("user_registration_success", "userRegistrationSuccess"),
     INVALID_TOKEN("invalid_token", "invalidToken"),
 
     DASHBOARD("user/dashboard", "user/dashboard"),
 
-    MANAGE_USERS("user/manage_users", "user/manageUsers"),
+    PROFILE("user/profile", "user/profile"),
     INVITE_USER("user/admin/user_invitation", "user/admin/inviteUser");
 
     private static final String REDIRECT = "redirect:";

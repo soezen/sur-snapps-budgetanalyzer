@@ -34,13 +34,19 @@ public class UserController extends AbstractController {
         return PageLinks.DASHBOARD.page();
     }
 
-    @RequestMapping("/manageUsers")
-    public String openManageUsersPage(Model model) {
+    @RequestMapping("/profile")
+    public String openProfilePage(Model model) {
         Entity entity = userContext.getCurrentUser().getEntity();
+        model.addAttribute("user", userContext.getCurrentUser());
         model.addAttribute("users", userManager.findUsersOfEntity(entity));
+        // TODO only load these if admin user is logged in
         model.addAttribute("tokens", tokenManager.findTokensForEntity(entity));
-        return PageLinks.MANAGE_USERS.page();
+        return PageLinks.PROFILE.page();
     }
 
+    @RequestMapping("/disableCurrentUser")
+    public String disableCurrentUser() {
+        return null;
+    }
 
 }

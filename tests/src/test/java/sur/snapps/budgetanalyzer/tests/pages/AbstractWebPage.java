@@ -17,7 +17,7 @@ public abstract class AbstractWebPage {
     @FindBy(className = "form_error")
     private WebElement formError;
 
-    @FindBy(className = "field_error")
+    @FindBy(css = "div.form-group.has-error p.text-danger > span[id$='.errors']")
     private List<WebElement> fieldErrors;
 
     public boolean hasFormError() {

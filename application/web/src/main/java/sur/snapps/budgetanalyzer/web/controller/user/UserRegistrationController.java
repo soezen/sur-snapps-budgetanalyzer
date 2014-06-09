@@ -56,7 +56,8 @@ public class UserRegistrationController extends AbstractController {
 
         TokenStatus status = token == null ? TokenStatus.NOT_EXISTING : token.getStatus();
         if (!status.isValid()) {
-            model.addAttribute("tokenStatus", status);
+            model.addAttribute("error", true);
+            model.addAttribute("error_message", "form.user_registration.token." + status);
             return PageLinks.INVALID_TOKEN.page();
         }
 
@@ -78,8 +79,8 @@ public class UserRegistrationController extends AbstractController {
         }
         userManager.create(user);
         redirectAttributes.addFlashAttribute("success", "true");
-        redirectAttributes.addFlashAttribute("success_message", "User Created, wait for email.");
-        return PageLinks.USER_REGISTRATION_SUCCESS.redirect();
+        redirectAttributes.addFlashAttribute("success_message", "form.user_registration.success");
+        return PageLinks.USER_REGISTRATION.redirect();
     }
 
     private void validateUserRegistrationInput(User user, Errors errors) {

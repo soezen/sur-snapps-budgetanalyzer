@@ -6,7 +6,7 @@ import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import sur.snapps.budgetanalyzer.tests.pages.DashboardPage;
-import sur.snapps.budgetanalyzer.tests.pages.HomePage;
+import sur.snapps.budgetanalyzer.tests.pages.Menu;
 import sur.snapps.budgetanalyzer.tests.pages.LoginPage;
 import sur.snapps.jetta.database.DatabaseTestRule;
 import sur.snapps.jetta.selenium.annotations.SeleniumWebDriver;
@@ -37,7 +37,7 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
 
 
     @WebPage
-    protected HomePage homePage;
+    protected Menu menu;
     @WebPage
     protected LoginPage loginPage;
     @WebPage

@@ -19,6 +19,8 @@ public class ManageUsersPage extends AbstractWebPage {
 
     public static final String USERS_COLUMN_NAME = "name";
     public static final String USERS_COLUMN_EMAIL = "email";
+    public static final String USERS_COLUMN_STATUS = "status";
+    public static final String USERS_COLUMN_ADMIN = "admin";
     public static final String USERS_COLUMN_ACTIONS = "actions";
 
     public static final String USER_ACTION_REMOVE = "remove_user";
@@ -39,9 +41,12 @@ public class ManageUsersPage extends AbstractWebPage {
     @WebTable(id = "users", columns = {
             @Column(index = 1, name = USERS_COLUMN_NAME),
             @Column(index = 2, name = USERS_COLUMN_EMAIL),
-            @Column(index = 3, name = USERS_COLUMN_ACTIONS, optional = true)
+            @Column(index = 3, name = USERS_COLUMN_STATUS),
+            @Column(index = 4, name = USERS_COLUMN_ADMIN),
+            @Column(index = 5, name = USERS_COLUMN_ACTIONS, optional = true)
     })
     private Table usersTable;
+
     @WebTable(id = "tokens", columns = {
             @Column(index = 1, name = TOKENS_COLUMN_EMAIL),
             @Column(index = 2, name = TOKENS_COLUMN_EXPIRATION_DATE),
@@ -74,10 +79,10 @@ public class ManageUsersPage extends AbstractWebPage {
         return usersTable;
     }
 
-    public boolean isUserPresent(DummyUser user, boolean asAdmin) {
+    public boolean isUserPresent(DummyUser user, boolean hasDisableAction) {
         RowCriteria criteria = maxUserCriteria(user)
-                .rowHasNumberOfColumns(asAdmin ? 3 : 2);
-        if (asAdmin) {
+                .rowHasNumberOfColumns(5);
+        if (hasDisableAction) {
             criteria = criteria.columnHasLinks(USERS_COLUMN_ACTIONS, 1);
         }
         return criteria.row() != null;
@@ -85,7 +90,9 @@ public class ManageUsersPage extends AbstractWebPage {
 
     private RowCriteria maxUserCriteria(DummyUser user) {
         return minUserCriteria(user.email())
-                .columnHasValue(USERS_COLUMN_NAME, user.name());
+                .columnHasValue(USERS_COLUMN_NAME, user.name())
+                .columnHasCheckIcon(USERS_COLUMN_STATUS, user.enabled())
+                .columnHasCheckIcon(USERS_COLUMN_ADMIN, user.admin());
     }
 
     private RowCriteria minUserCriteria(String email) {

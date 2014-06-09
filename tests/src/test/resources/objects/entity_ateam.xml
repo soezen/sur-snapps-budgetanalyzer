@@ -3,14 +3,14 @@
         <entity>
             <id>1</id>
             <name>the A-Team</name>
-            <owned>1</owned>
-            <shared>0</shared>
+            <owned>true</owned>
+            <shared>false</shared>
         </entity>
         <entity transient="true">
             <id>2</id>
             <name>Bosco Albert Baracus</name>
-            <owned>1</owned>
-            <shared>0</shared>
+            <owned>true</owned>
+            <shared>false</shared>
         </entity>
     </entities>
     <users>
@@ -20,7 +20,7 @@
             <password translation="test">872fdc2a08772ba2c7c1cddd081bfd96</password>
             <email>hannibal@a-team.com</email>
             <name>John Smith</name>
-            <enabled>1</enabled>
+            <enabled>true</enabled>
             <entity_id>1</entity_id>
         </user>
         <user>
@@ -29,7 +29,7 @@
             <password translation="test">872fdc2a08772ba2c7c1cddd081bfd96</password>
             <email>face@a-team.com</email>
             <name>Templeton Peck</name>
-            <enabled>1</enabled>
+            <enabled>true</enabled>
             <entity_id>1</entity_id>
         </user>
         <user transient="true">
@@ -38,7 +38,7 @@
             <password translation="TEST$test12" />
             <email>ba@a-team.com</email>
             <name>Bosco Albert Baracus</name>
-            <enabled>1</enabled>
+            <enabled>true</enabled>
             <entity_id>2</entity_id>
             <actions>
                 <action id="invalid_email">

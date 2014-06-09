@@ -39,8 +39,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void adminSuccess() {
-        homePage.openUserDashboard();
-        loginPage.openRegistrationPage();
+        menu.register();
 
         boolean registrationSuccess = userRegistrationPage
                 .name("Bosco Albert Baracus")
@@ -51,7 +50,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                 .isSuccess();
         assertTrue("There were errors submitting the 'user registration' form.", registrationSuccess);
 
-        homePage.openUserDashboard();
+        menu.login();
         boolean loginSuccess = loginPage.username("ba")
                 .password("TEST$test12")
                 .login()
@@ -101,8 +100,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void adminErrorInsecurePassword() {
-        homePage.openUserDashboard();
-        loginPage.openRegistrationPage();
+        menu.register();
 
         boolean passwordError = userRegistrationPage
                 .name("Bosco Albert Baracus")
@@ -126,8 +124,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     @Test
     @Ignore
     public void adminErrorInvalidEmail() {
-        homePage.openUserDashboard();
-        loginPage.openRegistrationPage();
+        menu.register();
 
         boolean emailError = userRegistrationPage
                 .name("Bosco Albert Baracus")
@@ -158,7 +155,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                 .isSuccess();
         assertTrue("There were errors submitting the 'user registration' form.", success);
 
-        homePage.openUserDashboard();
+        menu.login();
         boolean loginSuccess = loginPage.username("ba")
                 .password("TEST$test12")
                 .login()
@@ -201,8 +198,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void adminErrorUsernameAlreadyUsed() {
-        homePage.openUserDashboard();
-        loginPage.openRegistrationPage();
+        menu.register();
 
         boolean usernameError = userRegistrationPage
                 .name("John Smith")
@@ -251,20 +247,20 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     public void notAdminErrorTokenExpired() {
         driver.navigate().to("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=token-expired");
 
-        assertTrue(driver.findElement(By.id("main_wrapper")).getText().contains("User invitation has expired."));
+        assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation has expired."));
     }
 
     @Test
     public void notAdminErrorTokenRevoked() {
         driver.navigate().to("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=token-revoked");
 
-        assertTrue(driver.findElement(By.id("main_wrapper")).getText().contains("User invitation has been revoked."));
+        assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation has been revoked."));
     }
 
     @Test
     public void notAdminErrorTokenNotInDB() {
         driver.navigate().to("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=token-not-existing");
 
-        assertTrue(driver.findElement(By.id("main_wrapper")).getText().contains("User invitation not found for this link."));
+        assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation not found for this link."));
     }
 }

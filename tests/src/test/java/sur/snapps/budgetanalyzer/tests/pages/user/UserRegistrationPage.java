@@ -21,7 +21,7 @@ public class UserRegistrationPage extends AbstractWebPage {
     @FindBy(id = "password")
     private WebElement passwordElement;
 
-    @FindBy(id = "btn_register")
+    @FindBy(id = "btn_submit")
     private WebElement registerButton;
     @FindBy(id = "btn_cancel")
     private WebElement cancelButton;

@@ -5,15 +5,12 @@
 --%>
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:template>
-    <jsp:attribute name="title">Dashboard</jsp:attribute>
+    <jsp:attribute name="title"><fmt:message key="title.dashboard" /></jsp:attribute>
     <jsp:body>
-        <ul>
-            <!-- TODO other link name for non-admin users -->
-            <!-- TODO use message properties for text -->
-            <li><a id="btn_manage_users" href="<c:url value="/budgetanalyzer/user/manageUsers" />">Manage Users</a></li>
-        </ul>
+        Dashboard
     </jsp:body>
 </t:template>

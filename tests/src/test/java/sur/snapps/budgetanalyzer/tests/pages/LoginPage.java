@@ -17,10 +17,8 @@ public class LoginPage extends AbstractWebPage {
     private WebElement usernameElement;
     @FindBy(id = "password")
     private WebElement passwordElement;
-    @FindBy(id = "btn_login")
+    @FindBy(id = "btn_submit")
     private WebElement loginButton;
-    @FindBy(id = "btn_open_registration_page")
-    private WebElement openRegistrationPageLink;
 
     public LoginPage username(String username) {
         usernameElement.sendKeys(username);
@@ -42,9 +40,5 @@ public class LoginPage extends AbstractWebPage {
         password(user.password());
         loginButton.click();
         return createFormResponse();
-    }
-
-    public void openRegistrationPage() {
-        openRegistrationPageLink.click();
     }
 }

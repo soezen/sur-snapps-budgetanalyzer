@@ -37,7 +37,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
     @Test
     public void revokeInvitation() {
-        homePage.openUserDashboard();
+        menu.dashboard();
         assertTrue(loginPage.login(hannibal()).isSuccess());
         dashboardPage.manageUsers();
 
@@ -54,7 +54,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
     @Test
     public void extendInvitation() {
-        homePage.openUserDashboard();
+        menu.dashboard();
         assertTrue(loginPage.login(hannibal()).isSuccess());
         dashboardPage.manageUsers();
 
@@ -69,7 +69,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
     @Test
     public void restoreRevokedInvitation() {
-        homePage.openUserDashboard();
+        menu.dashboard();
         assertTrue(loginPage.login(hannibal()).isSuccess());
         dashboardPage.manageUsers();
 
@@ -84,7 +84,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
     @Test
     public void restoreExpiredInvitation() {
-        homePage.openUserDashboard();
+        menu.dashboard();
         assertTrue(loginPage.login(hannibal()).isSuccess());
         dashboardPage.manageUsers();
 
@@ -97,9 +97,11 @@ public class ManageUsersTest extends AbstractSeleniumTest {
         assertTokenPresentInDatabase(expired(), false);
     }
 
+    // TODO try to get the assertion error messages to be more specific
+
     @Test
     public void manageUsersAsAdmin() {
-        homePage.openUserDashboard();
+        menu.dashboard();
         assertTrue(loginPage.login(hannibal()).isSuccess());
         dashboardPage.manageUsers();
 
@@ -117,13 +119,13 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
     @Test
     public void manageUsersAsNotAdmin() {
-        homePage.openUserDashboard();
+        menu.dashboard();
         assertTrue(loginPage.login(face()).isSuccess());
         dashboardPage.manageUsers();
 
         assertEquals(2, manageUsersPage.numberOfUsers());
         assertTrue(manageUsersPage.isUserPresent(hannibal(), false));
-        assertTrue(manageUsersPage.isUserPresent(face(), false));
+        assertTrue(manageUsersPage.isUserPresent(face(), true));
 
         assertFalse(manageUsersPage.areTokensVisible());
     }

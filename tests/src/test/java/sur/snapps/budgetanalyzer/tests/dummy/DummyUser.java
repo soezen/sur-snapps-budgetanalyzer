@@ -1,7 +1,8 @@
 package sur.snapps.budgetanalyzer.tests.dummy;
 
-import sur.snapps.jetta.database.dummy.Dummy;
 import sur.snapps.jetta.database.dummy.Identifier;
+import sur.snapps.jetta.database.dummy.annotations.Calculated;
+import sur.snapps.jetta.database.dummy.annotations.Dummy;
 
 /**
  * User: SUR
@@ -18,6 +19,8 @@ public class DummyUser {
     private String email;
     private String name;
     private boolean enabled;
+    @Calculated(selector = "authorities/authority", fk = "user_id", id = "id", formula = "authority/text() = 'ROLE_ADMIN'")
+    private boolean admin;
     private int entityId;
 
     public int id() {
@@ -42,6 +45,10 @@ public class DummyUser {
 
     public boolean enabled() {
         return enabled;
+    }
+
+    public boolean admin() {
+        return admin;
     }
 
     public int entityId() {

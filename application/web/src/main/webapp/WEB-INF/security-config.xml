@@ -9,8 +9,11 @@
                            http://www.springframework.org/schema/util/spring-util.xsd
                            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-	<security:http access-denied-page="/denied.jsp" use-expressions="true">
-		<security:form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=true" />
+	<security:http access-denied-page="/WEB-INF/budgetanalyzer/pages/denied.jsp" use-expressions="true">
+		<security:form-login login-page="/budgetanalyzer/login"
+                             username-parameter="username"
+                             password-parameter="password"
+                             authentication-failure-url="/budgetanalyzer/login/error" />
 		<security:intercept-url pattern="/budgetanalyzer/user/**" access="hasRole('ROLE_USER')" />
         <security:intercept-url pattern="/budgetanalyzer/user/admin/**" access="hasRole('ROLE_ADMIN')" />
 		<security:logout/>

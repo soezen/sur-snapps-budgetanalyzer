@@ -41,9 +41,12 @@
 				/WEB-INF/mvc-config.xml
 			</param-value>
 		</init-param>
-
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+
+    <welcome-file-list>
+        <welcome-file>/budgetanalyzer/homepage</welcome-file>
+    </welcome-file-list>
 
 
 	<!-- Maps all /accounts URLs to the 'accounts' servlet -->

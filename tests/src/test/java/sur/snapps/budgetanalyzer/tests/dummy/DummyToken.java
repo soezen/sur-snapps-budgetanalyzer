@@ -1,7 +1,7 @@
 package sur.snapps.budgetanalyzer.tests.dummy;
 
-import sur.snapps.jetta.database.dummy.Dummy;
 import sur.snapps.jetta.database.dummy.Identifier;
+import sur.snapps.jetta.database.dummy.annotations.Dummy;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
