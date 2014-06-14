@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sur.snapps.budgetanalyzer.business.event.EventManager;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
@@ -25,12 +26,16 @@ public class UserController extends AbstractController {
     private UserManager userManager;
     @Autowired
     private TokenManager tokenManager;
+    @Autowired
+    private EventManager eventManager;
 
     @Autowired
     private UserContext userContext;
 
     @RequestMapping("/dashboard")
-    public String openUserDashboard() {
+    public String openUserDashboard(Model model) {
+        // TODO change this so user can only see events that are allowed to be visible to him
+        model.addAttribute("events", eventManager.getEvents(userContext.getCurrentUser().getEntity()));
         return PageLinks.DASHBOARD.page();
     }
 

@@ -50,7 +50,7 @@ public class UserAdminController {
         }
 
         User currentUser = userContext.getCurrentUser();
-        tokenManager.create(currentUser.getEntity(), user.getEmail(), currentUser.getName(), HttpServletRequestUtil.createUrl(request));
+        tokenManager.create(currentUser, user.getEmail(), HttpServletRequestUtil.createUrl(request));
 
         // TODO show confirmations message
         return PageLinks.PROFILE.redirect();
@@ -83,7 +83,7 @@ public class UserAdminController {
 
     @RequestMapping("/restoreInvitation/{tokenId}")
     public String restoreInvitation(@PathVariable int tokenId, HttpServletRequest request) {
-        tokenManager.restore(userContext.getCurrentUser().getId(), tokenId, HttpServletRequestUtil.createUrl(request));
+        tokenManager.restore(userContext.getCurrentUser(), tokenId, HttpServletRequestUtil.createUrl(request));
         return PageLinks.PROFILE.redirect();
     }
 
@@ -91,19 +91,19 @@ public class UserAdminController {
     @NavigateTo(PageLinks.PROFILE)
     public String extendInvitation(@PathVariable int tokenId) {
         // TODO send email to user informing his invitation was extended? depends on whether we set time invitation valid in user invitation mail
-        tokenManager.extend(userContext.getCurrentUser().getId(), tokenId);
+        tokenManager.extend(userContext.getCurrentUser(), tokenId);
         return PageLinks.PROFILE.redirect();
     }
 
     @RequestMapping("/resendInvitation/{tokenId}")
     public String resendInvitation(@PathVariable int tokenId, HttpServletRequest request) {
-        tokenManager.resend(userContext.getCurrentUser().getId(), tokenId, HttpServletRequestUtil.createUrl(request));
+        tokenManager.resend(userContext.getCurrentUser(), tokenId, HttpServletRequestUtil.createUrl(request));
         return PageLinks.PROFILE.redirect();
     }
 
     @RequestMapping("/revokeInvitation/{tokenId}")
     public String revokeInvitation(@PathVariable int tokenId) {
-        tokenManager.revoke(userContext.getCurrentUser().getId(), tokenId);
+        tokenManager.revoke(userContext.getCurrentUser(), tokenId);
         return PageLinks.PROFILE.redirect();
     }
 }

@@ -11,6 +11,23 @@
 <t:template>
     <jsp:attribute name="title"><fmt:message key="title.dashboard" /></jsp:attribute>
     <jsp:body>
-        Dashboard
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>User</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="event" items="${events}">
+                    <tr>
+                        <td><fmt:formatDate value="${event.tms}" /></td>
+                        <td>${event.user.name}</td>
+                        <td>${event.type}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
     </jsp:body>
 </t:template>

@@ -20,14 +20,17 @@
 
     <aop:aspectj-autoproxy>
         <aop:include name="exceptionWrapperAspect" />
+        <aop:include name="eventLoggerAspect" />
     </aop:aspectj-autoproxy>
 
     <bean id="exceptionWrapperAspect" class="sur.snapps.budgetanalyzer.business.exception.ExceptionWrapperAspect" />
+    <bean id="eventLoggerAspect" class="sur.snapps.budgetanalyzer.business.event.EventLoggerAspect" />
 
     <tx:annotation-driven transaction-manager="transactionManager" />
 
     <bean id="userManager" class="sur.snapps.budgetanalyzer.business.user.UserManager" />
     <bean id="tokenManager" class="sur.snapps.budgetanalyzer.business.user.TokenManager" />
+    <bean id="eventManager" class="sur.snapps.budgetanalyzer.business.event.EventManager" />
 
     <bean id="mailFactory" class="sur.snapps.budgetanalyzer.business.mail.MailFactory" />
 

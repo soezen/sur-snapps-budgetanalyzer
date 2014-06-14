@@ -2,6 +2,8 @@ package sur.snapps.budgetanalyzer.business.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import sur.snapps.budgetanalyzer.business.event.LogEvent;
+import sur.snapps.budgetanalyzer.domain.event.EventType;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
@@ -22,6 +24,7 @@ public class UserManager {
     private TokenManager tokenManager;
 
     @Transactional
+    @LogEvent(EventType.REGISTRATION)
     public User create(User user) {
         String tokenValue = user.getTokenValue();
         if (tokenValue == null) {

@@ -2,8 +2,10 @@ package sur.snapps.budgetanalyzer.business.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import sur.snapps.budgetanalyzer.business.event.LogEvent;
 import sur.snapps.budgetanalyzer.business.mail.MailFactory;
 import sur.snapps.budgetanalyzer.business.mail.MailSender;
+import sur.snapps.budgetanalyzer.domain.event.EventType;
 import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.mail.UserInvitationMail;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
@@ -21,8 +23,6 @@ import java.util.List;
  */
 public class TokenManager {
 
-    @Autowired
-    private UserManager userManager;
     @Autowired
     private TokenRepository tokenRepository;
 
@@ -49,9 +49,8 @@ public class TokenManager {
     }
 
     @Transactional
-    public void restore(int userId, int tokenId, Url url) {
+    public void restore(User user, int tokenId, Url url) {
         Token token = findTokenById(tokenId);
-        User user = userManager.findById(userId);
         if (!user.hasAccessTo(token)) {
             throw new BusinessException("user has no access to specified token");
         }
@@ -74,9 +73,8 @@ public class TokenManager {
     }
 
     @Transactional
-    public void extend(int userId, int tokenId) {
+    public void extend(User user, int tokenId) {
         Token token = findTokenById(tokenId);
-        User user = userManager.findById(userId);
         if (!user.hasAccessTo(token)) {
             throw new BusinessException("user has no access to specified token");
         }
@@ -89,10 +87,11 @@ public class TokenManager {
     }
 
     @Transactional
-    public void create(Entity entity, String mail, String inviter, Url url) {
+    @LogEvent(EventType.USER_INVITATION)
+    public void create(User user, String mail, Url url) {
         Token token = Token.createUserInvitationToken()
                 .generateToken()
-                .entity(entity)
+                .entity(user.getEntity())
                 .email(mail)
                 .build();
         token = tokenRepository.save(token);
@@ -102,7 +101,7 @@ public class TokenManager {
                 .port(url.getServerPort())
                 .context(url.getContextPath())
                 .token(token.value())
-                .inviter(inviter)
+                .inviter(user.getName())
                 .to(mail);
         mailSender.send(userInvitationMail);
 
@@ -111,9 +110,8 @@ public class TokenManager {
     }
 
     @Transactional
-    public void resend(int userId, int tokenId, Url url) {
+    public void resend(User user, int tokenId, Url url) {
         Token token = findTokenById(tokenId);
-        User user = userManager.findById(userId);
         if (!user.hasAccessTo(token)) {
             throw new BusinessException("user has no access to specified token");
         }
@@ -132,9 +130,8 @@ public class TokenManager {
     }
 
     @Transactional
-    public void revoke(int userId, int tokenId) {
+    public void revoke(User user, int tokenId) {
         Token token = findTokenById(tokenId);
-        User user = userManager.findById(userId);
         if (!user.hasAccessTo(token)) {
             throw new BusinessException("user has no access to specified token");
         }

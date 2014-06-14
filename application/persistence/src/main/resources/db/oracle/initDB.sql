@@ -34,17 +34,20 @@ create table users (
   PRIMARY KEY (id)
 );
 
-create sequence seq_users;
+drop table events;
+create table events (
+  id  number not null,
+  type varchar2(15) not null,
+  tms timestamp not null,
+  user_id number not null
+);
+alter table events
+add constraint events_pk
+primary key (id);
 
-create or replace trigger id_users
-  before insert on users
-  for each row
-  begin
-    select seq_users.nextval
-    into :new.id
-    from dual;
-  end;
-  /
+alter table events
+add constraint events_user_id_fk
+foreign key (user_id) references users (id);
 
 drop table authorities;
 

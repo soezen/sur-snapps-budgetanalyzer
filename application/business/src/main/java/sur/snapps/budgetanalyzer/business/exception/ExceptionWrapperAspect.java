@@ -14,7 +14,7 @@ import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 @Aspect
 public class ExceptionWrapperAspect {
 
-    @AfterThrowing(value = "execution(* sur.snapps.budgetanalyzer.business..*.*(*))", throwing = "e")
+    @AfterThrowing(value = "execution(* sur.snapps.budgetanalyzer.business..*.*(..))", throwing = "e")
     public void wrapException(JoinPoint joinPoint, Exception e) {
         Signature signature = joinPoint.getSignature();
         throw new BusinessException(signature.getDeclaringTypeName() + "." + signature.getName(), e);

@@ -50,7 +50,9 @@
                     </t:accordion>
                 </jsp:attribute>
                 <jsp:attribute name="formActions">
-                    <a id="disable_entity" class="btn btn-default"><fmt:message key="form.profile.action.disable_entity" /></a>
+                    <c:if test="${user.admin}">
+                        <a id="disable_entity" class="btn btn-default"><fmt:message key="form.profile.action.disable_entity" /></a>
+                    </c:if>
                 </jsp:attribute>
                 <jsp:body>
                     <t:form-property-output path="name" property="${user.entity}" />

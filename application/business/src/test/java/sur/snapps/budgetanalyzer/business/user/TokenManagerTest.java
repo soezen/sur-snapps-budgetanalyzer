@@ -15,6 +15,7 @@ import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.mail.UserInvitationMail;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
+import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.TokenRepository;
 
 import static org.easymock.EasyMock.capture;
@@ -50,6 +51,8 @@ public class TokenManagerTest {
     private UserInvitationMail userInvitationMail;
     @Mock
     private Token token;
+    @Mock
+    private User user;
     @Dummy
     private Entity entity;
 
@@ -82,7 +85,7 @@ public class TokenManagerTest {
         mailSender.send(userInvitationMail);
         replay();
 
-        manager.create(entity, mail, inviter, url);
+        manager.create(user, mail, url);
 
         Token token = tokenCapture.getValue();
         assertSame(entity, token.entity());

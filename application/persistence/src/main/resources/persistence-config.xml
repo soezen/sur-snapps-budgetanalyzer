@@ -10,5 +10,6 @@
 
     <bean id="userRepository" class="sur.snapps.budgetanalyzer.persistence.user.UserRepository" />
     <bean id="tokenRepository" class="sur.snapps.budgetanalyzer.persistence.user.TokenRepository" />
+    <bean id="eventRepository" class="sur.snapps.budgetanalyzer.persistence.event.EventRepository" />
 
 </beans>
