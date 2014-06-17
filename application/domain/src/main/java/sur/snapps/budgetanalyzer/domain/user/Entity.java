@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * User: SUR
@@ -53,6 +54,17 @@ public class Entity implements Serializable {
 
     public boolean isShared() {
         return shared;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Entity
+                && Objects.equals(id, ((Entity) obj).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     public static class Builder {

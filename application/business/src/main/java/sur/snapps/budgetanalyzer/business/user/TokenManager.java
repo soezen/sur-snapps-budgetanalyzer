@@ -8,8 +8,10 @@ import sur.snapps.budgetanalyzer.business.mail.MailSender;
 import sur.snapps.budgetanalyzer.domain.event.EventType;
 import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.mail.UserInvitationMail;
+import sur.snapps.budgetanalyzer.domain.user.Email;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
+import sur.snapps.budgetanalyzer.domain.user.TokenStatus;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.TokenRepository;
 import sur.snapps.budgetanalyzer.util.exception.BusinessException;
@@ -49,17 +51,13 @@ public class TokenManager {
     }
 
     @Transactional
-    public void restore(User user, int tokenId, Url url) {
+    public Token restore(User user, int tokenId, Url url) {
         Token token = findTokenById(tokenId);
-        if (!user.hasAccessTo(token)) {
-            throw new BusinessException("user has no access to specified token");
-        }
-        if (!token.getStatus().isExpired() && !token.getStatus().isRevoked()) {
-            throw new BusinessException("token invalid state for restore action");
-        }
+        checkUserAccess(user, token);
+        checkTokenStatus(token, TokenStatus.VALID, false);
 
         token.restore();
-        tokenRepository.save(token);
+        token = tokenRepository.save(token);
 
         // TODO send different or same mail as user invitation?
         UserInvitationMail userInvitationMail = mailFactory.createUserInvitationMail()
@@ -70,25 +68,35 @@ public class TokenManager {
                 .inviter(user.getName())
                 .to(token.getEmail());
         mailSender.send(userInvitationMail);
+        return token;
     }
 
     @Transactional
-    public void extend(User user, int tokenId) {
+    public Token extend(User user, int tokenId) {
         Token token = findTokenById(tokenId);
-        if (!user.hasAccessTo(token)) {
-            throw new BusinessException("user has no access to specified token");
-        }
-        if (!token.getStatus().isValid()) {
-            throw new BusinessException("token invalid state for extend action");
-        }
+        checkUserAccess(user, token);
+        checkTokenStatus(token, TokenStatus.VALID, true);
 
         token.extendWithDays(5);
-        tokenRepository.save(token);
+        return tokenRepository.save(token);
+    }
+
+    private void checkTokenStatus(Token token, TokenStatus status, boolean required) {
+        if ((required && token.getStatus() != status)
+            || (!required && token.getStatus() == status)) {
+            throw new BusinessException("error.token.invalid_state", "Token invalid state for this action");
+        }
+    }
+
+    private void checkUserAccess(User user, Token token) {
+        if (!user.hasAccessTo(token)) {
+            throw new BusinessException("error.token.invalid_access", "User has no access to specified token");
+        }
     }
 
     @Transactional
     @LogEvent(EventType.USER_INVITATION)
-    public void create(User user, String mail, Url url) {
+    public void create(User user, Email mail, Url url) {
         Token token = Token.createUserInvitationToken()
                 .generateToken()
                 .entity(user.getEntity())
@@ -110,14 +118,10 @@ public class TokenManager {
     }
 
     @Transactional
-    public void resend(User user, int tokenId, Url url) {
+    public Token resend(User user, int tokenId, Url url) {
         Token token = findTokenById(tokenId);
-        if (!user.hasAccessTo(token)) {
-            throw new BusinessException("user has no access to specified token");
-        }
-        if (!token.getStatus().isValid()) {
-            throw new BusinessException("token invalid state for resend action");
-        }
+        checkUserAccess(user, token);
+        checkTokenStatus(token, TokenStatus.VALID, true);
 
         UserInvitationMail userInvitationMail = mailFactory.createUserInvitationMail()
                 .host(url.getServerName())
@@ -127,19 +131,16 @@ public class TokenManager {
                 .inviter(user.getName())
                 .to(token.getEmail());
         mailSender.send(userInvitationMail);
+        return token;
     }
 
     @Transactional
-    public void revoke(User user, int tokenId) {
+    public Token revoke(User user, int tokenId) {
         Token token = findTokenById(tokenId);
-        if (!user.hasAccessTo(token)) {
-            throw new BusinessException("user has no access to specified token");
-        }
-        if (!token.getStatus().isValid()) {
-            throw new BusinessException("token invalid state for revoke action");
-        }
+        checkUserAccess(user, token);
+        checkTokenStatus(token, TokenStatus.VALID, true);
 
         token.revoke();
-        tokenRepository.save(token);
+        return tokenRepository.save(token);
     }
 }

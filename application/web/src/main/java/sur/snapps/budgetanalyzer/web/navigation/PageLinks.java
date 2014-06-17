@@ -7,6 +7,8 @@ package sur.snapps.budgetanalyzer.web.navigation;
  */
 public enum PageLinks {
 
+    UNEXPECTED_ERROR("unexpected_error", "unexpectedError"),
+
     HOMEPAGE("homepage", "homepage"),
     LOGIN("login", "login"),
     DENIED("denied", "denied"),

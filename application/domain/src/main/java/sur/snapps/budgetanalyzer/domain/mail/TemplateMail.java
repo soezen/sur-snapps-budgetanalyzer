@@ -3,6 +3,7 @@ package sur.snapps.budgetanalyzer.domain.mail;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
+import sur.snapps.budgetanalyzer.domain.user.Email;
 
 /**
  * User: SUR
@@ -12,11 +13,11 @@ import org.stringtemplate.v4.STGroupFile;
 public abstract class TemplateMail<C extends TemplateMail> {
 
     protected abstract ST getTemplate(String name);
-    public abstract C to(String toEmail);
+    public abstract C to(Email toEmail);
 
     private String template;
     private String subject;
-    protected String toEmail;
+    protected Email toEmail;
 
     protected TemplateMail(String template, String subject) {
         this.template = template;
@@ -31,7 +32,7 @@ public abstract class TemplateMail<C extends TemplateMail> {
         return subject;
     }
 
-    public String to() {
+    public Email to() {
         return toEmail;
     }
 

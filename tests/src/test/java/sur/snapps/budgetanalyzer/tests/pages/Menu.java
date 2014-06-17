@@ -16,6 +16,12 @@ public class Menu {
     private WebElement loginLink;
     @FindBy(id = "menu_register")
     private WebElement registerLink;
+    @FindBy(id = "menu_profile")
+    private WebElement profileLink;
+
+    public void profile() {
+        profileLink.click();
+    }
 
     public void register() {
         registerLink.click();

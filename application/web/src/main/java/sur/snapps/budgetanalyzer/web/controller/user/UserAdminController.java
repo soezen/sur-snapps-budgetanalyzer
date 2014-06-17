@@ -1,6 +1,5 @@
 package sur.snapps.budgetanalyzer.web.controller.user;
 
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,9 +8,15 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
+import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
+import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 import sur.snapps.budgetanalyzer.util.validators.EmailValidator;
+import sur.snapps.budgetanalyzer.web.response.ResponseHolder;
+import sur.snapps.budgetanalyzer.web.response.SuccessResponse;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 import sur.snapps.budgetanalyzer.web.util.HttpServletRequestUtil;
@@ -46,7 +51,7 @@ public class UserAdminController {
         validateUserInvitation(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return PageLinks.INVITE_USER.page();
+            throw new BusinessException("form.errors.validation");
         }
 
         User currentUser = userContext.getCurrentUser();
@@ -58,7 +63,7 @@ public class UserAdminController {
 
     private void validateUserInvitation(User user, Errors errors) {
         EmailValidator emailValidator = new EmailValidator();
-        if (Strings.isNullOrEmpty(user.getEmail())) {
+        if (user.getEmail() == null) {
             errors.rejectValue("email", "error.field.required");
         } else if (!emailValidator.validate(user.getEmail())) {
             errors.rejectValue("email", "error.email.invalid");
@@ -81,29 +86,29 @@ public class UserAdminController {
         return PageLinks.PROFILE.redirect();
     }
 
-    @RequestMapping("/restoreInvitation/{tokenId}")
-    public String restoreInvitation(@PathVariable int tokenId, HttpServletRequest request) {
-        tokenManager.restore(userContext.getCurrentUser(), tokenId, HttpServletRequestUtil.createUrl(request));
-        return PageLinks.PROFILE.redirect();
-    }
-
-    @RequestMapping("/extendInvitation/{tokenId}")
+    @RequestMapping("/invitation_action/{tokenId}")
     @NavigateTo(PageLinks.PROFILE)
-    public String extendInvitation(@PathVariable int tokenId) {
-        // TODO send email to user informing his invitation was extended? depends on whether we set time invitation valid in user invitation mail
-        tokenManager.extend(userContext.getCurrentUser(), tokenId);
-        return PageLinks.PROFILE.redirect();
-    }
-
-    @RequestMapping("/resendInvitation/{tokenId}")
-    public String resendInvitation(@PathVariable int tokenId, HttpServletRequest request) {
-        tokenManager.resend(userContext.getCurrentUser(), tokenId, HttpServletRequestUtil.createUrl(request));
-        return PageLinks.PROFILE.redirect();
-    }
-
-    @RequestMapping("/revokeInvitation/{tokenId}")
-    public String revokeInvitation(@PathVariable int tokenId) {
-        tokenManager.revoke(userContext.getCurrentUser(), tokenId);
-        return PageLinks.PROFILE.redirect();
+    // TODO wrap response in object so we can include error message
+    // TODO make javascript show error message
+    // TODO make actions visible or invisible with javascript based on other values of the row
+    public @ResponseBody
+    ResponseHolder<Token> invitationAction(@PathVariable int tokenId, @RequestParam String action, HttpServletRequest request) {
+        Token token = null;
+        switch (action) {
+            case "extend":
+                // TODO send email to user informing his invitation was extended? depends on whether we set time invitation valid in user invitation mail
+                token = tokenManager.extend(userContext.getCurrentUser(), tokenId);
+                break;
+            case "resend":
+                token = tokenManager.resend(userContext.getCurrentUser(), tokenId, HttpServletRequestUtil.createUrl(request));
+                break;
+            case "restore":
+                token = tokenManager.restore(userContext.getCurrentUser(), tokenId, HttpServletRequestUtil.createUrl(request));
+                break;
+            case "revoke":
+                token = tokenManager.revoke(userContext.getCurrentUser(), tokenId);
+                break;
+        }
+        return new SuccessResponse<Token>(token);
     }
 }

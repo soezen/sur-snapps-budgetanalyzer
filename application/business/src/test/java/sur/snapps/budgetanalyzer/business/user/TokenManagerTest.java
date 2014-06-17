@@ -13,6 +13,7 @@ import sur.snapps.budgetanalyzer.business.mail.MailFactory;
 import sur.snapps.budgetanalyzer.business.mail.SendGridMailSender;
 import sur.snapps.budgetanalyzer.domain.mail.Url;
 import sur.snapps.budgetanalyzer.domain.mail.UserInvitationMail;
+import sur.snapps.budgetanalyzer.domain.user.Email;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
@@ -55,6 +56,8 @@ public class TokenManagerTest {
     private User user;
     @Dummy
     private Entity entity;
+    @Dummy
+    private Email mail;
 
     private Url url;
 
@@ -68,11 +71,11 @@ public class TokenManagerTest {
 
     @Test
     public void testCreateToken() {
-        String mail = "mail";
         String inviter = "inviter";
         String tokenValue = "tokenValue";
         Capture<Token> tokenCapture = new Capture<>();
 
+        expect(user.getEntity()).andReturn(entity);
         expect(repository.save(capture(tokenCapture))).andReturn(token);
         expect(mailFactory.createUserInvitationMail()).andReturn(userInvitationMail);
         expect(userInvitationMail.host(url.getServerName())).andReturn(userInvitationMail);
@@ -80,6 +83,7 @@ public class TokenManagerTest {
         expect(userInvitationMail.context(url.getContextPath())).andReturn(userInvitationMail);
         expect(token.value()).andReturn(tokenValue);
         expect(userInvitationMail.token(tokenValue)).andReturn(userInvitationMail);
+        expect(user.getName()).andReturn(inviter);
         expect(userInvitationMail.inviter(inviter)).andReturn(userInvitationMail);
         expect(userInvitationMail.to(mail)).andReturn(userInvitationMail);
         mailSender.send(userInvitationMail);

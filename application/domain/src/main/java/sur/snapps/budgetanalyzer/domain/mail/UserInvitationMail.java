@@ -1,6 +1,7 @@
 package sur.snapps.budgetanalyzer.domain.mail;
 
 import org.stringtemplate.v4.ST;
+import sur.snapps.budgetanalyzer.domain.user.Email;
 
 /**
  * User: SUR
@@ -27,7 +28,7 @@ public class UserInvitationMail extends TemplateMail<UserInvitationMail> {
     }
 
     @Override
-    public UserInvitationMail to(String toEmail) {
+    public UserInvitationMail to(Email toEmail) {
         this.toEmail = toEmail;
         return this;
     }

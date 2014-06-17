@@ -17,6 +17,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap/bootstrap.min.css" />" type="text/css" />
         <link rel="stylesheet" href="<c:url value="/resources/css/application.css" />" type="text/css"/>
         <script type="text/javascript" src="<c:url value="/resources/js/jquery-2.1.1.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/jquery-dateFormat.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/application.js" />"></script>
         <title><fmt:message key="application.name" /> - <jsp:invoke fragment="title" /></title>

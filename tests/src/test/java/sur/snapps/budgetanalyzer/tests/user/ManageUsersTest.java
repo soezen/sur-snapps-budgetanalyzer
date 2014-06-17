@@ -3,7 +3,7 @@ package sur.snapps.budgetanalyzer.tests.user;
 import org.junit.Test;
 import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
 import sur.snapps.budgetanalyzer.tests.dummy.DummyToken;
-import sur.snapps.budgetanalyzer.tests.pages.user.ManageUsersPage;
+import sur.snapps.budgetanalyzer.tests.pages.user.ProfilePage;
 import sur.snapps.jetta.database.counter.RecordCounter;
 import sur.snapps.jetta.database.counter.table.Table;
 import sur.snapps.jetta.database.script.Script;
@@ -33,35 +33,37 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     private RecordCounter counter;
 
     @WebPage
-    private ManageUsersPage manageUsersPage;
+    private ProfilePage profilePage;
 
     @Test
     public void revokeInvitation() {
-        menu.dashboard();
+        menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
-        dashboardPage.manageUsers();
+        menu.profile();
 
         // TODO add unique constraint on email
 
-        manageUsersPage.revokeInvitation(valid());
+        profilePage.revokeInvitation(valid());
 
-        assertTrue(manageUsersPage.isTokenPresent(validRevoked()));
-        assertFalse(manageUsersPage.isTokenPresent(valid()));
+        profilePage.assertTokenPanelOpen(wait, true);
+        assertTrue(profilePage.isTokenPresent(validRevoked()));
+        assertFalse(profilePage.isTokenPresent(valid()));
 
         assertTokenPresentInDatabase(validRevoked(), true);
         assertTokenPresentInDatabase(valid(), false);
     }
 
     @Test
-    public void extendInvitation() {
-        menu.dashboard();
+    public void extendInvitation() throws InterruptedException {
+        menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
-        dashboardPage.manageUsers();
+        menu.profile();
 
-        manageUsersPage.extendInvitation(valid());
+        profilePage.extendInvitation(valid());
 
-        assertTrue(manageUsersPage.isTokenPresent(validExtended()));
-        assertFalse(manageUsersPage.isTokenPresent(valid()));
+        profilePage.assertTokenPanelOpen(wait, true);
+        assertTrue(profilePage.isTokenPresent(validExtended()));
+        assertFalse(profilePage.isTokenPresent(valid()));
 
         assertTokenPresentInDatabase(validExtended(), true);
         assertTokenPresentInDatabase(valid(), false);
@@ -69,14 +71,15 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
     @Test
     public void restoreRevokedInvitation() {
-        menu.dashboard();
+        menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
-        dashboardPage.manageUsers();
+        menu.profile();
 
-        manageUsersPage.restoreInvitation(revoked());
+        profilePage.restoreInvitation(revoked());
 
-        assertTrue(manageUsersPage.isTokenPresent(revokedRestored()));
-        assertFalse(manageUsersPage.isTokenPresent(revoked()));
+        profilePage.assertTokenPanelOpen(wait, true);
+        assertTrue(profilePage.isTokenPresent(revokedRestored()));
+        assertFalse(profilePage.isTokenPresent(revoked()));
 
         assertTokenPresentInDatabase(revokedRestored(), true);
         assertTokenPresentInDatabase(revoked(), false);
@@ -84,14 +87,15 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
     @Test
     public void restoreExpiredInvitation() {
-        menu.dashboard();
+        menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
-        dashboardPage.manageUsers();
+        menu.profile();
 
-        manageUsersPage.restoreInvitation(expired());
+        profilePage.restoreInvitation(expired());
 
-        assertTrue(manageUsersPage.isTokenPresent(expiredRestored()));
-        assertFalse(manageUsersPage.isTokenPresent(expired()));
+        profilePage.assertTokenPanelOpen(wait, true);
+        assertTrue(profilePage.isTokenPresent(expiredRestored()));
+        assertFalse(profilePage.isTokenPresent(expired()));
 
         assertTokenPresentInDatabase(expiredRestored(), true);
         assertTokenPresentInDatabase(expired(), false);
@@ -101,33 +105,33 @@ public class ManageUsersTest extends AbstractSeleniumTest {
 
     @Test
     public void manageUsersAsAdmin() {
-        menu.dashboard();
+        // TODO add assertions for user info
+        menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
-        dashboardPage.manageUsers();
+        menu.profile();
 
-        assertEquals(2, manageUsersPage.numberOfUsers());
-        assertTrue(manageUsersPage.isUserPresent(hannibal(), true));
-        assertTrue(manageUsersPage.isUserPresent(face(), true));
+        assertEquals(1, profilePage.numberOfUsers());
+        assertTrue(profilePage.isUserPresent(face(), true));
 
-        assertTrue(manageUsersPage.areTokensVisible());
+        assertTrue(profilePage.areTokensVisible());
 
-        assertEquals(3, manageUsersPage.numberOfTokens());
-        assertTrue(manageUsersPage.isTokenPresent(valid()));
-        assertTrue(manageUsersPage.isTokenPresent(revoked()));
-        assertTrue(manageUsersPage.isTokenPresent(expired()));
+        assertEquals(3, profilePage.numberOfTokens());
+        assertTrue(profilePage.isTokenPresent(valid()));
+        assertTrue(profilePage.isTokenPresent(revoked()));
+        assertTrue(profilePage.isTokenPresent(expired()));
     }
 
     @Test
     public void manageUsersAsNotAdmin() {
-        menu.dashboard();
+        // TODO add assertions for user info
+        menu.login();
         assertTrue(loginPage.login(face()).isSuccess());
-        dashboardPage.manageUsers();
+        menu.profile();
 
-        assertEquals(2, manageUsersPage.numberOfUsers());
-        assertTrue(manageUsersPage.isUserPresent(hannibal(), false));
-        assertTrue(manageUsersPage.isUserPresent(face(), true));
+        assertEquals(1, profilePage.numberOfUsers());
+        assertTrue(profilePage.isUserPresent(hannibal(), false));
 
-        assertFalse(manageUsersPage.areTokensVisible());
+        assertFalse(profilePage.areTokensVisible());
     }
 
     private void assertTokenPresentInDatabase(DummyToken token, boolean present) {

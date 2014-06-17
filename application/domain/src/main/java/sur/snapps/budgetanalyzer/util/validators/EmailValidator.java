@@ -1,5 +1,7 @@
 package sur.snapps.budgetanalyzer.util.validators;
 
+import sur.snapps.budgetanalyzer.domain.user.Email;
+
 import java.util.regex.Pattern;
 
 /**
@@ -17,7 +19,7 @@ public class EmailValidator {
         pattern = Pattern.compile(PATTERN);
     }
 
-    public boolean validate(String input) {
-        return pattern.matcher(input).matches();
+    public boolean validate(Email input) {
+        return pattern.matcher(input.getAddress()).matches();
     }
 }

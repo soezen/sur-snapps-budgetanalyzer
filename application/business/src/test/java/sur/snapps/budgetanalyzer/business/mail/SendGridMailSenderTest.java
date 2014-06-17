@@ -9,6 +9,7 @@ import org.unitils.UnitilsJUnit4TestClassRunner;
 import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.InjectInto;
 import sur.snapps.budgetanalyzer.domain.mail.TemplateMail;
+import sur.snapps.budgetanalyzer.domain.user.Email;
 
 import static org.easymock.EasyMock.expect;
 import static org.unitils.easymock.EasyMockUnitils.replay;
@@ -35,6 +36,8 @@ public class SendGridMailSenderTest {
     private TemplateMail mail;
     @Mock
     private ST template;
+    @Mock
+    private Email email;
 
     @Before
     public void init() {
@@ -48,7 +51,8 @@ public class SendGridMailSenderTest {
 
     @Test
     public void testSend() {
-        expect(mail.to()).andReturn("toEmail");
+        expect(mail.to()).andReturn(email);
+        expect(email.getAddress()).andReturn("toEmail");
         expect(sendGrid.addTo("toEmail")).andReturn(sendGrid);
         expect(sendGrid.setFrom(fromEmail)).andReturn(sendGrid);
         expect(sendGrid.setFromName(fromName)).andReturn(sendGrid);

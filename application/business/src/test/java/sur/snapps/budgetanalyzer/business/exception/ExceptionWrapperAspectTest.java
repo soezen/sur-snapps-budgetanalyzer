@@ -29,7 +29,7 @@ public class ExceptionWrapperAspectTest {
     @Mock
     private Signature signature;
     @Dummy
-    private Exception exception;
+    private RuntimeException exception;
 
     @Test(expected = BusinessException.class)
     public void testWrapException() {

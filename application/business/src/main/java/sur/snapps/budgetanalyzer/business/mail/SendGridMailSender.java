@@ -31,7 +31,7 @@ public class SendGridMailSender implements MailSender {
 
     @Override
     public void send(TemplateMail mail) {
-        String to = mail.to();
+        String to = mail.to().getAddress();
         String result = sendGrid.addTo(to)
                 .setFrom(fromEmail)
                 .setFromName(fromName)

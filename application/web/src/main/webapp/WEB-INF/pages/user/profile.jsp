@@ -23,7 +23,7 @@
                 <jsp:body>
                     <t:form-property-output property="${user}" path="name" />
                     <t:form-property-output path="username" property="${user}" />
-                    <t:form-property-output path="email" property="${user}" />
+                    <t:form-property-output path="email.address" property="${user}" />
                 </jsp:body>
             </t:form-fieldset>
         </div>

@@ -1,8 +1,5 @@
 package sur.snapps.budgetanalyzer.tests.pages;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-
 /**
  * User: SUR
  * Date: 5/05/14
@@ -10,10 +7,4 @@ import org.openqa.selenium.support.FindBy;
  */
 public class DashboardPage {
 
-    @FindBy(id = "btn_manage_users")
-    private WebElement manageUsersLink;
-
-    public void manageUsers() {
-        manageUsersLink.click();
-    }
 }

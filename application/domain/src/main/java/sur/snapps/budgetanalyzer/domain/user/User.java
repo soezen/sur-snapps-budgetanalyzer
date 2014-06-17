@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -38,8 +39,8 @@ public class User implements Serializable {
     private String username;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
-    private String email;
+    @Embedded
+    private Email email;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -82,11 +83,11 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 

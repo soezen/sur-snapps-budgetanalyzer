@@ -17,4 +17,6 @@ import java.lang.annotation.Target;
 public @interface NavigateTo {
 
     PageLinks value() default PageLinks.DASHBOARD;
+    String successMessage() default "action.success";
+    String errorMessage() default "action.error";
 }

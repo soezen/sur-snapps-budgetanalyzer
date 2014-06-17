@@ -3,6 +3,7 @@ package sur.snapps.budgetanalyzer.domain.user;
 import sur.snapps.budgetanalyzer.util.DateUtil;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -34,8 +35,8 @@ public class Token implements Serializable {
     private Entity entity;
     @Column(name = "EXPIRATION_DATE", nullable = false)
     private Date expirationDate;
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Embedded
+    private Email email;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TokenStatus status;
@@ -82,7 +83,7 @@ public class Token implements Serializable {
         private String token;
         private Entity entity;
         private Date expirationDate;
-        private String email;
+        private Email email;
         private TokenStatus status;
         private TokenType type;
 
@@ -98,7 +99,7 @@ public class Token implements Serializable {
             return this;
         }
 
-        public Builder email(String email) {
+        public Builder email(Email email) {
             this.email = email;
             return this;
         }
@@ -146,7 +147,7 @@ public class Token implements Serializable {
         return status;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 

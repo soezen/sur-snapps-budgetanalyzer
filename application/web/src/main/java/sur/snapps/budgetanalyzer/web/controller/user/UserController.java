@@ -34,7 +34,6 @@ public class UserController extends AbstractController {
 
     @RequestMapping("/dashboard")
     public String openUserDashboard(Model model) {
-        // TODO change this so user can only see events that are allowed to be visible to him
         model.addAttribute("events", eventManager.getEvents(userContext.getCurrentUser().getEntity()));
         return PageLinks.DASHBOARD.page();
     }
