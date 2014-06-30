@@ -59,7 +59,7 @@ public class TokenManager {
         token.restore();
         token = tokenRepository.save(token);
 
-        // TODO send different or same mail as user invitation?
+        // TODO-FUNC UC-1 send different or same mail as user invitation?
         UserInvitationMail userInvitationMail = mailFactory.createUserInvitationMail()
                 .host(url.getServerName())
                 .port(url.getServerPort())
@@ -113,8 +113,8 @@ public class TokenManager {
                 .to(mail);
         mailSender.send(userInvitationMail);
 
-        // TODO add updated tms in db
-        // TODO add version in db
+        // TODO-TECH add updated tms in db
+        // TODO-TECH add version in db
     }
 
     @Transactional

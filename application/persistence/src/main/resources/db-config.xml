@@ -39,8 +39,8 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <!-- TODO selenium tests are being run twice within one jenkins build (other tests too i guess) -->
-    <!-- TODO verify on jenkins that this is fixed -->
+    <!-- TODO-TECH selenium tests are being run twice within one jenkins build (other tests too i guess) -->
+    <!-- TODO-TECH verify on jenkins that this is fixed -->
 
     <!-- Testing "dataSource" configuration using an in-memory database (for
         unit tests, ...) -->

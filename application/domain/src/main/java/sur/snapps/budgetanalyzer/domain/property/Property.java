@@ -9,5 +9,5 @@ public class Property {
 
     private PropertyType type;
 
-    // TODO use pattern (leaf, composite?)
+    // TODO-TECH use pattern (leaf, composite?)
 }

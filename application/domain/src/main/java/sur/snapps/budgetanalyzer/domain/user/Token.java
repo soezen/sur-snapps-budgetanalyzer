@@ -88,7 +88,7 @@ public class Token implements Serializable {
         private TokenType type;
 
         public Token build() {
-            // TODO add validation
+            // TODO-FUNC UC-1 add validation
             // if status is valid, expiration date has to be after now
             // (automatically change it or throw error)
             return new Token(this);

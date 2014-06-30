@@ -49,7 +49,6 @@ public class UserManagerTest {
         Capture<Entity> entityCapture = new Capture<>();
         String username = "username";
 
-        expect(user.getTokenValue()).andReturn(null);
         expect(user.getName()).andReturn(username);
         user.encodePassword();
         user.setEnabled(true);
@@ -59,7 +58,7 @@ public class UserManagerTest {
         expect(repository.save(user)).andReturn(user);
         replay();
 
-        User result = manager.create(user);
+        User result = manager.create(null);
 
         assertNotNull(result);
         assertSame(user, result);
@@ -71,7 +70,6 @@ public class UserManagerTest {
 
     @Test
     public void testCreateUserNotAdmin() {
-        expect(user.getTokenValue()).andReturn("token");
         expect(tokenManager.findTokenByValue("token")).andReturn(token);
         expect(token.entity()).andReturn(entity);
         user.setEntity(entity);
@@ -82,7 +80,7 @@ public class UserManagerTest {
         expect(repository.save(user)).andReturn(user);
         replay();
 
-        User result = manager.create(user);
+        User result = manager.create(null);
 
         assertNotNull(result);
         assertSame(user, result);

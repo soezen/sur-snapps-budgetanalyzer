@@ -22,6 +22,10 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public User attach(User user) {
+        return entityManager.merge(user);
+    }
+
     public User save(User user) {
         entityManager.persist(user);
         return user;
@@ -43,7 +47,7 @@ public class UserRepository {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
         Predicate condition = builder.equal(
-                // TODO use User_ class instead
+                // TODO-TECH use User_ class instead
                 query.from(User.class).get("username"),
                 username);
         query.where(condition);

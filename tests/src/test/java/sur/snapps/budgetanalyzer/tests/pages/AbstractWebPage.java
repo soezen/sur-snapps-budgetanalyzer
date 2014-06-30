@@ -14,7 +14,7 @@ import java.util.List;
  */
 public abstract class AbstractWebPage {
 
-    @FindBy(className = "form_error")
+    @FindBy(id = "form_error")
     private WebElement formError;
 
     @FindBy(css = "div.form-group.has-error p.text-danger > span[id$='.errors']")

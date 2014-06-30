@@ -14,6 +14,12 @@ public class Email {
     @Column(name = "EMAIL", nullable = false, unique = true)
     private String address;
 
+    public Email() {}
+
+    public Email(String address) {
+        this.address = address;
+    }
+
     public String getAddress() {
         return address;
     }

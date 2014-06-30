@@ -11,11 +11,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <t:template>
-    <jsp:attribute name="title">User Registration</jsp:attribute>
+    <jsp:attribute name="title"><fmt:message key="title.user_registration" /></jsp:attribute>
     <jsp:body>
         <c:if test="${empty success}">
             <!-- TODO send verification email or confirmation email? -->
-            <f:form modelAttribute="user" action="postUserRegistration" method="post" cssClass="form-horizontal">
+            <f:form modelAttribute="user" commandName="user" action="postUserRegistration" method="post" cssClass="form-horizontal">
                 <f:errors cssClass="form_error" />
                 <f:hidden path="tokenValue" />
                 <c:set var="withToken" value="${not empty user.tokenValue}" />
@@ -28,7 +28,8 @@
                         <t:form-property-input property="user" path="name" />
                         <t:form-property-input property="user" path="username" />
                         <t:form-property-input property="user" path="email" type="email" readonly="${withToken}" />
-                        <t:form-property-input path="password" property="user" type="password" />
+                        <t:form-property-input property="user" path="newPassword" type="password" />
+                        <t:form-property-input property="user" path="confirmPassword" type="password" />
                     </jsp:body>
                 </t:form-fieldset>
             </f:form>

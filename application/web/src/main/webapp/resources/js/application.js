@@ -29,12 +29,14 @@ $(document).ready(function() {
         return header.find("th").index(column);
     }
 
-    sur.updateToken = function(clickedLink, url, action) {
+    // TODO-TECH put in different files
+    sur.updateRow = function(clickedLink, url, action) {
         $.getJSON(url, { action : action }, function(response) {
             if (response.success) {
                 var row = $(clickedLink).parentsUntil("tbody", "tr");
                 var header = $(row).parentsUntil("table").siblings("thead");
 
+                // TODO-BUG UC-1 boolean values are no longer check-icon
                 var columns = header.find("th[data-column]");
                 columns.each(function() {
                     var columnName = $(this).data("column");
@@ -137,4 +139,71 @@ $(document).ready(function() {
         return expression.length - expression.replace(character, '').length;
     }
 
+    sur.formFocus = function(formId) {
+        $("#overlay").toggleClass("overlay-active");
+
+        var form = $("#" + formId);
+        var editSelector = "[data-form-focus*='edit']";
+        var showSelector = "[data-form-focus*='show']";
+        var showGroupSelector = "[data-form-focus*='show-group']";
+        var hideSelector = "[data-form-focus*='hide']";
+        form.toggleClass("form-focus");
+        if (form.hasClass("form-focus")) {
+            form.find(editSelector).removeAttr("readonly");
+            form.find(showSelector).show();
+            form.find(showGroupSelector).parents(".form-group").show();
+            form.find(hideSelector).hide();
+        } else {
+            form.find(editSelector).attr("readonly", "readonly");
+            form.find(showSelector).hide();
+            form.find(showGroupSelector).parents(".form-group").hide();
+            form.find(hideSelector).show();
+        }
+    };
+
+    sur.showPopup = function(popupId) {
+        $("#" + popupId).modal();
+    };
+
+    sur.editing = null;
+    sur.edit = function(event, editGroup) {
+        event = event || window.event;
+        event.cancelBubble = true;
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        }
+
+        sur.cancel(sur.editing);
+
+        $("[data-edit-group='" + editGroup + "']").show();
+        $("[data-edit-group-readonly='" + editGroup + "']").hide();
+        sur.editing = editGroup;
+    };
+
+    sur.submit = function(form_id) {
+        document.forms[form_id].submit();
+    };
+
+    sur.cancel = function(editGroup) {
+        if (editGroup == null) {
+            return;
+        }
+        var editGroupElements = $("[data-edit-group='" + editGroup + "']");
+        editGroupElements.parents("form").each(function() {
+            this.reset();
+        });
+        editGroupElements.hide();
+        $("[data-edit-group-readonly='" + editGroup + "']").show();
+        sur.editing = null;
+    };
+
+    sur.formId = function(element) {
+        return $(element).parents("form").attr("id");
+    };
+
+    $("body").on("click", function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            sur.cancel(sur.editing);
+        }
+    });
 });

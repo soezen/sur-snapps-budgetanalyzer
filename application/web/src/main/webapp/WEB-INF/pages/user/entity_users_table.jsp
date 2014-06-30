@@ -18,16 +18,13 @@
         <c:if test="${user.username ne principal.username}">
             <sur:row value="${user}">
                 <td>
+                    <!-- TODO-FUNC UC-1 order by timestamp desc -->
                     <c:if test="${user.enabled}">
                         <s:authorize ifAllGranted="ROLE_ADMIN">
-                            <select id="user_actions" data-execute-btn="execute_user_action">
-                                <option></option>
-                                <option value="transferAdminRole"><fmt:message key="form.profile.action.transfer_admin_role" /></option>
-                                <option value="disableUser"><fmt:message key="form.profile.action.disable_user" /></option>
-                            </select>
-                            <a id="execute_user_action" data-base-url="<c:url value="/budgetanalyzer/user/admin/" />"><fmt:message key="form.profile.action.execute" /></a>
-                            <!-- TODO admin cannot remove himself but can close the account instead -->
-                            <!-- TODO not admin user can only close his user registration -->
+                            <a name="transfer_admin_role"
+                               onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/transfer_admin_role/${user.id}" />');"><fmt:message key="form.profile.action.transfer_admin_role" /></a>
+                            <a name="disable_user"
+                               onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/disable_user/${user.id}" />')"><fmt:message key="form.profile.action.close_user" /></a>
                         </s:authorize>
                     </c:if>
                 </td>

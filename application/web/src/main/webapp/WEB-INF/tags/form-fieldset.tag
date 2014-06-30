@@ -7,13 +7,17 @@
 <%@attribute name="formActions" fragment="true" required="false" %>
 <%@attribute name="extension" fragment="true" required="false" %>
 
+<c:set var="body_width" value="7" />
+<c:if test="${empty formActions}">
+    <c:set var="body_width" value="10" />
+</c:if>
 <fieldset>
     <c:if test="${not empty legendKey}">
         <legend><fmt:message key="${legendKey}" /></legend>
     </c:if>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-7">
+            <div class="col-sm-${body_width}">
                 <jsp:doBody />
             </div>
             <div class="col-sm-5">

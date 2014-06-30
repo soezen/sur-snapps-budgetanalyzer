@@ -25,6 +25,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
     <body>
         <s:authentication property="principal" var="principal" scope="session" />
+        <div id="overlay"></div>
         <div id="header-container">
             <div class="wrapper">
                 <div class="title">

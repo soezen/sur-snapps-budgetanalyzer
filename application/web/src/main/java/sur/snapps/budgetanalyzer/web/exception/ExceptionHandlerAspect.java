@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import sur.snapps.budgetanalyzer.util.Logger;
@@ -51,6 +52,7 @@ public class ExceptionHandlerAspect {
                 Logger.error(businessException.getErrorCode() + " : " + businessException.getMessage());
                 requestAttributes.setAttribute("error_items", Lists.newArrayList(businessException.getErrorCode()), RequestAttributes.SCOPE_SESSION);
             } else {
+                throwable.printStackTrace();
                 return PageLinks.UNEXPECTED_ERROR.page();
             }
         }
@@ -91,23 +93,23 @@ public class ExceptionHandlerAspect {
         }
     }
 
-//    @Around("execution(java.lang.String sur.snapps.budgetanalyzer.web.controller..*.*(.., org.springframework.validation.BindingResult, ..)) && args(.., bindingResult) && @annotation(navigateTo)")
-//    public String handleException(ProceedingJoinPoint joinPoint, BindingResult bindingResult, NavigateTo navigateTo) throws Throwable {
-//        try {
-//            return (String) joinPoint.proceed();
-//        } catch (Throwable exception) {
-//            List<Throwable> causalChain = Throwables.getCausalChain(exception);
-//            Iterable<Throwable> throwables = Iterables.filter(causalChain, Predicates.instanceOf(BusinessException.class));
-//            if (throwables.iterator().hasNext()) {
-//                BusinessException businessException = (BusinessException) throwables.iterator().next();
-//                Logger.error(businessException.getErrorCode() + " : " + businessException.getMessage());
-//                bindingResult.reject(businessException.getErrorCode());
-//            } else {
-//                exception.printStackTrace();
-//                Logger.error(exception.getMessage());
-//            }
-//        }
-//        return navigateTo.value().page();
-//    }
+    @Around("execution(java.lang.String sur.snapps.budgetanalyzer.web.controller..*.*(.., org.springframework.validation.BindingResult, ..)) && args(.., bindingResult) && @annotation(navigateTo)")
+    public String handleException(ProceedingJoinPoint joinPoint, BindingResult bindingResult, NavigateTo navigateTo) throws Throwable {
+        try {
+            return (String) joinPoint.proceed();
+        } catch (Throwable exception) {
+            List<Throwable> causalChain = Throwables.getCausalChain(exception);
+            Iterable<Throwable> throwables = Iterables.filter(causalChain, Predicates.instanceOf(BusinessException.class));
+            if (throwables.iterator().hasNext()) {
+                BusinessException businessException = (BusinessException) throwables.iterator().next();
+                Logger.error(businessException.getErrorCode() + " : " + businessException.getMessage());
+                bindingResult.reject(businessException.getErrorCode());
+            } else {
+                exception.printStackTrace();
+                Logger.error(exception.getMessage());
+            }
+        }
+        return navigateTo.value().page();
+    }
 
 }

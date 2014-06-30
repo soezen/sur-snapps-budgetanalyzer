@@ -17,19 +17,19 @@
         <t:row value="${token}">
             <td>
                 <a name="resend_invitation" data-visible="in(column(status),[VALID])"
-                   onclick="sur.updateToken(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'resend');">
+                   onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'resend');">
                     <fmt:message key="form.profile.action.resend" />
                 </a>
                 <a name="extend_invitation" data-visible="equal(column(status),VALID)"
-                   onclick="sur.updateToken(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'extend');">
+                   onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'extend');">
                     <fmt:message key="form.profile.action.extend" />
                 </a>
                 <a name="revoke_invitation" data-visible="equal(column(status),VALID)"
-                   onclick="sur.updateToken(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'revoke');">
+                   onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'revoke');">
                     <fmt:message key="form.profile.action.revoke" />
                 </a>
                 <a name="restore_invitation" data-visible="in(column(status),[REVOKED,EXPIRED])"
-                   onclick="sur.updateToken(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'restore');">
+                   onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'restore');">
                     <fmt:message key="form.profile.action.restore" />
                 </a>
             </td>

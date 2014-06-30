@@ -7,16 +7,33 @@
 <%@tag description="Form output of a property field with label" pageEncoding="UTF-8"%>
 <%@attribute name="path" fragment="false" required="true" %>
 <%@attribute name="property" type="java.lang.Object" fragment="false" required="true" %>
+<%@attribute name="type" fragment="false" %>
+<%@attribute name="editable" fragment="false" %>
+<%@attribute name="edit_group" fragment="false" %>
 
-<!-- TODO open panel by clicking on complete header instead of just the title -->
-<div class="form-group">
+<c:if test="${empty edit_group}">
+    <c:set var="edit_group" value="${path}" />
+</c:if>
+<div class="form-group" data-edit-group-readonly="${edit_group}">
     <label for="${path}" class="col-sm-3 control-label">
         <fmt:message key="${fn:toLowerCase(property.class.simpleName)}.${path}" />
     </label>
     <div class="col-sm-9">
-        <p id="${path}" class="form-control-static">
-            <sur:set-property-value path="${path}" property="${property}" />
-            <c:out value="${sur_property}" />
+        <p class="form-control-static">
+            <c:choose>
+                <c:when test="${type ne 'password'}">
+                    <sur:set-property-value path="${path}" property="${property}" />
+                    <c:out value="${sur_property}" />
+                </c:when>
+                <c:otherwise>
+                    <c:out value="**********" />
+                </c:otherwise>
+            </c:choose>
+            <c:if test="${not empty editable and editable}">
+                <a onclick="sur.edit(event, '${edit_group}')">
+                    <i class="fa fa-pencil-square-o"></i>
+                </a>
+            </c:if>
         </p>
     </div>
 </div>

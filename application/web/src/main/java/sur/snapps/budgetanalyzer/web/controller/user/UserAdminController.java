@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
+import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.util.exception.BusinessException;
@@ -36,6 +37,9 @@ public class UserAdminController {
     private TokenManager tokenManager;
 
     @Autowired
+    private UserManager userManager;
+
+    @Autowired
     private UserContext userContext;
 
 
@@ -57,7 +61,6 @@ public class UserAdminController {
         User currentUser = userContext.getCurrentUser();
         tokenManager.create(currentUser, user.getEmail(), HttpServletRequestUtil.createUrl(request));
 
-        // TODO show confirmations message
         return PageLinks.PROFILE.redirect();
     }
 
@@ -65,38 +68,33 @@ public class UserAdminController {
         EmailValidator emailValidator = new EmailValidator();
         if (user.getEmail() == null) {
             errors.rejectValue("email", "error.field.required");
-        } else if (!emailValidator.validate(user.getEmail())) {
+            // TODO do not use user object here
+        } else if (!emailValidator.validate(user.getEmail().getAddress())) {
             errors.rejectValue("email", "error.email.invalid");
         }
     }
 
     @RequestMapping("/disableUser/{userId}")
     public String disableUser(@PathVariable int userId) {
-        // TODO validate that logged in user has access to that user
-        // TODO implement removeUser
+        // TODO-FUNC UC-1 validate that logged in user has access to that user
+        // TODO-FUNC UC-1 implement removeUser
         // set status to inactive, confirm that user cannot login anymore (should it still be visible in page?)
-        // TODO add column status (disabled or enabled)
-        // TODO when disabling admin user, all other users will also be disabled
-        // TODO refactor manage users page to manage user + entity page
-        // present on page: details of entity + details of user
+        // TODO-FUNC UC-1 allow admin to edit entity info
         // as admin following actions: edit entity name, edit user (name, password, email), invitation actions, disable users, disable entity, transfer admin account
         // as normal user following actions: edit user (name, password, email), disable user (only himself)
-        // TODO make email address a link
         System.out.println("Removing user: " + userId);
         return PageLinks.PROFILE.redirect();
     }
 
     @RequestMapping("/invitation_action/{tokenId}")
     @NavigateTo(PageLinks.PROFILE)
-    // TODO wrap response in object so we can include error message
-    // TODO make javascript show error message
-    // TODO make actions visible or invisible with javascript based on other values of the row
+    // TODO-FUNC UC-1 make javascript show error message (also use this for regular error messages)
     public @ResponseBody
     ResponseHolder<Token> invitationAction(@PathVariable int tokenId, @RequestParam String action, HttpServletRequest request) {
         Token token = null;
         switch (action) {
             case "extend":
-                // TODO send email to user informing his invitation was extended? depends on whether we set time invitation valid in user invitation mail
+                // TODO-FUNC UC-1 send email to user informing his invitation was extended? depends on whether we set time invitation valid in user invitation mail
                 token = tokenManager.extend(userContext.getCurrentUser(), tokenId);
                 break;
             case "resend":
@@ -110,5 +108,14 @@ public class UserAdminController {
                 break;
         }
         return new SuccessResponse<Token>(token);
+    }
+
+    @RequestMapping("/transfer_admin_role/{userId}")
+    @NavigateTo(PageLinks.PROFILE)
+    public @ResponseBody ResponseHolder<User> transferAdminRole(@PathVariable int userId) {
+        // TODO-FUNC UC-1 transfer admin role
+        // TODO-BUG UC-1 logged in user (in context also needs to be updated)
+        User user = userManager.transferAdminRole(userContext.getCurrentUser(), userId);
+        return new SuccessResponse<User>(user);
     }
 }

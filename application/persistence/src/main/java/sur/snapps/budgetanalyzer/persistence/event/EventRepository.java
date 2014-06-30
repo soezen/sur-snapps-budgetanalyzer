@@ -30,7 +30,7 @@ public class EventRepository {
     }
 
     public List<Event> getEvents(Entity entity) {
-        // TODO only fetch first X results (or the next page, ...)
+        // TODO-TECH only fetch first X results (or the next page, ...)
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> cq = cb.createQuery(Event.class);
         Root<Event> eventRoot = cq.from(Event.class);

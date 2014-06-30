@@ -13,7 +13,7 @@
 	<mvc:annotation-driven />
     <aop:aspectj-autoproxy />
 
-    <bean id="userValidator" class="sur.snapps.budgetanalyzer.util.validators.UserValidator" />
+    <bean id="userValidator" class="sur.snapps.budgetanalyzer.web.controller.user.UserValidator" />
 
     <!-- Resolves logical view names to JSP views -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

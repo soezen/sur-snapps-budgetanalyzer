@@ -20,10 +20,14 @@
     padding: 0;
 }
 
+a > i {
+    cursor: default;
+}
+
 #header-container nav ul li {
     float: left;
     margin-left: 10px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
 }
 
 #header-container .header-lint {
@@ -53,4 +57,52 @@
 
 .current_user_row {
     background-color: #D9EDFF;
+}
+
+#overlay {
+    background-color: #3c3c3c;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.overlay-active {
+    z-index: 101;
+    opacity: 0.5 !important;
+}
+
+.form-focus > .form-horizontal {
+    position: relative;
+    z-index: 102;
+    border-color: #CCCCCC;
+}
+
+.modal-body legend {
+    padding: 20px;
+}
+
+input[readonly] {
+    background-color: inherit !important;
+    border: none !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    padding-left: 0 !important;
+    height: inherit !important;
+}
+
+.form-horizontal {
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+td > a {
+    display: block;
+    float: none;
+}
+
+.edit-group {
+    display: inline-block;
+    width: inherit;
 }

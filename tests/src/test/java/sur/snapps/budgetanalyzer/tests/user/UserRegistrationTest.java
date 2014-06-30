@@ -4,6 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
+import sur.snapps.budgetanalyzer.tests.FormResponse;
 import sur.snapps.budgetanalyzer.tests.pages.user.UserRegistrationPage;
 import sur.snapps.jetta.database.counter.RecordCounter;
 import sur.snapps.jetta.database.counter.table.Table;
@@ -11,6 +12,7 @@ import sur.snapps.jetta.database.script.Script;
 import sur.snapps.jetta.selenium.annotations.SeleniumTestCase;
 import sur.snapps.jetta.selenium.elements.WebPage;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
@@ -25,7 +27,7 @@ import static sur.snapps.jetta.database.counter.expression.operator.Operators.no
  *  - Templeton Peck aka Face
  *    -> already registered as not-admin
  */
-// TODO make other webdrivers work
+// TODO-TECH make other webdrivers work
 @SeleniumTestCase("01 - User Registration")
 @Script("users.sql")
 public class UserRegistrationTest extends AbstractSeleniumTest {
@@ -35,7 +37,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     private RecordCounter recordCounter;
 
-    // TODO minimum length of username?
+    // TODO-FUNC UC-1 minimum length of username?
 
     @Test
     public void adminSuccess() {
@@ -45,7 +47,8 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                 .name("Bosco Albert Baracus")
                 .username("ba")
                 .email("ba@a-team.com")
-                .password("TEST$test12")
+                .newPassword("TEST$test12")
+                .confirmPassword("TEST$test12")
                 .register()
                 .isSuccess();
         assertTrue("There were errors submitting the 'user registration' form.", registrationSuccess);
@@ -58,7 +61,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
         assertTrue("There were errors logging in.", loginSuccess);
 
 
-        // TODO add true and false methods
+        // TODO-TECH add true and false methods
         Table usersTable = new Table("users", "u", "id");
         assertEquals(1, recordCounter.count()
                 .from(usersTable)
@@ -99,6 +102,48 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    public void adminErrorIncomplete() {
+        menu.register();
+
+        FormResponse response = userRegistrationPage.register();
+
+        assertFalse(response.isSuccess());
+        assertTrue(response.hasFieldError("name"));
+        assertTrue(response.hasFieldError("username"));
+        assertTrue(response.hasFieldError("email.address"));
+        assertTrue(response.hasFieldError("newPassword"));
+        assertTrue(response.hasFieldError("confirmPassword"));
+
+        Table usersTable = new Table("users", "u", "id");
+        assertEquals(0, recordCounter.count()
+                .from(usersTable)
+                .where(equal(usersTable.column("username"), "'ba'"))
+                .get());
+    }
+
+    @Test
+    public void adminErrorPasswordsNotMatching() {
+        menu.register();
+
+        FormResponse response = userRegistrationPage
+                .name("Bosco Albert Baracus")
+                .username("ba")
+                .email("ba@a-team.com")
+                .newPassword("TEST$test12")
+                .confirmPassword("TEST$$test12")
+                .register();
+
+        assertFalse(response.isSuccess());
+        assertTrue(response.hasFieldError("confirmPassword"));
+
+        Table usersTable = new Table("users", "u", "id");
+        assertEquals(0, recordCounter.count()
+                .from(usersTable)
+                .where(equal(usersTable.column("username"), "'ba'"))
+                .get());
+    }
+
+    @Test
     public void adminErrorInsecurePassword() {
         menu.register();
 
@@ -106,7 +151,8 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                 .name("Bosco Albert Baracus")
                 .username("ba")
                 .email("ba-baracus@a-team.com")
-                .password("test")
+                .newPassword("test")
+                .confirmPassword("test")
                 .register()
                 .hasFieldError("password");
         assertTrue(passwordError);
@@ -131,7 +177,8 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                 // TODO add validation to username: has to be one word (exclude special characters)
                 .username("ba")
                 .email("invalid")
-                .password("TEST$test12")
+                .newPassword("TEST$test12")
+                .confirmPassword("TEST$test12")
                 .register()
                 .hasFieldError("email");
         assertTrue(emailError);
@@ -150,7 +197,8 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
         boolean success = userRegistrationPage
                 .name("Bosco Albert Baracus")
                 .username("ba")
-                .password("TEST$test12")
+                .newPassword("TEST$test12")
+                .confirmPassword("TEST$test12")
                 .register()
                 .isSuccess();
         assertTrue("There were errors submitting the 'user registration' form.", success);
@@ -204,7 +252,8 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                 .name("John Smith")
                 .username("hannibal")
                 .email("hannibal@a-team.com")
-                .password("TEST$test12")
+                .newPassword("TEST$test12")
+                .confirmPassword("TEST$test12")
                 .register()
                 .hasFieldError("username");
         assertTrue(usernameError);
@@ -224,7 +273,8 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                 .name("John Smith")
                 .username("hannibal")
                 .email("hannibal@a-team.com")
-                .password("TEST$test12")
+                .newPassword("TEST$test12")
+                .confirmPassword("TEST$test12")
                 .register()
                 .hasFieldError("username");
         assertTrue(usernameError);

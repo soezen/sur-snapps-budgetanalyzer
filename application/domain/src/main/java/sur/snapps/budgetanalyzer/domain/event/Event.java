@@ -22,7 +22,7 @@ import java.util.Date;
 @Table(name = "EVENTS")
 public class Event {
 
-    // TODO also use uid as generated keys?
+    // TODO-TECH also use uid as generated keys? see mail (gmail) sent on 17/06/2014
     @Id
     @GeneratedValue
     private int id;

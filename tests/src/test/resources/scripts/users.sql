@@ -14,6 +14,6 @@ insert into tokens (id, value, entity_id, email, expiration_date, status, type)
   values(3, 'token-expired', 1, 'expired@test.com', sysdate - interval '1' day, 'VALID', 'USER_INVITATION');
 
 
--- TODO boolean: Y-N instead of number
--- TODO exclude comments from execution
--- TODO allow parameters in sql file?
+-- TODO-TECH boolean: Y-N instead of number
+-- TODO-TECH exclude comments from execution
+-- TODO-TECH allow parameters in sql file?

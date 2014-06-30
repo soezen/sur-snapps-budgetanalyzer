@@ -8,5 +8,7 @@ package sur.snapps.budgetanalyzer.domain.event;
 public enum EventType {
 
     USER_INVITATION,
-    REGISTRATION
+    ADMIN_TRANSFER,
+    USER_REGISTRATION,
+    USER_UPDATE
 }

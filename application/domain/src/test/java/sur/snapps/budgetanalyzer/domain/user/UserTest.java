@@ -16,7 +16,8 @@ import static org.junit.Assert.assertNull;
 @RunWith(UnitilsJUnit4TestClassRunner.class)
 public class UserTest {
 
-    // TODO test getters and setters automatically
+    // TODO-TECH test getters and setters automatically
+    // is it necessary to test getters and setters?
     @TestedObject
     private User user;
 

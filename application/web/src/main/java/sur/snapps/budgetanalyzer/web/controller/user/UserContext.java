@@ -33,4 +33,11 @@ public class UserContext {
         return user;
     }
 
+    public String getUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public void reset() {
+        user = null;
+    }
 }

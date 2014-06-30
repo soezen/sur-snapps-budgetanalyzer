@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.business.event.LogEvent;
 import sur.snapps.budgetanalyzer.domain.event.EventType;
+import sur.snapps.budgetanalyzer.domain.user.Email;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
@@ -24,21 +25,42 @@ public class UserManager {
     private TokenManager tokenManager;
 
     @Transactional
-    @LogEvent(EventType.REGISTRATION)
-    public User create(User user) {
-        String tokenValue = user.getTokenValue();
+    @LogEvent(EventType.USER_REGISTRATION)
+    public User create(EditUserView inputUser) {
+        User user = new User();
+        user.setUsername(inputUser.getUsername());
+        user.setEmail(new Email(inputUser.getEmail()));
+        user.setName(inputUser.getName());
+        user.setPassword(inputUser.getNewPassword());
+        user.encodePassword();
+        user.setEnabled(true);
+        user.addAuthority(User.ROLE_USER);
+
+        String tokenValue = inputUser.getTokenValue();
         if (tokenValue == null) {
-            user.setEntity(Entity.newOwnedEntity().name(user.getName()).build());
+            user.setEntity(Entity.newOwnedEntity().name(inputUser.getName()).build());
             user.addAuthority(User.ROLE_ADMIN);
         } else {
             Token token = tokenManager.findTokenByValue(tokenValue);
             user.setEntity(token.entity());
             tokenManager.delete(token);
         }
-        user.encodePassword();
-        user.setEnabled(true);
-        user.addAuthority(User.ROLE_USER);
         return userRepository.save(user);
+    }
+
+    @Transactional
+    // TODO try to get this to work
+//    @LogEvent(EventType.USER_UPDATE)
+    public User update(EditUserView user) {
+        System.out.println(user.getUsername());
+        User managedUser = userRepository.findByUsername(user.getUsername());
+        managedUser.setEmail(new Email(user.getEmail()));
+        managedUser.setName(user.getName());
+        if (user.getNewPassword() != null) {
+            managedUser.setPassword(user.getNewPassword());
+            managedUser.encodePassword();
+        }
+        return userRepository.attach(managedUser);
     }
 
     public User findById(int userId) {
@@ -54,7 +76,18 @@ public class UserManager {
     }
 
     public User findByUsername(String username) {
-        // TODO validate input
+        // TODO-FUNC UC-1 validate input
         return userRepository.findByUsername(username);
+    }
+
+    @Transactional
+    @LogEvent(EventType.ADMIN_TRANSFER)
+    public User transferAdminRole(User currentAdminUser, int userId) {
+        User newAdminUser = userRepository.findById(userId);
+        userRepository.attach(currentAdminUser);
+        newAdminUser.addAuthority(User.ROLE_ADMIN);
+        currentAdminUser.removeAuthority(User.ROLE_ADMIN);
+        userRepository.save(currentAdminUser);
+        return userRepository.save(newAdminUser);
     }
 }

@@ -16,10 +16,12 @@ public class UserRegistrationPage extends AbstractWebPage {
     private WebElement nameElement;
     @FindBy(id = "username")
     private WebElement usernameElement;
-    @FindBy(id = "email")
+    @FindBy(id = "email.address")
     private WebElement emailElement;
-    @FindBy(id = "password")
-    private WebElement passwordElement;
+    @FindBy(id = "newPassword")
+    private WebElement newPasswordElement;
+    @FindBy(id = "confirmPassword")
+    private WebElement confirmPasswordElement;
 
     @FindBy(id = "btn_submit")
     private WebElement registerButton;
@@ -41,8 +43,13 @@ public class UserRegistrationPage extends AbstractWebPage {
         return this;
     }
 
-    public UserRegistrationPage password(String password) {
-        passwordElement.sendKeys(password);
+    public UserRegistrationPage newPassword(String password) {
+        newPasswordElement.sendKeys(password);
+        return this;
+    }
+
+    public UserRegistrationPage confirmPassword(String password) {
+        confirmPasswordElement.sendKeys(password);
         return this;
     }
 

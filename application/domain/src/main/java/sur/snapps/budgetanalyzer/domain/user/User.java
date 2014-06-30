@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -46,9 +45,6 @@ public class User implements Serializable {
     @Column(nullable = false)
     private boolean enabled;
 
-    @Transient
-    private String tokenValue;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "AUTHORITIES", joinColumns = @JoinColumn(name = "USER_ID"))
     @Column(name = "AUTHORITY")
@@ -65,14 +61,6 @@ public class User implements Serializable {
 
     public int getId() {
         return id;
-    }
-
-    public String getTokenValue() {
-        return tokenValue;
-    }
-
-    public void setTokenValue(String tokenValue) {
-        this.tokenValue = tokenValue;
     }
 
     public String getName() {
@@ -137,6 +125,10 @@ public class User implements Serializable {
 
     public void addAuthority(String authority) {
         authorities.add(authority);
+    }
+
+    public void removeAuthority(String authority) {
+        authorities.remove(authority);
     }
 
     public void encodePassword() {
