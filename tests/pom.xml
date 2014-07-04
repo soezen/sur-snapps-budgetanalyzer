@@ -19,43 +19,36 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>sauce_junit</artifactId>
             <version>2.1.1</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-support</artifactId>
             <version>${selenium.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-api</artifactId>
             <version>${selenium.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>sur.snapps.jetta</groupId>
             <artifactId>jetta-selenium</artifactId>
             <version>${jetta-version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>sur.snapps.jetta</groupId>
             <artifactId>jetta-database</artifactId>
             <version>${jetta-version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>sur.snapps.jetta</groupId>
@@ -118,10 +111,7 @@
                         <directory>src/env/jenkins</directory>
                     </testResource>
                     <testResource>
-                        <directory>src/test/resources</directory>
-                    </testResource>
-                    <testResource>
-                        <directory>src/test/java</directory>
+                        <directory>src/test/*</directory>
                     </testResource>
                 </testResources>
             </build>
