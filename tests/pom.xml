@@ -118,7 +118,7 @@
                         <directory>src/env/jenkins</directory>
                     </testResource>
                     <testResource>
-                        <directory>src/test/resources</directory>
+                        <directory>src/test</directory>
                     </testResource>
                 </testResources>
             </build>
