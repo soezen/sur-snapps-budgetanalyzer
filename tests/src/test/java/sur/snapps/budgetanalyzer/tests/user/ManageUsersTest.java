@@ -109,6 +109,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
         menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
         menu.profile();
+        // TODO-TECH remove deploy from jenkins build and make a separate one for that
 
         assertEquals(1, profilePage.numberOfUsers());
         assertTrue(profilePage.isUserPresent(face(), true));

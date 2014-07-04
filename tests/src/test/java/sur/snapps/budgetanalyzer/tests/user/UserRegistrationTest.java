@@ -12,9 +12,9 @@ import sur.snapps.jetta.database.script.Script;
 import sur.snapps.jetta.selenium.annotations.SeleniumTestCase;
 import sur.snapps.jetta.selenium.elements.WebPage;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.isNull;
 import static sur.snapps.jetta.database.counter.expression.operator.Operators.and;

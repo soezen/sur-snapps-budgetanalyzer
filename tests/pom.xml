@@ -18,7 +18,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>[4.11]</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -67,11 +67,6 @@
             <groupId>org.unitils</groupId>
             <artifactId>unitils-core</artifactId>
             <version>3.4</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.15</version>
         </dependency>
     </dependencies>
 
@@ -127,6 +122,13 @@
                     </testResource>
                 </testResources>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>5.1.15</version>
+                </dependency>
+            </dependencies>
         </profile>
 
     </profiles>
