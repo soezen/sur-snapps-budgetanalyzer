@@ -110,7 +110,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
         assertFalse(response.isSuccess());
         assertTrue(response.hasFieldError("name"));
         assertTrue(response.hasFieldError("username"));
-        assertTrue(response.hasFieldError("email.address"));
+        assertTrue(response.hasFieldError("email"));
         assertTrue(response.hasFieldError("newPassword"));
         assertTrue(response.hasFieldError("confirmPassword"));
 
@@ -154,7 +154,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
                 .newPassword("test")
                 .confirmPassword("test")
                 .register()
-                .hasFieldError("password");
+                .hasFieldError("newPassword");
         assertTrue(passwordError);
 
         Table usersTable = new Table("users", "u", "id");

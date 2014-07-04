@@ -9,6 +9,7 @@ import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.UserRepository;
+import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 
 import java.util.List;
 
@@ -30,18 +31,23 @@ public class UserManager {
         User user = new User();
         user.setUsername(inputUser.getUsername());
         user.setEmail(new Email(inputUser.getEmail()));
-        user.setName(inputUser.getName());
+        String name = inputUser.getName();
+        user.setName(name);
         user.setPassword(inputUser.getNewPassword());
         user.encodePassword();
         user.setEnabled(true);
         user.addAuthority(User.ROLE_USER);
 
         String tokenValue = inputUser.getTokenValue();
+
         if (tokenValue == null) {
-            user.setEntity(Entity.newOwnedEntity().name(inputUser.getName()).build());
+            user.setEntity(Entity.newOwnedEntity().name(name).build());
             user.addAuthority(User.ROLE_ADMIN);
         } else {
             Token token = tokenManager.findTokenByValue(tokenValue);
+            if (token == null) {
+                throw new BusinessException("error", "token.not.found");
+            }
             user.setEntity(token.entity());
             tokenManager.delete(token);
         }

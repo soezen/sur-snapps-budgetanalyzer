@@ -78,6 +78,7 @@ public class UserRegistrationController extends AbstractController {
 //            return PageLinks.USER_REGISTRATION.page();
             throw new BusinessException("form.errors.validation");
         }
+
         userManager.create(user);
         return PageLinks.USER_REGISTRATION.redirect();
     }

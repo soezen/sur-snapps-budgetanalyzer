@@ -3,6 +3,7 @@ package sur.snapps.budgetanalyzer.business.user;
 import org.easymock.Capture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.unitils.UnitilsJUnit4TestClassRunner;
 import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.InjectIntoByType;
@@ -38,52 +39,82 @@ public class UserManagerTest {
     private TokenManager tokenManager;
 
     @Mock
-    private User user;
+    private EditUserView editUserView;
     @Mock
     private Token token;
     @Dummy
     private Entity entity;
+    @Dummy
+    private User user;
 
     @Test
     public void testCreateUserAdmin() {
-        Capture<Entity> entityCapture = new Capture<>();
+        Capture<User> userCapture = new Capture<>();
         String username = "username";
+        String name = "name";
+        String email = "email";
+        String password = "password";
 
-        expect(user.getName()).andReturn(username);
-        user.encodePassword();
-        user.setEnabled(true);
-        user.addAuthority(User.ROLE_USER);
-        user.addAuthority(User.ROLE_ADMIN);
-        user.setEntity(capture(entityCapture));
-        expect(repository.save(user)).andReturn(user);
+        expect(editUserView.getUsername()).andReturn(username);
+        expect(editUserView.getName()).andReturn(name);
+        expect(editUserView.getEmail()).andReturn(email);
+        expect(editUserView.getNewPassword()).andReturn(password);
+        expect(editUserView.getTokenValue()).andReturn(null);
+        expect(repository.save(capture(userCapture))).andReturn(user);
         replay();
 
-        User result = manager.create(null);
+        User result = manager.create(editUserView);
 
         assertNotNull(result);
-        assertSame(user, result);
-        Entity entity = entityCapture.getValue();
-        assertEquals(username, entity.getName());
+        User userSaved = userCapture.getValue();
+        assertNotNull(userSaved);
+        assertEquals(username, userSaved.getUsername());
+        assertEquals(name, userSaved.getName());
+        assertEquals(email, userSaved.getEmail().getAddress());
+        assertNotNull(userSaved.getPassword());
+        assertFalse(password.equals(userSaved.getPassword()));
+        Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+        assertTrue(passwordEncoder.isPasswordValid(userSaved.getPassword(), password, "BUDGET-ANALYZER"));
+
+        Entity entity = userSaved.getEntity();
+        assertEquals(name, entity.getName());
         assertTrue(entity.isOwned());
         assertFalse(entity.isShared());
     }
 
     @Test
     public void testCreateUserNotAdmin() {
-        expect(tokenManager.findTokenByValue("token")).andReturn(token);
+        Capture<User> userCapture = new Capture<>();
+        String username = "username";
+        String name = "name";
+        String email = "email";
+        String password = "password";
+        String tokenValue = "token-value";
+
+        expect(editUserView.getUsername()).andReturn(username);
+        expect(editUserView.getName()).andReturn(name);
+        expect(editUserView.getEmail()).andReturn(email);
+        expect(editUserView.getNewPassword()).andReturn(password);
+        expect(editUserView.getTokenValue()).andReturn(tokenValue);
+        expect(tokenManager.findTokenByValue(tokenValue)).andReturn(token);
         expect(token.entity()).andReturn(entity);
-        user.setEntity(entity);
         tokenManager.delete(token);
-        user.encodePassword();
-        user.setEnabled(true);
-        user.addAuthority(User.ROLE_USER);
-        expect(repository.save(user)).andReturn(user);
+        expect(repository.save(capture(userCapture))).andReturn(user);
         replay();
 
-        User result = manager.create(null);
+        User result = manager.create(editUserView);
 
         assertNotNull(result);
-        assertSame(user, result);
+        User userSaved = userCapture.getValue();
+        assertNotNull(userSaved);
+        assertEquals(username, userSaved.getUsername());
+        assertEquals(name, userSaved.getName());
+        assertEquals(email, userSaved.getEmail().getAddress());
+        assertNotNull(userSaved.getPassword());
+        assertFalse(password.equals(userSaved.getPassword()));
+        Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+        assertTrue(passwordEncoder.isPasswordValid(userSaved.getPassword(), password, "BUDGET-ANALYZER"));
+        assertSame(entity, userSaved.getEntity());
     }
 
     @Test

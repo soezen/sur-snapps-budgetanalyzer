@@ -16,7 +16,7 @@ public class UserRegistrationPage extends AbstractWebPage {
     private WebElement nameElement;
     @FindBy(id = "username")
     private WebElement usernameElement;
-    @FindBy(id = "email.address")
+    @FindBy(id = "email")
     private WebElement emailElement;
     @FindBy(id = "newPassword")
     private WebElement newPasswordElement;

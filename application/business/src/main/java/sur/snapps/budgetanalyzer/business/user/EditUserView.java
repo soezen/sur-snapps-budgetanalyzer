@@ -37,6 +37,10 @@ public class EditUserView implements Serializable {
         return tokenValue;
     }
 
+    public void setTokenValue(String tokenValue) {
+        this.tokenValue = tokenValue;
+    }
+
     public String getUsername() {
         return username;
     }

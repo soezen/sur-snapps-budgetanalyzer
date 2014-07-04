@@ -92,7 +92,7 @@ public class ProfilePage extends AbstractWebPage {
         RowCriteria criteria = maxUserCriteria(user)
                 .rowHasNumberOfColumns(hasDisableAction ? 5 : 4);
         if (hasDisableAction) {
-            criteria = criteria.columnHasLinks(USERS_COLUMN_ACTIONS, 1);
+            criteria = criteria.columnHasLinks(USERS_COLUMN_ACTIONS, 2);
         }
         return criteria.row() != null;
     }
