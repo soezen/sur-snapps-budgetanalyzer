@@ -8,19 +8,6 @@ create table entities (
   primary key (id)
 );
 
-create sequence seq_entities;
-
-create or replace trigger id_entities
-  before insert on entities
-  for each row
-    begin
-      select seq_entities.nextval
-      into :new.id
-      from dual;
-    end;
-  /
-
-
 DROP TABLE users;
 
 create table users (
@@ -71,17 +58,6 @@ create table tokens (
   unique (email)
 );
 
-create sequence seq_tokens;
-
-create or replace trigger id_tokens
-  before insert on tokens
-  for each row
-  begin
-    select seq_tokens.nextval
-    into :new.id
-    from dual;
-  end;
-/
 
 alter table authorities
     add foreign key (user_id) references users(id);
