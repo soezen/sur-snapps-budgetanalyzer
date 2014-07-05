@@ -2,7 +2,6 @@ package sur.snapps.budgetanalyzer.tests;
 
 import com.google.common.base.Function;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
-import com.sun.istack.internal.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.openqa.selenium.NoSuchElementException;
@@ -68,7 +67,7 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
     protected void assertEqualsWhileWaiting(final Object expected, final Object actual) {
         wait.until(new Function<WebDriver, Object>() {
             @Override
-            public Object apply(@Nullable WebDriver input) {
+            public Object apply(WebDriver input) {
                 return expected.equals(actual);
             }
         });

@@ -11,7 +11,7 @@
 
     <properties>
         <selenium.version>2.41.0</selenium.version>
-        <jetta-version>0.0.2</jetta-version>
+        <jetta-version>0.0.3-SNAPSHOT</jetta-version>
     </properties>
 
     <dependencies>
