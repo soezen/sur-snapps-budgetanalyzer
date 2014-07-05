@@ -30,6 +30,10 @@
 		org.springframework.web.context.ContextLoaderListener
 		</listener-class> 
 	</listener>
+
+    <welcome-file-list>
+        <welcome-file>/budgetanalyzer/homepage</welcome-file>
+    </welcome-file-list>
 	
 	<!-- Deploys the 'budgetanalyzer' dispatcher servlet whose configuration resides in /WEB-INF/mvc-config.xml -->
 	<servlet>
