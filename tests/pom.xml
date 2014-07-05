@@ -79,10 +79,10 @@
             <id>snapps-release-repository</id>
             <url>https://repository-snapps.forge.cloudbees.com/release/</url>
         </repository>
-        <repository>
-            <id>snapps-snapshot-repository</id>
-            <url>https://repository-snapps.forge.cloudbees.com/snapshot/</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>snapps-snapshot-repository</id>-->
+            <!--<url>https://repository-snapps.forge.cloudbees.com/snapshot/</url>-->
+        <!--</repository>-->
     </repositories>
 
     <profiles>
