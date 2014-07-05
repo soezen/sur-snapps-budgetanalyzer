@@ -192,7 +192,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void notAdminSuccess() {
-        driver.navigate().to("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=token-valid");
+        driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-valid");
 
         boolean success = userRegistrationPage
                 .name("Bosco Albert Baracus")
@@ -267,7 +267,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void notAdminErrorUsernameAlreadyUsed() {
-        driver.navigate().to("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=token-valid");
+        driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-valid");
 
         boolean usernameError = userRegistrationPage
                 .name("John Smith")
@@ -295,21 +295,22 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @Test
     public void notAdminErrorTokenExpired() {
-        driver.navigate().to("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=token-expired");
+        // TODO write own method to do this and depending on base url add / or not
+        driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-expired");
 
         assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation has expired."));
     }
 
     @Test
     public void notAdminErrorTokenRevoked() {
-        driver.navigate().to("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=token-revoked");
+        driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-revoked");
 
         assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation has been revoked."));
     }
 
     @Test
     public void notAdminErrorTokenNotInDB() {
-        driver.navigate().to("http://localhost:2001/web/budgetanalyzer/userRegistrationWithToken?value=token-not-existing");
+        driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-not-existing");
 
         assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation not found for this link."));
     }

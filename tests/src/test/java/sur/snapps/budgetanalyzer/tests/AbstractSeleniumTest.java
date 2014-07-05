@@ -16,6 +16,7 @@ import sur.snapps.jetta.database.DatabaseTestRule;
 import sur.snapps.jetta.selenium.SauceTestWatcher;
 import sur.snapps.jetta.selenium.SeleniumTestRule;
 import sur.snapps.jetta.selenium.annotations.SeleniumWebDriver;
+import sur.snapps.jetta.selenium.elements.BaseUrl;
 import sur.snapps.jetta.selenium.elements.WebPage;
 
 import java.util.concurrent.TimeUnit;
@@ -42,6 +43,8 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
     protected WebDriver driver;
     protected Wait<WebDriver> wait;
 
+    @BaseUrl
+    protected String baseUrl;
 
     @WebPage
     protected Menu menu;
