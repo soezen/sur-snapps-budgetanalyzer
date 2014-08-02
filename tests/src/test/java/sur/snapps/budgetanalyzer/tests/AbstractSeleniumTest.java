@@ -60,6 +60,8 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
                 .ignoring(NoSuchElementException.class)
                 .pollingEvery(100, TimeUnit.MILLISECONDS)
                 .withTimeout(3, TimeUnit.SECONDS);
+
+        driver.navigate().to(baseUrl + "/budgetanalyzer/homepage");
     }
 
     @Override
