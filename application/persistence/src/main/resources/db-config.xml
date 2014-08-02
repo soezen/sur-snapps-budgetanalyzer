@@ -22,22 +22,6 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
-    <!-- FactoryBean that creates the EntityManagerFactory -->
-    <bean id="entityManagerFactory"
-        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
-        </property>
-        <property name="packagesToScan" value="sur.snapps.budgetanalyzer.domain" />
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
-            </props>
-        </property>
-        <property name="dataSource" ref="dataSource" />
-    </bean>
 
     <!-- TODO-TECH selenium tests are being run twice within one jenkins build (other tests too i guess) -->
     <!-- TODO-TECH verify on jenkins that this is fixed -->
@@ -47,6 +31,22 @@
     <!-- To enable, declare "-Dspring.profiles.active=dev-hsql" or @ActiveProfiles("dev-hsql") -->
     <beans profile="local">
 
+        <!-- FactoryBean that creates the EntityManagerFactory -->
+        <bean id="entityManagerFactory"
+              class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+            <property name="jpaVendorAdapter">
+                <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+            </property>
+            <property name="packagesToScan" value="sur.snapps.budgetanalyzer.domain" />
+            <property name="jpaProperties">
+                <props>
+                    <prop key="hibernate.show_sql">true</prop>
+                    <prop key="hibernate.format_sql">true</prop>
+                    <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+                </props>
+            </property>
+            <property name="dataSource" ref="dataSource" />
+        </bean>
         <!--<jdbc:embedded-database id="dataSource" type="HSQL">-->
             <!--<jdbc:script location="classpath:db/hsqldb/initDB.sql" />-->
             <!--<jdbc:script location="classpath:db/hsqldb/populateDB.sql" />-->
@@ -62,6 +62,25 @@
     <!-- JNDI DataSource for JEE environments -->
     <!-- use relative jndi-name + resource-ref=true for https://jira.springsource.org/browse/SPR-4585 -->
     <beans profile="cloudbees">
+
+        <!-- FactoryBean that creates the EntityManagerFactory -->
+        <bean id="entityManagerFactory"
+              class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+            <property name="jpaVendorAdapter">
+                <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+            </property>
+            <property name="packagesToScan" value="sur.snapps.budgetanalyzer.domain" />
+            <property name="jpaProperties">
+                <props>
+                    <prop key="hibernate.show_sql">true</prop>
+                    <prop key="hibernate.format_sql">true</prop>
+                    <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                </props>
+            </property>
+            <property name="dataSource" ref="dataSource" />
+        </bean>
+
+
         <jee:jndi-lookup id="dataSource" jndi-name="jdbc/mydb" resource-ref="true" />
     </beans>
 
