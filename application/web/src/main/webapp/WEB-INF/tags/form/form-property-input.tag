@@ -4,7 +4,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@tag description="Form input for a property field with label and errors" pageEncoding="UTF-8"%>
 <%@attribute name="path" fragment="false" required="true" %>
-<%@attribute name="property" fragment="false" required="true" %>
+<%@attribute name="property" fragment="false" type="java.lang.Object" %>
 <%@attribute name="type" fragment="false" required="false" %>
 <%@attribute name="readonly" fragment="false" required="false" %>
 <%@attribute name="form_focus" fragment="false" %>
@@ -13,6 +13,15 @@
 <%@attribute name="editable" fragment="false" %>
 <%@attribute name="show_buttons" fragment="false" %>
 <%@attribute name="edit_group" fragment="false" %>
+<%@attribute name="spring_input" fragment="false" %>
+
+
+<c:if test="${empty property}">
+    <c:set var="property" value="${sur_readonly_property}" />
+</c:if>
+<c:if test="${empty edit_property}">
+    <c:set var="edit_property" value="${sur_edit_property}" />
+</c:if>
 
 <c:choose>
     <c:when test="${layout eq 'center'}">
@@ -38,15 +47,35 @@
 </c:if>
 <div ${dataEditGroup} class="form-group ${fieldErrorsClass} has-feedback">
     <c:if test="${type ne 'hidden'}">
-        <f:label path="${path}" cssClass="col-sm-${label_width} control-label">
-            <fmt:message key="${property}.${path}" />
-        </f:label>
+        <c:choose>
+            <c:when test="${spring_input eq 'false'}">
+                <label for="${path}" class="col-sm-${label_width} control-label">
+                    <fmt:message key="${property.class.simpleName}.${path}" />
+                </label>
+            </c:when>
+            <c:otherwise>
+                <f:label path="${path}" cssClass="col-sm-${label_width} control-label">
+                    <fmt:message key="${property}.${path}" />
+                </f:label>
+            </c:otherwise>
+        </c:choose>
     </c:if>
     <div class="col-sm-${input_width}">
-        <f:input path="${path}" cssClass="form-control ${not empty edit_group ? 'edit-group' : '' }" type="${empty type ? 'text' : type}" readonly="${readonly}" data-form-focus="${form_focus}" />
+        <c:set var="readonly_attribute" value="" />
+        <c:if test="${not empty readonly}">
+            <c:set var="readonly_attribute" value="readonly='${readonly}'" />
+        </c:if>
+        <c:choose>
+            <c:when test="${spring_input eq 'false'}">
+                <input id="${path}" type="${empty type ? 'text' : type}" ${readonly_attribute} class="form-control ${not empty edit_group ? 'edit-group': ''}" value="${property[path]}" />
+            </c:when>
+            <c:otherwise>
+                <f:input path="${path}" cssClass="form-control ${not empty edit_group ? 'edit-group' : '' }" type="${empty type ? 'text' : type}" readonly="${readonly}" data-form-focus="${form_focus}" />
+            </c:otherwise>
+        </c:choose>
         <!-- TODO automatically focus input when first showing it -->
         <c:if test="${not empty show_buttons and show_buttons}">
-            <a onclick="sur.submit(sur.formId(this))">
+            <a onclick="sur.submit('${edit_group}', '<c:url value="/budgetanalyzer/user/editUser/${path}" />')">
                 <i class="fa fa-check fa-lg" style="color:green;"></i>
             </a>
             <a onclick="sur.cancel('${edit_group}')">

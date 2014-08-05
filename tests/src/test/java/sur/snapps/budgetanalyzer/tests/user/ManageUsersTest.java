@@ -26,7 +26,7 @@ import static sur.snapps.jetta.database.counter.expression.operator.Operators.an
  * Time: 15:35
  */
 // TODO load mutliple scripts
-@SeleniumTestCase("02 - Manage Users")
+@SeleniumTestCase("03 - Manage Users")
 @Script("users.sql")
 public class ManageUsersTest extends AbstractSeleniumTest {
 

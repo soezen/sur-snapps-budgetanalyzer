@@ -3,9 +3,12 @@ package sur.snapps.budgetanalyzer.web.controller.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sur.snapps.budgetanalyzer.business.event.EventManager;
 import sur.snapps.budgetanalyzer.business.user.EditUserView;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
@@ -16,8 +19,9 @@ import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
+import sur.snapps.budgetanalyzer.web.response.ResponseHolder;
+import sur.snapps.budgetanalyzer.web.response.SuccessResponse;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -78,17 +82,46 @@ public class UserController extends AbstractController {
         return null;
     }
 
-    @RequestMapping("/postEditUser")
+    @RequestMapping(value = "/editUser/name")
     @NavigateTo(PageLinks.PROFILE)
-    public String editCurrentUser(@ModelAttribute("editUser") @Valid EditUserView editUser, BindingResult bindingResult) {
+    public @ResponseBody ResponseHolder<User> editCurrentUserName(@RequestParam String name) {
+
+        EditUserView editUser = new EditUserView(userContext.getCurrentUser());
+        editUser.setName(name);
+
+        return updateUser(editUser);
+    }
+
+    @RequestMapping("/editUser/email")
+    @NavigateTo(PageLinks.PROFILE)
+    public @ResponseBody ResponseHolder<User> editCurrentUserEmail(@RequestParam String email) {
+        EditUserView editUser = new EditUserView(userContext.getCurrentUser());
+        editUser.setEmail(email);
+
+        return updateUser(editUser);
+    }
+
+    @RequestMapping("/editUser/confirmPassword")
+    @NavigateTo(PageLinks.PROFILE)
+    public @ResponseBody ResponseHolder<User> editCurrentUserPassword(@RequestParam String newPassword, @RequestParam String confirmPassword) {
+        EditUserView editUser = new EditUserView(userContext.getCurrentUser());
+        editUser.setNewPassword(newPassword);
+        editUser.setConfirmPassword(confirmPassword);
+
+        return updateUser(editUser);
+    }
+
+    private ResponseHolder<User> updateUser(EditUserView editUser) {
+
+        BindingResult bindingResult = new BeanPropertyBindingResult(editUser, "editUser");
         userValidator.validate(editUser, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BusinessException("form.errors.validation");
         }
 
-        userManager.update(editUser);
+        User updatedUser = userManager.update(editUser);
         userContext.reset();
-        return PageLinks.PROFILE.redirect();
+        return new SuccessResponse<>(updatedUser);
     }
 }

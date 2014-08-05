@@ -32,6 +32,7 @@ $(document).ready(function() {
     // TODO-TECH put in different files
     sur.updateRow = function(clickedLink, url, action) {
         $.getJSON(url, { action : action }, function(response) {
+            sur.showResponseMessage(response);
             if (response.success) {
                 var row = $(clickedLink).parentsUntil("tbody", "tr");
                 var header = $(row).parentsUntil("table").siblings("thead");
@@ -55,13 +56,6 @@ $(document).ready(function() {
                 });
 
                 sur.processTableVisibleItems($(row).parents("table").attr("id"));
-            } else {
-                var div = document.createElement("div");
-                div.id = "form_error";
-                $(div).addClass("alert");
-                $(div).addClass("alert-danger");
-                $(div).text(response.message);
-                $("#content-container").find("div.wrapper").prepend(div);
             }
         });
     };
@@ -180,22 +174,107 @@ $(document).ready(function() {
         sur.editing = editGroup;
     };
 
-    sur.submit = function(form_id) {
-        document.forms[form_id].submit();
+    // TODO delete success message after half a minute
+    // TODO submit with error does not show error
+
+    sur.submit = function(editGroup, url) {
+
+        var values = {};
+        $("div[data-edit-group='" + editGroup + "']").find("input").each(function() {
+            values[this.id] = this.value;
+        });
+
+        $.getJSON(url, values, function(response) {
+            sur.showResponseMessage(response);
+            if (response.success) {
+                $("div[data-edit-group-readonly='" + editGroup + "']")
+                    .find("span.edit-group-value")
+                    .text(getTextFromResponse(response, editGroup));
+                sur.cancel(editGroup);
+            } else {
+                // TODO implement put in generic method
+            }
+        });
+    };
+
+    function getTextFromResponse(response, editGroup) {
+        var path = getPathFromEditGroup(editGroup);
+        var result = response.value;
+        while (path.indexOf('.') != -1) {
+            var subPath = path.substring(0, path.indexOf('.'));
+            path = path.substring(path.indexOf('.') + 1);
+            result = result[subPath];
+        }
+
+        return result[path];
+    }
+
+    function getPathFromEditGroup(editGroup) {
+        return editGroup.substring(editGroup.lastIndexOf('-') + 1);
+    }
+
+    sur.showResponseMessage = function(response) {
+        $("div#form_success").remove();
+        $("div#form_error").remove();
+        var div = $(document.createElement("div"));
+
+        var closeBtn = $(document.createElement("button"));
+        closeBtn.addClass("close");
+        closeBtn.attr("data-dismiss", "alert");
+
+        var spanTimes = $(document.createElement("span"));
+        spanTimes.attr("aria-hidden", "true");
+        spanTimes.text('\u00D7');
+        closeBtn.append(spanTimes);
+
+        var spanClose = $(document.createElement("span"));
+        spanClose.addClass("sr-only");
+        spanClose.text("Close");
+        closeBtn.append(spanClose);
+
+        if (response.success) {
+            div.attr("id", "form_success");
+            div.addClass("alert-success");
+            // TODO replace with more specific message?
+            div.text('Action executed with success');
+        } else {
+            div.attr("id", "form_error");
+            div.addClass("alert-danger");
+            div.text(response.message);
+        }
+        div.append(closeBtn);
+        div.addClass("alert");
+        div.alert();
+        $("#content-container").find("div.wrapper").prepend(div);
+
+        window.setTimeout(function() {
+            $("#form_success").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 10000);
     };
 
     sur.cancel = function(editGroup) {
         if (editGroup == null) {
             return;
         }
+
         var editGroupElements = $("[data-edit-group='" + editGroup + "']");
-        editGroupElements.parents("form").each(function() {
-            this.reset();
+        var path = getPathFromEditGroup(editGroup);
+        editGroupElements.find("input.edit-group").each(function() {
+            this.value = "";
         });
+        editGroupElements.find("input.edit-group").first()[0].value = getReadOnlyValue(editGroup);
         editGroupElements.hide();
         $("[data-edit-group-readonly='" + editGroup + "']").show();
         sur.editing = null;
     };
+
+    function getReadOnlyValue(editGroup) {
+        return $("[data-edit-group-readonly='" + editGroup + "']")
+            .find("span.edit-group-value")
+            .text().trim();
+    }
 
     sur.formId = function(element) {
         return $(element).parents("form").attr("id");
@@ -205,5 +284,14 @@ $(document).ready(function() {
         if (event.target.tagName !== 'INPUT') {
             sur.cancel(sur.editing);
         }
+    });
+
+    // TODO make bug filter
+    // TODO-BUG when editing field, first with validation error and then with success: validation error message still visible (same with success message)
+
+    // show hidden form-groups with error and hide the corresponding read only form-groups
+    $("div.form-group.has-error[data-edit-group]:not(:visible)").each(function() {
+        $(this).show();
+        $("div.form-group[data-edit-group-readonly='" + $(this).data('edit-group') + "']:visible").hide();
     });
 });

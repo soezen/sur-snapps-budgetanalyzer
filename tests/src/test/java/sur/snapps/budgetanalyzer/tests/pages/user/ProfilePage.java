@@ -9,6 +9,8 @@ import sur.snapps.budgetanalyzer.tests.dummy.DummyToken;
 import sur.snapps.budgetanalyzer.tests.dummy.DummyUser;
 import sur.snapps.budgetanalyzer.tests.pages.AbstractWebPage;
 import sur.snapps.jetta.selenium.elements.Column;
+import sur.snapps.jetta.selenium.elements.EditField;
+import sur.snapps.jetta.selenium.elements.EditInputElement;
 import sur.snapps.jetta.selenium.elements.RowCriteria;
 import sur.snapps.jetta.selenium.elements.Table;
 import sur.snapps.jetta.selenium.elements.WebTable;
@@ -41,6 +43,12 @@ public class ProfilePage extends AbstractWebPage {
     @FindBy(id = "btn_reload_page")
     private WebElement reloadPageButton;
 
+    @EditField(form = "editUser", field = "name")
+    private EditInputElement editNameInput;
+    @EditField(form = "editUser", field = "email")
+    private EditInputElement editEmailInput;
+
+
     // TODO generify accordion
     @FindBy(xpath = "//div[@id='tokens_accordion_panel']")
     private WebElement tokensPanel;
@@ -63,6 +71,14 @@ public class ProfilePage extends AbstractWebPage {
             @Column(index = 4, name = TOKENS_COLUMN_ACTIONS)
     })
     private Table tokensTable;
+
+    public String getName() {
+        return editNameInput.getReadOnlyValue();
+    }
+
+    public String getEmail() {
+        return editEmailInput.getReadOnlyValue();
+    }
 
     public void reload() {
         reloadPageButton.click();
@@ -130,6 +146,22 @@ public class ProfilePage extends AbstractWebPage {
         minUserCriteria(email)
                 .link(USERS_COLUMN_ACTIONS, USER_ACTION_REMOVE)
                 .click();
+    }
+
+    public void editName(String newName) {
+        editNameInput.getEditButton().click();
+        WebElement inputElement = editNameInput.getInputElement();
+        inputElement.clear();
+        inputElement.sendKeys(newName);
+        editNameInput.getSubmitButton().click();
+    }
+
+    public void editEmail(String newEmail) {
+        editEmailInput.getEditButton().click();
+        WebElement inputElement = editEmailInput.getInputElement();
+        inputElement.clear();;
+        inputElement.sendKeys(newEmail);
+        editEmailInput.getSubmitButton().click();
     }
 
     public void revokeInvitation(DummyToken token) {

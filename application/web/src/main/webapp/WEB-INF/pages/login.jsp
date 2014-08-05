@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sur" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sur-form" tagdir="/WEB-INF/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <sur:template>
@@ -10,16 +11,16 @@
         </div>
 
         <form action="<c:url value='/j_spring_security_check' />" method="post" class="form-horizontal">
-            <sur:form-fieldset legendKey="form.login.legend">
+            <sur-form:form-fieldset legendKey="form.login.legend">
                 <jsp:attribute name="formActions">
                     <a id="btn_cancel" class="btn" href="<c:url value="/" />"><fmt:message key="form.action.cancel" /></a>
                     <input id="btn_submit" class="btn btn-primary" type="submit" value="<fmt:message key="form.action.submit" />" />
                 </jsp:attribute>
                 <jsp:body>
-                    <sur:form-input path="username" property="user" />
-                    <sur:form-input path="password" property="user" type="password" />
+                    <sur-form:form-input path="username" property="user" />
+                    <sur-form:form-input path="password" property="user" type="password" />
                 </jsp:body>
-            </sur:form-fieldset>
+            </sur-form:form-fieldset>
         </form>
     </jsp:body>
 </sur:template>

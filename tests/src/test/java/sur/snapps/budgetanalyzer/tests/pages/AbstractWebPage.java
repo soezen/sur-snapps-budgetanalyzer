@@ -16,6 +16,8 @@ public abstract class AbstractWebPage {
 
     @FindBy(id = "form_error")
     private WebElement formError;
+    @FindBy(id = "form_success")
+    private WebElement formSuccess;
 
     @FindBy(css = "div.form-group.has-error p.text-danger > span[id$='.errors']")
     private List<WebElement> fieldErrors;
@@ -23,6 +25,14 @@ public abstract class AbstractWebPage {
     public boolean hasFormError() {
         try {
             return formError.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    public boolean isActionSuccess() {
+        try {
+            return formSuccess.isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
         }

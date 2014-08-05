@@ -34,13 +34,14 @@ public class ExceptionHandlerAspect {
     @Around("execution(java.lang.String sur.snapps.budgetanalyzer.web.controller..*.*(..)) && @annotation(navigateTo)")
     public String handleException(ProceedingJoinPoint joinPoint, NavigateTo navigateTo) {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        requestAttributes.setAttribute("shown", 0, RequestAttributes.SCOPE_SESSION);
         try {
             String result = (String) joinPoint.proceed();
+            requestAttributes.setAttribute("shown_success", 0, RequestAttributes.SCOPE_SESSION);
             requestAttributes.setAttribute("success", true, RequestAttributes.SCOPE_SESSION);
             requestAttributes.setAttribute("success_message", navigateTo.successMessage(), RequestAttributes.SCOPE_SESSION);
             return result;
         } catch (Throwable throwable) {
+            requestAttributes.setAttribute("shown_error", 0, RequestAttributes.SCOPE_SESSION);
             requestAttributes.setAttribute("error", true, RequestAttributes.SCOPE_SESSION);
             requestAttributes.setAttribute("error_message", navigateTo.errorMessage(), RequestAttributes.SCOPE_SESSION);
 
@@ -79,17 +80,24 @@ public class ExceptionHandlerAspect {
     @Before("execution(@org.springframework.web.bind.annotation.RequestMapping * *(..))")
     public void clearMessages() {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        Object shown = requestAttributes.getAttribute("shown", RequestAttributes.SCOPE_SESSION);
+        Object shownSuccess = requestAttributes.getAttribute("shown_success", RequestAttributes.SCOPE_SESSION);
 
-        if (shown != null && (int) shown == 2) {
-            requestAttributes.removeAttribute("shown", RequestAttributes.SCOPE_SESSION);
+        if (shownSuccess != null && (int) shownSuccess == 2) {
+            requestAttributes.removeAttribute("shown_success", RequestAttributes.SCOPE_SESSION);
             requestAttributes.removeAttribute("success", RequestAttributes.SCOPE_SESSION);
             requestAttributes.removeAttribute("success_message", RequestAttributes.SCOPE_SESSION);
+        } else if (shownSuccess != null) {
+            requestAttributes.setAttribute("shown_success", (int) shownSuccess + 1, RequestAttributes.SCOPE_SESSION);
+        }
+
+        Object shownError = requestAttributes.getAttribute("shown_error", RequestAttributes.SCOPE_SESSION);
+
+        if (shownError != null && (int) shownError == 2) {
             requestAttributes.removeAttribute("error", RequestAttributes.SCOPE_SESSION);
             requestAttributes.removeAttribute("error_message", RequestAttributes.SCOPE_SESSION);
             requestAttributes.removeAttribute("error_items", RequestAttributes.SCOPE_SESSION);
-        } else if (shown != null) {
-            requestAttributes.setAttribute("shown", (int) shown + 1, RequestAttributes.SCOPE_SESSION);
+        } else if (shownError != null) {
+            requestAttributes.setAttribute("shown_error", (int) shownError + 1, RequestAttributes.SCOPE_SESSION);
         }
     }
 
