@@ -16,7 +16,7 @@
                              authentication-failure-url="/budgetanalyzer/login/error" />
 		<security:intercept-url pattern="/budgetanalyzer/user/**" access="hasRole('ROLE_USER')" />
         <security:intercept-url pattern="/budgetanalyzer/user/admin/**" access="hasRole('ROLE_ADMIN')" />
-		<security:logout/>
+		<security:logout logout-success-url="/budgetanalyzer/homepage" />
 	</security:http>
 
 	<security:authentication-manager>

@@ -1,5 +1,5 @@
 create table entities (
-  id      INT NOT NULL,
+  id      INT NOT NULL auto_increment,
   name    VARCHAR(100) NOT NULL,
   owned   VARCHAR(1) not null,
   shared  VARCHAR(1) not null,
@@ -7,7 +7,7 @@ create table entities (
 );
 
 create table users (
-  id        INT NOT NULL,
+  id        INT NOT NULL auto_increment,
   username  VARCHAR(100) NOT NULL,
   password  VARCHAR(100) NOT NULL,
   email     VARCHAR(250) NOT NULL,
@@ -18,14 +18,12 @@ create table users (
 );
 
 create table events (
-  id  int not null,
+  id  int not null auto_increment,
   type varchar(15) not null,
   tms timestamp not null,
-  user_id int not null
+  user_id int not null,
+  primary key (id)
 );
-alter table events
-add constraint events_pk
-primary key (id);
 
 alter table events
 add constraint events_user_id_fk
@@ -38,7 +36,7 @@ create table authorities (
 );
 
 create table tokens (
-  id              int not null,
+  id              int not null auto_increment,
   value           varchar(40) not null,
   entity_id       int not null,
   email           varchar(250) not null,
