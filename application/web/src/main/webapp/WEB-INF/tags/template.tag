@@ -55,7 +55,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                         <a id="menu_logout" href="<c:url value="/j_spring_security_logout"/>"><fmt:message key="menu.logout" /></a>)
                     </s:authorize>
                     <s:authorize ifNotGranted="ROLE_USER">
-                        <a id="menu_login" href="<c:url value="/budgetanalyzer/login" />"><fmt:message key="menu.login" /></a>
+                        <a id="menu_login" href="<c:url value="/budgetanalyzer/user/dashboard" />"><fmt:message key="menu.login" /></a>
                          |
                         <a id="menu_register" href="<c:url value="/budgetanalyzer/userRegistration" />"><fmt:message key="menu.register" /></a>
                     </s:authorize>
