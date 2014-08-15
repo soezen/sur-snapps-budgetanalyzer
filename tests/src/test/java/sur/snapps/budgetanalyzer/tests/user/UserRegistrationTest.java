@@ -298,20 +298,20 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
         // TODO write own method to do this and depending on base url add / or not
         driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-expired");
 
-        assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation has expired."));
+        assertTrue(driver.findElement(By.cssSelector("#form_response.alert-danger")).getText().contains("User invitation has expired."));
     }
 
     @Test
     public void notAdminErrorTokenRevoked() {
         driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-revoked");
 
-        assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation has been revoked."));
+        assertTrue(driver.findElement(By.cssSelector("#form_response.alert-danger")).getText().contains("User invitation has been revoked."));
     }
 
     @Test
     public void notAdminErrorTokenNotInDB() {
         driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-not-existing");
 
-        assertTrue(driver.findElement(By.id("form_error")).getText().contains("User invitation not found for this link."));
+        assertTrue(driver.findElement(By.cssSelector("#form_response.alert-danger")).getText().contains("User invitation not found for this link."));
     }
 }
