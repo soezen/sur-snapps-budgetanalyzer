@@ -97,6 +97,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
         assertTrue(profilePage.isTokenPresent(expiredRestored()));
         assertFalse(profilePage.isTokenPresent(expired()));
 
+        // TODO make this method available everywhere
         assertTokenPresentInDatabase(expiredRestored(), true);
         assertTokenPresentInDatabase(expired(), false);
     }

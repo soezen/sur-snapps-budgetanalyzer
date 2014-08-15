@@ -8,6 +8,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.RequestAttributes;
@@ -30,6 +32,8 @@ import java.util.List;
 @Component
 public class ExceptionHandlerAspect {
 
+    @Autowired
+    private ReloadableResourceBundleMessageSource messageSource;
 
     @Around("execution(java.lang.String sur.snapps.budgetanalyzer.web.controller..*.*(..)) && @annotation(navigateTo)")
     public String handleException(ProceedingJoinPoint joinPoint, NavigateTo navigateTo) {
@@ -70,12 +74,13 @@ public class ExceptionHandlerAspect {
 
             if (throwables.iterator().hasNext()) {
                 BusinessException businessException = (BusinessException) throwables.iterator().next();
-                Logger.error(businessException.getErrorCode() + " : " + businessException.getMessage());
-                return new ErrorResponse(businessException.getErrorMessage());
+                Logger.error(businessException.getErrorCode() + " : " + businessException.getErrorMessage());
+                return new ErrorResponse(businessException.translateErrorMessage(messageSource));
             }
         }
         return new ErrorResponse("unexpected error");
     }
+
 
     @Before("execution(@org.springframework.web.bind.annotation.RequestMapping * *(..))")
     public void clearMessages() {

@@ -15,8 +15,8 @@ import sur.snapps.budgetanalyzer.business.user.TokenManager;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
-import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
+import sur.snapps.budgetanalyzer.web.exception.ValidationException;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 import sur.snapps.budgetanalyzer.web.response.ResponseHolder;
@@ -108,6 +108,16 @@ public class UserController extends AbstractController {
         editUser.setNewPassword(newPassword);
         editUser.setConfirmPassword(confirmPassword);
 
+        BindingResult bindingResult = new BeanPropertyBindingResult(editUser, "editUser");
+        if (newPassword == null && confirmPassword == null) {
+            bindingResult.rejectValue("newPassword", "error.field.required");
+            bindingResult.rejectValue("confirmPassword", "error.field.required");
+        }
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult.getFieldErrors());
+        }
+
         return updateUser(editUser);
     }
 
@@ -117,7 +127,7 @@ public class UserController extends AbstractController {
         userValidator.validate(editUser, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            throw new BusinessException("form.errors.validation");
+            throw new ValidationException(bindingResult.getFieldErrors());
         }
 
         User updatedUser = userManager.update(editUser);

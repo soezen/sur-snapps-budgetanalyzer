@@ -67,12 +67,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             <div class="wrapper">
                 <!-- TODO style confirmation and error messages -->
                 <c:if test="${not empty success}">
-                    <div id="form_success" class="alert alert-success">
+                    <div id="form_response" class="alert alert-success">
                         <fmt:message key="${success_message}" />
                     </div>
                 </c:if>
                 <c:if test="${not empty error}">
-                    <div id="form_error" class="alert alert-danger">
+                    <div id="form_response" class="alert alert-danger">
                         <fmt:message key="${error_message}" />
                         <ul>
                             <c:forEach var="error" items="${error_items}">

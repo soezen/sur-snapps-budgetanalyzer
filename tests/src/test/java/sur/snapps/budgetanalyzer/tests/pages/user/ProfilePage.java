@@ -15,6 +15,7 @@ import sur.snapps.jetta.selenium.elements.RowCriteria;
 import sur.snapps.jetta.selenium.elements.Table;
 import sur.snapps.jetta.selenium.elements.WebTable;
 
+
 /**
  * User: SUR
  * Date: 5/05/14
@@ -43,9 +44,9 @@ public class ProfilePage extends AbstractWebPage {
     @FindBy(id = "btn_reload_page")
     private WebElement reloadPageButton;
 
-    @EditField(form = "editUser", field = "name")
+    @EditField(model = "user", readOnlyField = "name", editFields = "name")
     private EditInputElement editNameInput;
-    @EditField(form = "editUser", field = "email")
+    @EditField(model = "user", readOnlyField = "email.address", editFields = "email")
     private EditInputElement editEmailInput;
 
 
@@ -149,19 +150,14 @@ public class ProfilePage extends AbstractWebPage {
     }
 
     public void editName(String newName) {
-        editNameInput.getEditButton().click();
-        WebElement inputElement = editNameInput.getInputElement();
-        inputElement.clear();
-        inputElement.sendKeys(newName);
-        editNameInput.getSubmitButton().click();
+        editNameInput.edit(newName);
+        waitForFormResponse();
     }
 
+    // TODO put this inside the input element
     public void editEmail(String newEmail) {
-        editEmailInput.getEditButton().click();
-        WebElement inputElement = editEmailInput.getInputElement();
-        inputElement.clear();;
-        inputElement.sendKeys(newEmail);
-        editEmailInput.getSubmitButton().click();
+        editEmailInput.edit(newEmail);
+        waitForFormResponse();
     }
 
     public void revokeInvitation(DummyToken token) {

@@ -174,26 +174,28 @@ $(document).ready(function() {
         sur.editing = editGroup;
     };
 
-    // TODO delete success message after half a minute
-    // TODO submit with error does not show error
+
+    // TODO correct changing of password not ok yet: shows the new password in plain text (but encrypted)
+    // TODO also translate field names
+    // TODO do not copy value if field type = password
 
     sur.submit = function(editGroup, url) {
 
         var values = {};
+        var password = false;
         $("div[data-edit-group='" + editGroup + "']").find("input").each(function() {
             values[this.id] = this.value;
+            password = this.type == 'password';
         });
 
         $.getJSON(url, values, function(response) {
             sur.showResponseMessage(response);
-            if (response.success) {
+            if (response.success && !password) {
                 $("div[data-edit-group-readonly='" + editGroup + "']")
                     .find("span.edit-group-value")
                     .text(getTextFromResponse(response, editGroup));
-                sur.cancel(editGroup);
-            } else {
-                // TODO implement put in generic method
             }
+            sur.cancel(editGroup);
         });
     };
 
@@ -214,10 +216,31 @@ $(document).ready(function() {
     }
 
     sur.showResponseMessage = function(response) {
-        $("div#form_success").remove();
-        $("div#form_error").remove();
+        $("div#form_response").remove();
         var div = $(document.createElement("div"));
+        div.attr('id', 'form_response');
 
+        if (response.success) {
+            div.addClass("alert-success");
+            // TODO replace with more specific message?
+            div.text('Action executed with success');
+
+            window.setTimeout(function() {
+                $("#form_response").fadeTo(500, 0).slideUp(500, function(){
+                    $(this).remove();
+                });
+            }, 10000);
+        } else {
+            div.addClass("alert-danger");
+            div.html(response.message);
+        }
+        div.prepend(createCloseButton());
+        div.addClass("alert");
+        div.alert();
+        $("#content-container").find("div.wrapper").prepend(div);
+    };
+
+    function createCloseButton() {
         var closeBtn = $(document.createElement("button"));
         closeBtn.addClass("close");
         closeBtn.attr("data-dismiss", "alert");
@@ -232,27 +255,8 @@ $(document).ready(function() {
         spanClose.text("Close");
         closeBtn.append(spanClose);
 
-        if (response.success) {
-            div.attr("id", "form_success");
-            div.addClass("alert-success");
-            // TODO replace with more specific message?
-            div.text('Action executed with success');
-        } else {
-            div.attr("id", "form_error");
-            div.addClass("alert-danger");
-            div.text(response.message);
-        }
-        div.append(closeBtn);
-        div.addClass("alert");
-        div.alert();
-        $("#content-container").find("div.wrapper").prepend(div);
-
-        window.setTimeout(function() {
-            $("#form_success").fadeTo(500, 0).slideUp(500, function(){
-                $(this).remove();
-            });
-        }, 10000);
-    };
+        return closeBtn;
+    }
 
     sur.cancel = function(editGroup) {
         if (editGroup == null) {
@@ -264,7 +268,10 @@ $(document).ready(function() {
         editGroupElements.find("input.edit-group").each(function() {
             this.value = "";
         });
-        editGroupElements.find("input.edit-group").first()[0].value = getReadOnlyValue(editGroup);
+        var first = editGroupElements.find("input.edit-group").first()[0];
+        if (first.type !== 'password') {
+            first.value = getReadOnlyValue(editGroup);
+        }
         editGroupElements.hide();
         $("[data-edit-group-readonly='" + editGroup + "']").show();
         sur.editing = null;

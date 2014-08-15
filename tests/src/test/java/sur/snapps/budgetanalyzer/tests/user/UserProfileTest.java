@@ -4,6 +4,7 @@ import org.junit.Test;
 import sur.snapps.budgetanalyzer.tests.AbstractSeleniumTest;
 import sur.snapps.budgetanalyzer.tests.pages.user.ProfilePage;
 import sur.snapps.jetta.database.counter.RecordCounter;
+import sur.snapps.jetta.database.counter.table.Table;
 import sur.snapps.jetta.database.script.Script;
 import sur.snapps.jetta.selenium.annotations.SeleniumTestCase;
 import sur.snapps.jetta.selenium.elements.WebPage;
@@ -12,6 +13,8 @@ import static com.thoughtworks.selenium.SeleneseTestNgHelper.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static sur.snapps.budgetanalyzer.tests.dummy.Users.hannibal;
+import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
+import static sur.snapps.jetta.database.counter.expression.operator.Operators.and;
 
 /**
  * User: SUR
@@ -39,7 +42,20 @@ public class UserProfileTest extends AbstractSeleniumTest {
 
         assertEquals("Smith John", profilePage.getName());
 
-        // TODO DB assertions
+        // TODO simplify this!
+        Table usersTable = new Table("users", "u", "id");
+        assertEquals(1, counter.count()
+                .from(usersTable)
+                .where(and(
+                        equal(usersTable.column("username"), "'hannibal'"),
+                        equal(usersTable.column("name"), "'Smith John'")))
+                .get());
+        assertEquals(0, counter.count()
+                .from(usersTable)
+                .where(and(
+                        equal(usersTable.column("username"), "'hannibal'"),
+                        equal(usersTable.column("name"), "'John Smith'")))
+                .get());
     }
 
     @Test
@@ -51,14 +67,17 @@ public class UserProfileTest extends AbstractSeleniumTest {
         profilePage.editName("");
         assertFalse(profilePage.isActionSuccess());
         assertTrue(profilePage.hasFormError());
-        assertTrue(profilePage.hasFieldErrors());
 
-        // TODO-BUG cancel does not work on fields with field error
-        // TODO-BUG when showing fields with validation error, show everything from that group
+        assertEquals("John Smith", profilePage.getName());
 
-        // option: make submit an ajax call which return success or error message
-        // do not show edit input when error but only error message
-        // -> solves 3 issues: layout problem with X and cancel that will work again and issue with multiple inputs in one group
+        Table usersTable = new Table("users", "u", "id");
+        assertEquals(1, counter.count()
+                .from(usersTable)
+                .where(and(
+                        equal(usersTable.column("username"), "'hannibal'"),
+                        equal(usersTable.column("name"), "'John Smith'")))
+                .get());
+
     }
 
     @Test
@@ -72,7 +91,23 @@ public class UserProfileTest extends AbstractSeleniumTest {
         assertFalse(profilePage.hasFormError());
 
         assertEquals("other@mail.com", profilePage.getEmail());
+
+        Table usersTable = new Table("users", "u", "id");
+        assertEquals(1, counter.count()
+                .from(usersTable)
+                .where(and(
+                        equal(usersTable.column("username"), "'hannibal'"),
+                        equal(usersTable.column("email"), "'other@mail.com'")))
+                .get());
+        assertEquals(0, counter.count()
+                .from(usersTable)
+                .where(and(
+                        equal(usersTable.column("username"), "'hannibal'"),
+                        equal(usersTable.column("email"), "'hannibal@a-team.com'")))
+                .get());
     }
+
+    // TODO test cancel button
 
     @Test
     public void editEmailEmpty() {
@@ -83,8 +118,44 @@ public class UserProfileTest extends AbstractSeleniumTest {
         profilePage.editEmail("");
         assertFalse(profilePage.isActionSuccess());
         assertTrue(profilePage.hasFormError());
-        assertTrue(profilePage.hasFieldErrors());
 
-        // TODO test cancel button
+        assertEquals(hannibal().email(), profilePage.getEmail());
+
+        Table usersTable = new Table("users", "u", "id");
+        assertEquals(1, counter.count()
+                .from(usersTable)
+                .where(and(
+                        equal(usersTable.column("username"), "'hannibal'"),
+                        equal(usersTable.column("email"), "'hannibal@a-team.com'")))
+                .get());
     }
+
+    @Test
+    public void editEmailInvalid() {
+        menu.login();
+        assertTrue(loginPage.login(hannibal()).isSuccess());
+        menu.profile();
+
+        profilePage.editEmail("email @invalid.com");
+        assertFalse(profilePage.isActionSuccess());
+        assertTrue(profilePage.hasFormError());
+
+        assertEquals(hannibal().email(), profilePage.getEmail());
+
+        Table usersTable = new Table("users", "u", "id");
+        assertEquals(1, counter.count()
+                .from(usersTable)
+                .where(and(
+                        equal(usersTable.column("username"), "'hannibal'"),
+                        equal(usersTable.column("email"), "'hannibal@a-team.com'")))
+                .get());
+    }
+
+
+    // TODO test password success
+    // TODO test password one field missing
+    // TODO test other password field missing
+    // TODO test both password fields missing
+    // TODO test password mismatch
+    // TODO test password not sufficiently complicated
 }
