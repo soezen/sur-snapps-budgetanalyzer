@@ -1,6 +1,5 @@
 package sur.snapps.budgetanalyzer.business.event;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class EventLoggerAspect {
     private EventManager eventManager;
 
     @AfterReturning("execution(* sur.snapps.budgetanalyzer.business..*.*(..)) && args(user,..) && @annotation(logEvent)")
-    public void wrapException(JoinPoint joinPoint, User user, LogEvent logEvent) {
+    public void logEvent(User user, LogEvent logEvent) {
         eventManager.create(user, logEvent);
     }
 }
