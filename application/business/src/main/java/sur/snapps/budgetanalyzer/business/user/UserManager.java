@@ -58,7 +58,6 @@ public class UserManager {
     // TODO try to get this to work
 //    @LogEvent(EventType.USER_UPDATE)
     public User update(EditUserView user) {
-        System.out.println(user.getUsername());
         User managedUser = userRepository.findByUsername(user.getUsername());
         managedUser.setEmail(new Email(user.getEmail()));
         managedUser.setName(user.getName());

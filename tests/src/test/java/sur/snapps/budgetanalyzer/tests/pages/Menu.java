@@ -8,8 +8,6 @@ import org.openqa.selenium.support.ui.FluentWait;
 import sur.snapps.jetta.selenium.annotations.WaitElement;
 import sur.snapps.jetta.selenium.elements.BaseUrl;
 
-import javax.annotation.Nullable;
-
 /**
  * User: SUR
  * Date: 5/05/14
@@ -40,7 +38,9 @@ public class Menu {
         registerLink.click();
         wait.until(new Predicate<WebDriver>() {
             @Override
-            public boolean apply(@Nullable WebDriver driver) {
+            public boolean apply(WebDriver driver) {
+                System.out.println(driver.getCurrentUrl());
+                System.out.println(baseUrl + " /budgetanalyzer/userRegistration");
                 return driver.getCurrentUrl().equals(baseUrl + "/budgetanalyzer/userRegistration");
             }
         });
