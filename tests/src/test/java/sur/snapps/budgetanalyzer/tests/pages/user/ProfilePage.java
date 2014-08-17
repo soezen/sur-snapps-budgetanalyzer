@@ -53,7 +53,7 @@ public class ProfilePage extends AbstractWebPage {
     // TODO generify accordion
     @FindBy(xpath = "//div[@id='tokens_accordion_panel']")
     private WebElement tokensPanel;
-    @FindBy(xpath = "//div[@id='entity_accordion']/div[contains(@class, 'panel')]/div[contains(@class,'panel-heading')]/*[@class='panel-title']/a[@href='#tokens_accordion_panel']")
+    @FindBy(xpath = "//div[@id='entity_accordion']/div[contains(@class, 'panel')]/div[contains(@class,'panel-heading')]/a[@href='#tokens_accordion_panel']")
     private WebElement tokensPanelTitle;
 
     @WebTable(id = "users", columns = {
@@ -128,8 +128,8 @@ public class ProfilePage extends AbstractWebPage {
 
     private RowCriteria maxTokenCriteria(DummyToken token) {
         return minTokenCriteria(token)
-                .columnHasValue(TOKENS_COLUMN_STATUS, token.status())
-                .columnHasValue(TOKENS_COLUMN_EXPIRATION_DATE, token.expirationDate())
+                .columnIconHasClass(TOKENS_COLUMN_STATUS, token.statusIconClass())
+                .columnHasValue(TOKENS_COLUMN_EXPIRATION_DATE, token.expirationDateAsString())
                 .columnHasLinks(TOKENS_COLUMN_ACTIONS, token.nbrOfLinks());
     }
 
@@ -138,7 +138,7 @@ public class ProfilePage extends AbstractWebPage {
                 .columnHasLinkWithText(TOKENS_COLUMN_EMAIL, token.email());
     }
 
-    public boolean isTokenPresent(DummyToken token) {
+    public boolean isTokenPresent(final DummyToken token) {
         return maxTokenCriteria(token)
                 .row() != null;
     }
@@ -160,11 +160,16 @@ public class ProfilePage extends AbstractWebPage {
         waitForFormResponse();
     }
 
+    // TODO create annotations @Ajax, @AjaxAfter
+    // to specify which methods invoke ajax actions
+    // and what to do after such an action is executed
+    // the annotation takes a string to be able to have multiple mappings
     public void revokeInvitation(DummyToken token) {
         openTokensPanel();
         minTokenCriteria(token)
                 .link(TOKENS_COLUMN_ACTIONS, TOKEN_ACTION_REVOKE)
                 .click();
+        waitForFormResponse();
     }
 
     public void extendInvitation(DummyToken token) {
@@ -172,6 +177,7 @@ public class ProfilePage extends AbstractWebPage {
         minTokenCriteria(token)
                 .link(TOKENS_COLUMN_ACTIONS, TOKEN_ACTION_EXTEND)
                 .click();
+        waitForFormResponse();
     }
 
     public void restoreInvitation(DummyToken token) {
@@ -179,6 +185,7 @@ public class ProfilePage extends AbstractWebPage {
         minTokenCriteria(token)
                 .link(TOKENS_COLUMN_ACTIONS, TOKEN_ACTION_RESTORE)
                 .click();
+        waitForFormResponse();
     }
 
     public void resendInvitation(DummyToken token) {
@@ -186,6 +193,10 @@ public class ProfilePage extends AbstractWebPage {
         minTokenCriteria(token)
                 .link(TOKENS_COLUMN_ACTIONS, TOKEN_ACTION_RESEND)
                 .click();
+        waitForFormResponse();
+        // TODO make response bubble up until a parent will put it on screen
+        // TODO mouse pointer above links should no be a caret
+        // TODO other option for the ajax clicks are little wheels turning next to the link, telling the user the action is being executed
     }
 
     public void assertTokenPanelOpen(Wait<WebDriver> wait, final boolean open) {

@@ -31,10 +31,21 @@ $(document).ready(function() {
 
     // TODO-TECH put in different files
     sur.updateRow = function(clickedLink, url, action) {
+        $(clickedLink).closest("tr").addClass("updating");
+        $(clickedLink).closest("td").find("i").addClass("hidden");
+        $(clickedLink).closest("td").find("i.fa-refresh").removeClass("hidden");
         $.getJSON(url, { action : action }, function(response) {
-            sur.showResponseMessage(response);
+            var alertDiv = sur.showResponseMessage(response);
+            $(clickedLink).closest("[data-alert='catch']").prepend(alertDiv);
+            var row = $(clickedLink).closest("tr");
+            row.removeClass("updating");
+            $(clickedLink).closest("td").find("i").removeClass("hidden");
+            $(clickedLink).closest("td").find("i.fa-refresh").addClass("hidden");
             if (response.success) {
-                var row = $(clickedLink).parentsUntil("tbody", "tr");
+                row.addClass("updated");
+                window.setTimeout(function() {
+                    row.removeClass("updated");
+                }, 1000);
                 var header = $(row).parentsUntil("table").siblings("thead");
 
                 // TODO-BUG UC-1 boolean values are no longer check-icon
@@ -48,20 +59,42 @@ $(document).ready(function() {
                     var type = td.data("type");
                     if (type == 'date') {
                         value = $.format.date(value, "dd-MM-yyyy");
+                        td.text(value);
                     } else if (type == 'email') {
-                        value = value.address;
-                        td = td.find("a").find("span");
+                        td.find("a").find("span").text(value.address);
+                    } else if (type == 'icon') {
+                        var iconClass = td.data('icon-class');
+                        var iconClassValues = iconClasses[iconClass];
+                        for (var iconClassValue in iconClassValues) {
+                            if (iconClassValues.hasOwnProperty(iconClassValue)) {
+                                td.find("i.fa." + iconClass + "-" + iconClassValue).removeClass(iconClass + "-" + iconClassValue + " " + iconClassValues[iconClassValue]);
+                            }
+                        }
+                        td.find("i.fa").addClass(iconClass + "-" + value.toLowerCase());
+                        td.find("i.fa").addClass(iconClasses[iconClass][value.toLowerCase()]);
+
+                    } else {
+                        td.text(value);
                     }
-                    td.text(value);
                 });
 
                 sur.processTableVisibleItems($(row).parents("table").attr("id"));
             }
+            // TODO handle error message
         });
     };
 
+    var iconClasses = {
+        tokenstatus : {
+            valid: 'fa-check',
+            revoked: 'fa-times',
+            expired: 'fa-clock-o'
+        }
+    };
+
     sur.processTableVisibleItems = function(tableId) {
-        $("#" + tableId).find("[data-visible]").each(function() {
+        var table = $("#" + tableId);
+        table.find("[data-visible]").each(function() {
             var row = $(this).parentsUntil("tbody", "tr");
             var visibleExpression = $(this).data("visible");
             var visible = applyFunction(row, visibleExpression);
@@ -69,6 +102,19 @@ $(document).ready(function() {
                 $(this).show();
             } else {
                 $(this).hide();
+            }
+            // TODO if type is icon, translate icon class to actual icon class
+        });
+
+        // find icon cells that need to be translated
+        table.find("tbody").find("[data-type='icon']").each(function() {
+            var iconClass = this.dataset['iconClass'];
+            var iconClassValues = iconClasses[iconClass];
+            for (var value in iconClassValues) {
+                if (iconClassValues.hasOwnProperty(value)) {
+                    var iconClassTranslation = iconClassValues[value];
+                    $(this).find("i.fa." + iconClass + "-" + value).addClass(iconClassTranslation);
+                }
             }
         });
     };
@@ -80,6 +126,32 @@ $(document).ready(function() {
         }
         var columnIndex = findColumnIndex(row.parents("table").attr("id"), params[0]);
         return $.trim($(row.children("td")[columnIndex]).text());
+    };
+    functions.icon = function(row, params) {
+        if (params.length != 1) {
+            throw "invalid number of arguments";
+        }
+        var columnIndex = findColumnIndex(row.parents("table").attr("id"), params[0]);
+        return $(row.children("td")[columnIndex]).find("i");
+    };
+    functions.hasClass = function(row, params) {
+        if (params.length != 2) {
+            throw "invalid number of arguments";
+        }
+        var icon = params[0];
+        var requiredClasses = params[1];
+        if (requiredClasses instanceof Array) {
+            for (var index in requiredClasses) {
+                if (requiredClasses.hasOwnProperty(index)) {
+                    var requiredClass = requiredClasses[index];
+                    if (icon.hasClass(requiredClass)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return icon.hasClass(requiredClasses);
     };
     functions.in = function(row, params) {
         if (params.length != 2) {
@@ -97,6 +169,12 @@ $(document).ready(function() {
     };
 
     function applyFunction(row, expression) {
+        if (expression.indexOf('[') == 0 && expression.lastIndexOf(']') == expression.length - 1) {
+            expression = expression.substring(1, expression.length - 1);
+            return expression.split(',');
+        }
+        // TODO if one day you add a function into an array call applyFunction for each element in the array here.
+
         var index = expression.indexOf('(');
         if (index == -1) {
             return expression;
@@ -125,6 +203,9 @@ $(document).ready(function() {
             } else {
                 returnParams.push(applyFunction(row, param.trim()));
             }
+        }
+        if (previous != null) {
+            returnParams.push(applyFunction(row, previous));
         }
         return returnParams;
     }
@@ -189,7 +270,8 @@ $(document).ready(function() {
         });
 
         $.getJSON(url, values, function(response) {
-            sur.showResponseMessage(response);
+            var alertDiv = sur.showResponseMessage(response);
+            $("div[data-edit-group='" + editGroup + "']").closest("[data-alert='catch']").prepend(alertDiv);
             if (response.success && !password) {
                 $("div[data-edit-group-readonly='" + editGroup + "']")
                     .find("span.edit-group-value")
@@ -198,6 +280,8 @@ $(document).ready(function() {
             sur.cancel(editGroup);
         });
     };
+
+    // TODO disable onclick for clicked link (also make style changes)
 
     function getTextFromResponse(response, editGroup) {
         var path = getPathFromEditGroup(editGroup);
@@ -237,8 +321,9 @@ $(document).ready(function() {
         div.prepend(createCloseButton());
         div.addClass("alert");
         div.alert();
-        $("#content-container").find("div.wrapper").prepend(div);
+        return div;
     };
+//    $("#content-container").find("div.wrapper").prepend(div);
 
     function createCloseButton() {
         var closeBtn = $(document.createElement("button"));

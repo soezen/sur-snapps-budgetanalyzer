@@ -13,7 +13,9 @@
         <c:set var="isDate" value="${className eq 'java.util.Date'}" />
         <c:set var="isEmail" value="${className eq 'sur.snapps.budgetanalyzer.domain.user.Email'}" />
         <c:set var="isTimestamp" value="${className eq 'java.sql.Timestamp'}" />
-        <td data-type="${isDate ? 'date' : (isEmail ? 'email' : '')}">
+        <c:set var="isEnum" value="${sur_property.class.enum}" />
+        <c:set var="iconClass" value="data-icon-class='${fn:toLowerCase(sur_property.class.simpleName)}'" />
+        <td data-type="${isDate ? 'date' : (isEmail ? 'email' : (isEnum ? 'icon' : ''))}" ${isEnum ? iconClass : ''}>
             <c:choose>
                 <c:when test="${isDate}">
                     <fmt:formatDate value="${sur_property}" pattern="dd-MM-yyyy" />
@@ -29,6 +31,9 @@
                         <i class="fa fa-envelope-o"></i>
                         <span><c:out value="${sur_property.address}" /></span>
                     </a>
+                </c:when>
+                <c:when test="${isEnum}">
+                    <i class="fa fa-lg ${fn:toLowerCase(sur_property.class.simpleName)}-${fn:toLowerCase(sur_property)}"></i>
                 </c:when>
                 <c:otherwise>
                     <c:out value="${sur_property}" />

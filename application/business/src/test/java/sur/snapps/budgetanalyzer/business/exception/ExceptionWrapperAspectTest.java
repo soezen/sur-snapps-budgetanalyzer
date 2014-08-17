@@ -30,9 +30,11 @@ public class ExceptionWrapperAspectTest {
     private Signature signature;
     @Dummy
     private RuntimeException exception;
+    @Dummy
+    private BusinessException businessException;
 
     @Test(expected = BusinessException.class)
-    public void testWrapException() {
+    public void testWrapExceptionWrappedInBusinessException() {
         expect(joinPoint.getSignature()).andReturn(signature);
         expect(signature.getDeclaringTypeName()).andReturn("type");
         expect(signature.getName()).andReturn("name");
@@ -40,4 +42,10 @@ public class ExceptionWrapperAspectTest {
 
         aspect.wrapException(joinPoint, exception);
     }
+
+    @Test(expected = BusinessException.class)
+    public void testWrapExceptionNotWrappedInBusinessException() {
+        aspect.wrapException(joinPoint, businessException);
+    }
+
 }

@@ -17,7 +17,8 @@ import static sur.snapps.budgetanalyzer.tests.dummy.Tokens.*;
 import static sur.snapps.budgetanalyzer.tests.dummy.Users.face;
 import static sur.snapps.budgetanalyzer.tests.dummy.Users.hannibal;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
-import static sur.snapps.jetta.database.counter.expression.operator.Operators.and;
+import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equalDate;
+import static sur.snapps.jetta.database.counter.expression.operation.Operations.and;
 
 
 /**
@@ -142,7 +143,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
                 .from(tokensTable)
                 .where(and(
                         equal(tokensTable.column("status"), "'" + token.status() + "'"),
-                        equal(tokensTable.column("to_char(expiration_date, 'dd-MM-yyyy')"), "'" + token.expirationDate() + "'"),
+                        equalDate(tokensTable.column("expiration_date"), token.getExpirationDate()),
                         equal(tokensTable.column("email"), "'" + token.email() + "'")))
                 .get());
     }

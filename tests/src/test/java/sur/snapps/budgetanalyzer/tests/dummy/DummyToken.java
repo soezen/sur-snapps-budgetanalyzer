@@ -32,7 +32,7 @@ public class DummyToken {
         return value;
     }
 
-    public String expirationDate() {
+    public String expirationDateAsString() {
         if (expirationDate != null) {
             DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             format.setLenient(false);
@@ -41,11 +41,19 @@ public class DummyToken {
         return null;
     }
 
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
     public int nbrOfLinks() {
         if (status.equals("VALID")) {
             return 3;
         }
         return 1;
+    }
+
+    public String statusIconClass() {
+        return "tokenstatus-" + status.toLowerCase();
     }
 
     public String status() {

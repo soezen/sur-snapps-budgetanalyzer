@@ -17,8 +17,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.isNull;
-import static sur.snapps.jetta.database.counter.expression.operator.Operators.and;
-import static sur.snapps.jetta.database.counter.expression.operator.Operators.not;
+import static sur.snapps.jetta.database.counter.expression.operation.Operations.and;
+import static sur.snapps.jetta.database.counter.expression.operation.Operations.not;
 
 /**
  * Test data: the A-Team

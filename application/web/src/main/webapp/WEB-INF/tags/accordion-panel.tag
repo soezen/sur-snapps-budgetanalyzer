@@ -6,14 +6,14 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#${parentId}" href="#${id}">
+        <a data-toggle="collapse" data-parent="#${parentId}" href="#${id}">
+            <h4 class="panel-title">
                 <jsp:invoke fragment="title" />
-            </a>
-        </h4>
+            </h4>
+        </a>
     </div>
     <div id="${id}" class="panel-collapse collapse">
-        <div class="panel-body">
+        <div class="panel-body" data-alert="catch">
             <jsp:doBody />
         </div>
     </div>

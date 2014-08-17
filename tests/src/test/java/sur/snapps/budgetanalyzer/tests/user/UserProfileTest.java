@@ -14,7 +14,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static sur.snapps.budgetanalyzer.tests.dummy.Users.hannibal;
 import static sur.snapps.jetta.database.counter.expression.conditional.Conditionals.equal;
-import static sur.snapps.jetta.database.counter.expression.operator.Operators.and;
+import static sur.snapps.jetta.database.counter.expression.operation.Operations.and;
 
 /**
  * User: SUR

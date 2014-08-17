@@ -48,13 +48,15 @@ public class SendGridMailSender implements MailSender {
             } else {
                 JSONArray errors = (JSONArray) json.get("errors");
                 StringBuilder builder = new StringBuilder("error sending invitation mail to " + to + ":\n");
-                for (Object error : errors) {
-                    builder.append("\t - ").append(error).append("\n");
+                if (errors != null) {
+                    for (Object error : errors) {
+                        builder.append("\t - ").append(error).append("\n");
+                    }
                 }
                 Logger.error(builder.toString());
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            Logger.error("invalid json message: " + result);
         }
     }
 }

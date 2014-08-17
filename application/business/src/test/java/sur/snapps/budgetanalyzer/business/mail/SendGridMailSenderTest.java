@@ -50,7 +50,42 @@ public class SendGridMailSenderTest {
     }
 
     @Test
-    public void testSend() {
+    public void testSendWithSuccessResponse() {
+        expectCreateMessage();
+        expect(sendGrid.send()).andReturn("{\"message\": \"success\"}");
+        replay();
+
+        mailSender.send(mail);
+    }
+
+    @Test
+    public void testSendWithErrorResponse() {
+        expectCreateMessage();
+        expect(sendGrid.send()).andReturn("{\"message\": \"error\", \"errors\" : [\"error-1\", \"error-2\"]}");
+        replay();
+
+        mailSender.send(mail);
+    }
+
+    @Test
+    public void testSendWithErrorResponseWithoutErrors() {
+        expectCreateMessage();
+        expect(sendGrid.send()).andReturn("{\"message\": \"error\"}");
+        replay();
+
+        mailSender.send(mail);
+    }
+
+    @Test
+    public void testSendWithInvalidJSONResponse() {
+        expectCreateMessage();
+        expect(sendGrid.send()).andReturn("{open test");
+        replay();
+
+        mailSender.send(mail);
+    }
+
+    private void expectCreateMessage() {
         expect(mail.to()).andReturn(email);
         expect(email.getAddress()).andReturn("toEmail");
         expect(sendGrid.addTo("toEmail")).andReturn(sendGrid);
@@ -61,9 +96,5 @@ public class SendGridMailSenderTest {
         expect(mail.template()).andReturn(template);
         expect(template.render()).andReturn("html");
         expect(sendGrid.setHtml("html")).andReturn(sendGrid);
-        expect(sendGrid.send()).andReturn("{\"message\": \"success\"}");
-        replay();
-
-        mailSender.send(mail);
     }
 }

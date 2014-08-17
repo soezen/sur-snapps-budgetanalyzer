@@ -16,8 +16,8 @@ public class ExceptionWrapperAspect {
 
     @AfterThrowing(value = "execution(* sur.snapps.budgetanalyzer.business..*.*(..))", throwing = "e")
     public void wrapException(JoinPoint joinPoint, RuntimeException e) {
-        Signature signature = joinPoint.getSignature();
         if (!(e instanceof BusinessException)) {
+            Signature signature = joinPoint.getSignature();
             throw new BusinessException(signature.getDeclaringTypeName() + "." + signature.getName() + " : " + e.getMessage(), e);
         }
         throw e;
