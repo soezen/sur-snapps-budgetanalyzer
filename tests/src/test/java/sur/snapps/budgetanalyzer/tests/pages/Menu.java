@@ -39,9 +39,7 @@ public class Menu {
         wait.until(new Predicate<WebDriver>() {
             @Override
             public boolean apply(WebDriver driver) {
-                System.out.println(driver.getCurrentUrl());
-                System.out.println(baseUrl + " /budgetanalyzer/userRegistration");
-                return driver.getCurrentUrl().equals(baseUrl + "/budgetanalyzer/userRegistration");
+                return driver.getCurrentUrl().startsWith(baseUrl + "/budgetanalyzer/userRegistration");
             }
         });
     }
@@ -51,7 +49,7 @@ public class Menu {
         wait.until(new Predicate<WebDriver>() {
             @Override
             public boolean apply(WebDriver driver) {
-                return driver.getCurrentUrl().equals(baseUrl + "/budgetanalyzer/login");
+                return driver.getCurrentUrl().startsWith(baseUrl + "/budgetanalyzer/login");
             }
         });
     }
