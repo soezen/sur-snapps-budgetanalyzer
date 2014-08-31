@@ -10,5 +10,6 @@ public enum EventType {
     USER_INVITATION,
     ADMIN_TRANSFER,
     USER_REGISTRATION,
-    USER_UPDATE
+    USER_UPDATE,
+    ENTITY_UPDATE
 }

@@ -7,9 +7,10 @@ insert into users (id, username, password, email, name, enabled, entity_id) valu
 insert into authorities (user_id, authority) values (2, 'ROLE_USER');
 
 INSERT into tokens (id, value, entity_id, email, expiration_date, status, type)
-  values(1, 'token-valid', 1, 'valid@test.com', current_date + interval '1' month, 'VALID', 'USER_INVITATION');
+  values(1, 'token-valid', 1, 'valid@test.com', current_date + interval '31' day, 'VALID', 'USER_INVITATION');
+
 insert into tokens (id, value, entity_id, email, expiration_date, status, type)
-  values(2, 'token-revoked', 1, 'revoked@test.com', current_date + interval '1' month, 'REVOKED', 'USER_INVITATION');
+  values(2, 'token-revoked', 1, 'revoked@test.com', current_date + interval '31' day, 'REVOKED', 'USER_INVITATION');
 insert into tokens (id, value, entity_id, email, expiration_date, status, type)
   values(3, 'token-expired', 1, 'expired@test.com', current_date - interval '1' day, 'VALID', 'USER_INVITATION');
 
@@ -17,3 +18,6 @@ insert into tokens (id, value, entity_id, email, expiration_date, status, type)
 -- TODO-TECH boolean: Y-N instead of number
 -- TODO-TECH exclude comments from execution
 -- TODO-TECH allow parameters in sql file?
+
+-- TODO + interval 1 month gives errors on the 31 day of the month because that day does not exist in the next month
+-- for oracle add_month would work

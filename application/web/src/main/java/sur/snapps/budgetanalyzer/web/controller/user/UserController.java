@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sur.snapps.budgetanalyzer.business.event.EventManager;
+import sur.snapps.budgetanalyzer.business.user.EditEntityView;
 import sur.snapps.budgetanalyzer.business.user.EditUserView;
+import sur.snapps.budgetanalyzer.business.user.EntityManager;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
+import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
@@ -41,12 +44,16 @@ public class UserController extends AbstractController {
     private TokenManager tokenManager;
     @Autowired
     private EventManager eventManager;
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     private UserContext userContext;
 
     @Autowired
     private UserValidator userValidator;
+    @Autowired
+    private EntityValidator entityValidator;
 
     @RequestMapping("/dashboard")
     public String openUserDashboard(Model model) {
@@ -74,6 +81,7 @@ public class UserController extends AbstractController {
     public String openProfilePage(Model model) {
         User currentUser = userContext.getCurrentUser();
         model.addAttribute("editUser", new EditUserView(currentUser));
+        model.addAttribute("editEntity", new EditEntityView(currentUser.getEntity()));
         return PageLinks.PROFILE.page();
     }
 
@@ -82,28 +90,39 @@ public class UserController extends AbstractController {
         return null;
     }
 
-    @RequestMapping(value = "/editUser/name")
+    @RequestMapping("/editentityview/name")
     @NavigateTo(PageLinks.PROFILE)
-    public @ResponseBody ResponseHolder<User> editCurrentUserName(@RequestParam String name) {
+    public @ResponseBody ResponseHolder<Entity> editEntityName(@RequestParam("editentityview-name") String name) {
+        EditEntityView editEntity = new EditEntityView(userContext.getCurrentUser().getEntity());
+        editEntity.setName(name);
 
+        return updateEntity(editEntity);
+    }
+
+    @RequestMapping("/edituserview/name")
+    @NavigateTo(PageLinks.PROFILE)
+    public @ResponseBody ResponseHolder<User> editCurrentUserName(@RequestParam("edituserview-name") String name) {
+        System.out.println("name = " + name);
         EditUserView editUser = new EditUserView(userContext.getCurrentUser());
         editUser.setName(name);
 
         return updateUser(editUser);
     }
 
-    @RequestMapping("/editUser/email")
+    @RequestMapping("/edituserview/email")
     @NavigateTo(PageLinks.PROFILE)
-    public @ResponseBody ResponseHolder<User> editCurrentUserEmail(@RequestParam String email) {
+    public @ResponseBody ResponseHolder<User> editCurrentUserEmail(@RequestParam("edituserview-email") String email) {
         EditUserView editUser = new EditUserView(userContext.getCurrentUser());
         editUser.setEmail(email);
 
         return updateUser(editUser);
     }
 
-    @RequestMapping("/editUser/confirmPassword")
+    @RequestMapping("/edituserview/confirmPassword")
     @NavigateTo(PageLinks.PROFILE)
-    public @ResponseBody ResponseHolder<User> editCurrentUserPassword(@RequestParam String newPassword, @RequestParam String confirmPassword) {
+    public @ResponseBody ResponseHolder<User> editCurrentUserPassword(
+            @RequestParam("edituserview-newPassword") String newPassword,
+            @RequestParam("edituserview-confirmPassword") String confirmPassword) {
         EditUserView editUser = new EditUserView(userContext.getCurrentUser());
         editUser.setNewPassword(newPassword);
         editUser.setConfirmPassword(confirmPassword);
@@ -133,5 +152,20 @@ public class UserController extends AbstractController {
         User updatedUser = userManager.update(editUser);
         userContext.reset();
         return new SuccessResponse<>(updatedUser);
+    }
+
+    private ResponseHolder<Entity> updateEntity(EditEntityView editEntity) {
+        BindingResult bindingResult = new BeanPropertyBindingResult(editEntity, "editEntity");
+        entityValidator.validate(editEntity, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult.getFieldErrors());
+        }
+
+        // TODO events overview (choose icons or show text)
+        // TODO make invite new user a popup
+        Entity updatedEntity = entityManager.update(userContext.getCurrentUser(), editEntity);
+        userContext.reset();
+        return new SuccessResponse<>(updatedEntity);
     }
 }

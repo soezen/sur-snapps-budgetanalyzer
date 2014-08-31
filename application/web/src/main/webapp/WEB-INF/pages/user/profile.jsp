@@ -58,7 +58,8 @@
                     </c:if>
                 </jsp:attribute>
                 <jsp:body>
-                    <sur-form:form-property-output path="name" property="${user.entity}" />
+                    <sur-form:form-property name="entity" property="${user.entity}" edit_property="${editEntity}" />
+                    <sur-form:form-edit-group path="name" />
                 </jsp:body>
             </sur-form:form-fieldset>
         </div>

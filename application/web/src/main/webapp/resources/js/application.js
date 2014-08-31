@@ -281,8 +281,6 @@ $(document).ready(function() {
         });
     };
 
-    // TODO disable onclick for clicked link (also make style changes)
-
     function getTextFromResponse(response, editGroup) {
         var path = getPathFromEditGroup(editGroup);
         var result = response.value;
@@ -378,12 +376,6 @@ $(document).ready(function() {
         }
     });
 
-    // TODO make bug filter
     // TODO-BUG when editing field, first with validation error and then with success: validation error message still visible (same with success message)
 
-    // show hidden form-groups with error and hide the corresponding read only form-groups
-    $("div.form-group.has-error[data-edit-group]:not(:visible)").each(function() {
-        $(this).show();
-        $("div.form-group[data-edit-group-readonly='" + $(this).data('edit-group') + "']:visible").hide();
-    });
 });

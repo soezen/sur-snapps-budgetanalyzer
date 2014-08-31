@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -13,6 +14,8 @@ import sur.snapps.budgetanalyzer.tests.pages.DashboardPage;
 import sur.snapps.budgetanalyzer.tests.pages.LoginPage;
 import sur.snapps.budgetanalyzer.tests.pages.Menu;
 import sur.snapps.jetta.database.DatabaseTestRule;
+import sur.snapps.jetta.metadata.MetaDataTestRule;
+import sur.snapps.jetta.metadata.MetaDataTestRunner;
 import sur.snapps.jetta.selenium.SauceTestWatcher;
 import sur.snapps.jetta.selenium.SeleniumTestRule;
 import sur.snapps.jetta.selenium.annotations.SeleniumWebDriver;
@@ -26,6 +29,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 27/04/14
  * Time: 14:24
  */
+@RunWith(MetaDataTestRunner.class)
 public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProvider {
 
     @Rule
@@ -36,6 +40,9 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
 
     @Rule
     public DatabaseTestRule databaseTestRule = new DatabaseTestRule(this);
+
+    @Rule
+    public MetaDataTestRule metaDataTestRule = new MetaDataTestRule(this);
 
     private String sessionId;
 
@@ -56,7 +63,7 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
     @Before
     public void setUp() throws Exception {
         this.sessionId = ((RemoteWebDriver)driver).getSessionId().toString();
-        wait = new FluentWait<WebDriver>(driver)
+        wait = new FluentWait<>(driver)
                 .ignoring(NoSuchElementException.class)
                 .pollingEvery(100, TimeUnit.MILLISECONDS)
                 .withTimeout(3, TimeUnit.SECONDS);
@@ -70,9 +77,9 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
     }
 
     protected void assertEqualsWhileWaiting(final Object expected, final Object actual) {
-        wait.until(new Function<WebDriver, Object>() {
+        wait.until(new Function<WebDriver, Boolean>() {
             @Override
-            public Object apply(WebDriver input) {
+            public Boolean apply(WebDriver input) {
                 return expected.equals(actual);
             }
         });

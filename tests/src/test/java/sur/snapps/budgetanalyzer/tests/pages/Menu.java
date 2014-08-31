@@ -22,6 +22,8 @@ public class Menu {
     private WebElement dashboardLink;
     @FindBy(id = "menu_login")
     private WebElement loginLink;
+    @FindBy(id = "menu_logout")
+    private WebElement logoutLink;
     @FindBy(id = "menu_register")
     private WebElement registerLink;
     @FindBy(id = "menu_profile")
@@ -50,6 +52,16 @@ public class Menu {
             @Override
             public boolean apply(WebDriver driver) {
                 return driver.getCurrentUrl().startsWith(baseUrl + "/budgetanalyzer/login");
+            }
+        });
+    }
+
+    public void logout() {
+        logoutLink.click();
+        wait.until(new Predicate<WebDriver>() {
+            @Override
+            public boolean apply(WebDriver input) {
+                return input.getCurrentUrl().startsWith(baseUrl + "/budgetanalyzer/homepage");
             }
         });
     }

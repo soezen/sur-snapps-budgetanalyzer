@@ -64,6 +64,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>sur.snapps.jetta</groupId>
+            <artifactId>jetta-metadata</artifactId>
+            <version>${jetta-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.unitils</groupId>
             <artifactId>unitils-core</artifactId>
             <version>3.4</version>

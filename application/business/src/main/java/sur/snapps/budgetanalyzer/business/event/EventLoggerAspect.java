@@ -20,4 +20,5 @@ public class EventLoggerAspect {
     public void logEvent(User user, LogEvent logEvent) {
         eventManager.create(user, logEvent);
     }
+
 }

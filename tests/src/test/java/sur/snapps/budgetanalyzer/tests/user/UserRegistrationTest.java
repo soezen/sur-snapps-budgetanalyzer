@@ -9,6 +9,10 @@ import sur.snapps.budgetanalyzer.tests.pages.user.UserRegistrationPage;
 import sur.snapps.jetta.database.counter.RecordCounter;
 import sur.snapps.jetta.database.counter.table.Table;
 import sur.snapps.jetta.database.script.Script;
+import sur.snapps.jetta.metadata.annotations.Scenario;
+import sur.snapps.jetta.metadata.annotations.UseCase;
+import sur.snapps.jetta.metadata.xml.FailureImpact;
+import sur.snapps.jetta.metadata.xml.ScenarioType;
 import sur.snapps.jetta.selenium.annotations.SeleniumTestCase;
 import sur.snapps.jetta.selenium.elements.WebPage;
 
@@ -30,6 +34,7 @@ import static sur.snapps.jetta.database.counter.expression.operation.Operations.
 // TODO-TECH make other webdrivers work
 @SeleniumTestCase("01 - User Registration")
 @Script("users.sql")
+@UseCase("User Registration")
 public class UserRegistrationTest extends AbstractSeleniumTest {
 
     @WebPage
@@ -40,6 +45,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     // TODO-FUNC UC-1 minimum length of username?
 
     @Test
+    @Scenario(type = ScenarioType.SUCCESS, failureImpact = FailureImpact.MEDIUM)
     public void adminSuccess() {
         menu.register();
 
@@ -102,6 +108,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.MEDIUM)
     public void adminErrorIncomplete() {
         menu.register();
 
@@ -122,6 +129,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.MEDIUM)
     public void adminErrorPasswordsNotMatching() {
         menu.register();
 
@@ -144,6 +152,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.MEDIUM)
     public void adminErrorInsecurePassword() {
         menu.register();
 
@@ -191,6 +200,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.SUCCESS, failureImpact = FailureImpact.MEDIUM)
     public void notAdminSuccess() {
         driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-valid");
 
@@ -245,6 +255,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.MEDIUM)
     public void adminErrorUsernameAlreadyUsed() {
         menu.register();
 
@@ -266,6 +277,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.MEDIUM)
     public void notAdminErrorUsernameAlreadyUsed() {
         driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-valid");
 
@@ -294,6 +306,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.MEDIUM)
     public void notAdminErrorTokenExpired() {
         // TODO write own method to do this and depending on base url add / or not
         driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-expired");
@@ -302,6 +315,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.MEDIUM)
     public void notAdminErrorTokenRevoked() {
         driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-revoked");
 
@@ -309,6 +323,7 @@ public class UserRegistrationTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.MEDIUM)
     public void notAdminErrorTokenNotInDB() {
         driver.navigate().to(baseUrl + "/budgetanalyzer/userRegistrationWithToken?value=token-not-existing");
 

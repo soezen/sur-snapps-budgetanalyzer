@@ -56,6 +56,10 @@ public class Entity implements Serializable {
         return shared;
     }
 
+    public void updateName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Entity

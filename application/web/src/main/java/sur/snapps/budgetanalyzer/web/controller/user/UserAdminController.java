@@ -119,3 +119,10 @@ public class UserAdminController {
         return new SuccessResponse<User>(user);
     }
 }
+
+// TODO write all tests for use cases
+// annotate with pending if not yet implemented
+// assign use case number
+// say priority or type of test (main scenario, bugfix, ...)
+// make report based on number of tests per use case
+// look for todos in code assigned to specific use case

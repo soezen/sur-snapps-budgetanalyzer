@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@tag description="Form input for a property field with label and errors" pageEncoding="UTF-8"%>
 <%@attribute name="path" fragment="false" required="true" %>
@@ -50,7 +51,7 @@
         <c:choose>
             <c:when test="${spring_input eq 'false'}">
                 <label for="${path}" class="col-sm-${label_width} control-label">
-                    <fmt:message key="${property.class.simpleName}.${path}" />
+                    <fmt:message key="${fn:toLowerCase(property.class.simpleName)}.${path}" />
                 </label>
             </c:when>
             <c:otherwise>
@@ -67,7 +68,7 @@
         </c:if>
         <c:choose>
             <c:when test="${spring_input eq 'false'}">
-                <input id="${path}" type="${empty type ? 'text' : type}" ${readonly_attribute} class="form-control ${not empty edit_group ? 'edit-group': ''}" value="${property[path]}" />
+                <input id="${fn:toLowerCase(property.class.simpleName)}-${path}" type="${empty type ? 'text' : type}" ${readonly_attribute} class="form-control ${not empty edit_group ? 'edit-group': ''}" value="${property[path]}" />
             </c:when>
             <c:otherwise>
                 <f:input path="${path}" cssClass="form-control ${not empty edit_group ? 'edit-group' : '' }" type="${empty type ? 'text' : type}" readonly="${readonly}" data-form-focus="${form_focus}" />
@@ -75,7 +76,7 @@
         </c:choose>
         <!-- TODO automatically focus input when first showing it -->
         <c:if test="${not empty show_buttons and show_buttons}">
-            <a onclick="sur.submit('${edit_group}', '<c:url value="/budgetanalyzer/user/editUser/${path}" />')">
+            <a onclick="sur.submit('${edit_group}', '<c:url value="/budgetanalyzer/user/${fn:toLowerCase(edit_property.class.simpleName)}/${path}" />')">
                 <i class="fa fa-check fa-lg" style="color:green;"></i>
             </a>
             <a onclick="sur.cancel('${edit_group}')">
@@ -91,6 +92,6 @@
 <c:if test="${not empty visible and not visible}">
     <script>
         // TODO-FUNC UC-1 put this in js method and use in both locations
-        $("#${path}").parents(".form-group").hide();
+        $("#${fn:toLowerCase(property.class.simpleName)}-${path}").parents(".form-group").hide();
     </script>
 </c:if>

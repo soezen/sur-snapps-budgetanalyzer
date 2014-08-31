@@ -7,6 +7,10 @@ import sur.snapps.budgetanalyzer.tests.pages.user.ProfilePage;
 import sur.snapps.jetta.database.counter.RecordCounter;
 import sur.snapps.jetta.database.counter.table.Table;
 import sur.snapps.jetta.database.script.Script;
+import sur.snapps.jetta.metadata.annotations.Scenario;
+import sur.snapps.jetta.metadata.annotations.UseCase;
+import sur.snapps.jetta.metadata.xml.FailureImpact;
+import sur.snapps.jetta.metadata.xml.ScenarioType;
 import sur.snapps.jetta.selenium.annotations.SeleniumTestCase;
 import sur.snapps.jetta.selenium.elements.WebPage;
 
@@ -26,10 +30,10 @@ import static sur.snapps.jetta.database.counter.expression.operation.Operations.
  * Date: 26/05/14
  * Time: 15:35
  */
-// TODO load mutliple scripts
-@SeleniumTestCase("03 - Manage Users")
+@SeleniumTestCase("04 - Manage Entity")
 @Script("users.sql")
-public class ManageUsersTest extends AbstractSeleniumTest {
+@UseCase("Manage Entity")
+public class EntityManagementTest extends AbstractSeleniumTest {
 
     private RecordCounter counter;
 
@@ -37,6 +41,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     private ProfilePage profilePage;
 
     @Test
+    @Scenario(type = ScenarioType.SUCCESS, failureImpact = FailureImpact.MEDIUM)
     public void revokeInvitation() {
         menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
@@ -55,6 +60,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.SUCCESS, failureImpact = FailureImpact.MEDIUM)
     public void extendInvitation() throws InterruptedException {
         menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
@@ -71,6 +77,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.SUCCESS, failureImpact = FailureImpact.MEDIUM)
     public void restoreRevokedInvitation() {
         menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
@@ -87,6 +94,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.SUCCESS, failureImpact = FailureImpact.MEDIUM)
     public void restoreExpiredInvitation() {
         menu.login();
         assertTrue(loginPage.login(hannibal()).isSuccess());
@@ -106,6 +114,8 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     // TODO try to get the assertion error messages to be more specific
 
     @Test
+    // TODO scenarios do not work in report when only running one method (test)
+    @Scenario(type = ScenarioType.SUCCESS, failureImpact = FailureImpact.LOW)
     public void manageUsersAsAdmin() {
         // TODO add assertions for user info
         menu.login();
@@ -125,6 +135,7 @@ public class ManageUsersTest extends AbstractSeleniumTest {
     }
 
     @Test
+    @Scenario(type = ScenarioType.SUCCESS, failureImpact = FailureImpact.MEDIUM)
     public void manageUsersAsNotAdmin() {
         // TODO add assertions for user info
         menu.login();

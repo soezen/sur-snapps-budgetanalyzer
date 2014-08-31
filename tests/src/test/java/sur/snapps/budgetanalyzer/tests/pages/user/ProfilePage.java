@@ -44,11 +44,12 @@ public class ProfilePage extends AbstractWebPage {
     @FindBy(id = "btn_reload_page")
     private WebElement reloadPageButton;
 
-    @EditField(model = "user", readOnlyField = "name", editFields = "name")
+    @EditField(model = "user", readOnlyField = "name", editFields = "edituserview-name")
     private EditInputElement editNameInput;
-    @EditField(model = "user", readOnlyField = "email.address", editFields = "email")
+    @EditField(model = "user", readOnlyField = "email.address", editFields = "edituserview-email")
     private EditInputElement editEmailInput;
-
+    @EditField(model = "user", readOnlyField = "password", editFields = {"edituserview-newPassword", "edituserview-confirmPassword"})
+    private EditInputElement editPasswordInput;
 
     // TODO generify accordion
     @FindBy(xpath = "//div[@id='tokens_accordion_panel']")
@@ -79,6 +80,10 @@ public class ProfilePage extends AbstractWebPage {
 
     public String getEmail() {
         return editEmailInput.getReadOnlyValue();
+    }
+
+    public String getPassword() {
+        return editPasswordInput.getReadOnlyValue();
     }
 
     public void reload() {
@@ -154,9 +159,16 @@ public class ProfilePage extends AbstractWebPage {
         waitForFormResponse();
     }
 
-    // TODO put this inside the input element
     public void editEmail(String newEmail) {
         editEmailInput.edit(newEmail);
+        waitForFormResponse();
+    }
+
+    public void editPassword(String newPassword, String confirmPassword) {
+        editPasswordInput.edit(new String[][] {
+            new String[] { "edituserview-newPassword", newPassword},
+            new String[] { "edituserview-confirmPassword", confirmPassword}
+        });
         waitForFormResponse();
     }
 
@@ -210,7 +222,6 @@ public class ProfilePage extends AbstractWebPage {
 
     public boolean isTokensPanelCollapsed() {
         String className = tokensPanel.getAttribute("class");
-        System.out.println(className);
         return !className.matches("^(.* )?in( .*)?");
     }
 

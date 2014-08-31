@@ -17,7 +17,6 @@ public class Users {
     public static DummyUser hannibal() {
         if (hannibal == null) {
             hannibal = extractor.get(DummyUser.class, "hannibal");
-            System.out.println(hannibal.enabled());
         }
         return hannibal;
     }
@@ -25,7 +24,6 @@ public class Users {
     public static DummyUser face() {
         if (face == null) {
             face = extractor.get(DummyUser.class, "face");
-            System.out.println(face.enabled());
         }
         return face;
     }
