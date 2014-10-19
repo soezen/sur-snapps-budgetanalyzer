@@ -65,7 +65,5 @@
         </div>
         <!-- TODO-FUNC UC-1 in popup and make user confirm, add help text so user knows what the action implies -->
 
-
-        <a id="btn_reload_page" href="<c:url value="/budgetanalyzer/user/profile" />">Reload page</a>
     </jsp:body>
 </sur:template>

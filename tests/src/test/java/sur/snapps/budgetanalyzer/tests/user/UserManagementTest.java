@@ -124,6 +124,10 @@ public class UserManagementTest extends AbstractSeleniumTest {
         fail("not yet implemented");
     }
 
+    // TODO when session timed out and action is performed: give correct message
+
+    // TODO when revoking an invitation set date to today
+
     @Test
     @Pending
     @Scenario(type = ScenarioType.EXCEPTION, failureImpact = FailureImpact.LOW)

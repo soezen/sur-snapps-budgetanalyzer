@@ -85,12 +85,17 @@ public class UserManager {
         return userRepository.findByUsername(username);
     }
 
+    // TODO-FUNC UC-1 when refreshing table with ajax booleans are no longer icons
+    // TODO-FUNC UC-1 order user dashboard events by time (most recent on top)
+    // TODO-FUNC UC-1 confirmation popup when transferring admin role
+
     @Transactional
     @LogEvent(EventType.ADMIN_TRANSFER)
     public User transferAdminRole(User currentAdminUser, int userId) {
         User newAdminUser = userRepository.findById(userId);
         userRepository.attach(currentAdminUser);
         newAdminUser.addAuthority(User.ROLE_ADMIN);
+        currentAdminUser = userRepository.findById(currentAdminUser.getId());
         currentAdminUser.removeAuthority(User.ROLE_ADMIN);
         userRepository.save(currentAdminUser);
         return userRepository.save(newAdminUser);
