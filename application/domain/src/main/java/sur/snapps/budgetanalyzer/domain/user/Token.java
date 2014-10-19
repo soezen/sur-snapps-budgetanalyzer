@@ -1,17 +1,15 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
+import sur.snapps.budgetanalyzer.domain.BaseEntity;
 import sur.snapps.budgetanalyzer.util.DateUtil;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.sql.Date;
 import java.util.UUID;
 
@@ -22,11 +20,7 @@ import java.util.UUID;
  */
 @javax.persistence.Entity
 @Table(name = "TOKENS")
-public class Token implements Serializable {
-
-    @Id
-    @GeneratedValue
-    private int id;
+public class Token extends BaseEntity {
 
     @Column(nullable = false)
     private String value;
@@ -76,6 +70,11 @@ public class Token implements Serializable {
             this.expirationDate = new Date(DateUtil.addDays(DateUtil.now(), 7).getTime());
         }
         this.status = TokenStatus.VALID;
+    }
+
+    @Override
+    public String getDisplayValue() {
+        return email.getAddress();
     }
 
     public static class Builder {
@@ -132,10 +131,6 @@ public class Token implements Serializable {
         }
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String value() {
         return value;
     }
@@ -163,3 +158,5 @@ public class Token implements Serializable {
         return new java.util.Date(expirationDate.getTime());
     }
 }
+
+// TODO check for uniqueness of email when inviting user

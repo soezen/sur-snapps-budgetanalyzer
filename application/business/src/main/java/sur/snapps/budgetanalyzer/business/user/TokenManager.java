@@ -96,7 +96,7 @@ public class TokenManager {
 
     @Transactional
     @LogEvent(EventType.USER_INVITATION)
-    public void create(User user, Email mail, Url url) {
+    public Token create(User user, Email mail, Url url) {
         Token token = Token.createUserInvitationToken()
                 .generateToken()
                 .entity(user.getEntity())
@@ -115,6 +115,7 @@ public class TokenManager {
 
         // TODO-TECH add updated tms in db
         // TODO-TECH add version in db
+        return token;
     }
 
     @Transactional

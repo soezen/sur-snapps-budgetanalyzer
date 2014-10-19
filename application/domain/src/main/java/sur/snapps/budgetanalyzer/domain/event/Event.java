@@ -1,13 +1,12 @@
 package sur.snapps.budgetanalyzer.domain.event;
 
+import sur.snapps.budgetanalyzer.domain.BaseEntity;
 import sur.snapps.budgetanalyzer.domain.user.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -20,12 +19,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "EVENTS")
-public class Event {
-
-    // TODO-TECH also use uid as generated keys? see mail (gmail) sent on 17/06/2014
-    @Id
-    @GeneratedValue
-    private int id;
+public class Event extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -38,13 +32,8 @@ public class Event {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Column(nullable = true, name = "SUBJECT_ID")
+    private Integer subjectId;
 
     public EventType getType() {
         return type;
@@ -68,5 +57,18 @@ public class Event {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Integer subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    @Override
+    public String getDisplayValue() {
+        return "";
     }
 }

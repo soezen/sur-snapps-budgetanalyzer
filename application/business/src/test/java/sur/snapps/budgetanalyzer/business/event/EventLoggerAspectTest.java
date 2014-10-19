@@ -32,10 +32,10 @@ public class EventLoggerAspectTest {
     private LogEvent logEvent;
 
     @Test
-    public void testLogEvent() {
-        manager.create(user, logEvent);
+    public void testLogEventWithoutSubject() {
+        manager.create(user, null, logEvent);
         replay();
 
-        logger.logEvent(user, logEvent);
+        logger.logEvent(user, logEvent, null);
     }
 }

@@ -89,6 +89,9 @@ $(document).ready(function() {
             valid: 'fa-check',
             revoked: 'fa-times',
             expired: 'fa-clock-o'
+        },
+        eventtype : {
+            user_invitation: 'fa-check'
         }
     };
 

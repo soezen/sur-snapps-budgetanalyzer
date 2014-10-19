@@ -55,8 +55,7 @@ public class UserManager {
     }
 
     @Transactional
-    // TODO try to get this to work
-//    @LogEvent(EventType.USER_UPDATE)
+    @LogEvent(EventType.USER_UPDATE)
     public User update(EditUserView user) {
         User managedUser = userRepository.findByUsername(user.getUsername());
         managedUser.setEmail(new Email(user.getEmail()));

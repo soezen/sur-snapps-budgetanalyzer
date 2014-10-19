@@ -3,6 +3,7 @@ package sur.snapps.budgetanalyzer.domain.user;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import sur.snapps.budgetanalyzer.domain.BaseEntity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -10,12 +11,9 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,14 +23,10 @@ import java.util.List;
  */
 @javax.persistence.Entity
 @Table(name = "USERS")
-public class User implements Serializable {
+public class User extends BaseEntity {
 
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
-
-    @Id
-    @GeneratedValue
-    private int id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -57,10 +51,6 @@ public class User implements Serializable {
     public boolean hasAccessTo(Token token) {
         return isAdmin()
             && token.entity().equals(entity);
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {
@@ -135,5 +125,10 @@ public class User implements Serializable {
         Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
         String encodedPassword = passwordEncoder.encodePassword(password, "BUDGET-ANALYZER");
         setPassword(encodedPassword);
+    }
+
+    @Override
+    public String getDisplayValue() {
+        return name;
     }
 }

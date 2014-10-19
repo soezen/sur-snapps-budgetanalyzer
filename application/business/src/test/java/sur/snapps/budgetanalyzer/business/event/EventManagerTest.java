@@ -49,14 +49,14 @@ public class EventManagerTest {
     private LogEvent logEvent;
 
     @Test
-    public void testCreate() {
+    public void testCreateWithoutSubject() {
         Capture<Event> eventCapture = new Capture<>();
 
         expect(logEvent.value()).andReturn(EventType.USER_INVITATION);
         expect(repository.save(capture(eventCapture))).andReturn(null);
         replay();
 
-        manager.create(user, logEvent);
+        manager.create(user, null, logEvent);
 
         Event event = eventCapture.getValue();
         assertNotNull(event.getTms());
