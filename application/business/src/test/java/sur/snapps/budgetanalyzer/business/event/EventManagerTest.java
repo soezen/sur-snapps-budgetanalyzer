@@ -64,13 +64,4 @@ public class EventManagerTest {
         assertSame(user, event.getUser());
     }
 
-    @Test
-    public void testGetEvents() {
-        expect(repository.getEvents(entity)).andReturn(events);
-        replay();
-
-        List<Event> results = manager.getEvents(entity);
-
-        assertSame(events, results);
-    }
 }

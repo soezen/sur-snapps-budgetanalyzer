@@ -197,6 +197,7 @@ public class UserManagerTest {
         expect(repository.attach(oldAdminUser)).andReturn(oldAdminUser);
         expect(repository.save(oldAdminUser)).andReturn(oldAdminUser);
         expect(repository.save(newAdminUser)).andReturn(newAdminUser);
+        expect(repository.findById(oldAdminUser.getId())).andReturn(oldAdminUser);
         replay();
 
         User result = manager.transferAdminRole(oldAdminUser, userId);
