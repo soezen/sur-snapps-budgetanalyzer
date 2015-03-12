@@ -1,9 +1,9 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.hibernate.envers.Audited;
+import sur.snapps.budgetanalyzer.domain.BaseEntity;
+
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -13,11 +13,8 @@ import java.util.Objects;
  */
 @javax.persistence.Entity
 @Table(name = "ENTITIES")
-public class Entity implements Serializable {
-
-    @Id
-    @GeneratedValue
-    private int id;
+@Audited
+public class Entity extends BaseEntity {
 
     private String name;
 
@@ -25,9 +22,16 @@ public class Entity implements Serializable {
     private boolean shared;
 
 //    private List<Account> accounts;
+    // TODO when updating name to one that is already used, we get unexpected error
+    // we would like to have a nice error message instead
 
     protected Entity() {
         // for hibernate
+    }
+
+    @Override
+    public String getDisplayValue() {
+        return name;
     }
 
     private Entity(Builder builder) {
@@ -38,10 +42,6 @@ public class Entity implements Serializable {
 
     public static Builder newOwnedEntity() {
         return new Builder().owned(true).shared(false);
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {
@@ -63,12 +63,12 @@ public class Entity implements Serializable {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Entity
-                && Objects.equals(id, ((Entity) obj).id);
+                && Objects.equals(name, ((Entity) obj).name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(name);
     }
 
     public static class Builder {

@@ -1,13 +1,17 @@
 package sur.snapps.budgetanalyzer.util;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.unitils.UnitilsJUnit4TestClassRunner;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import static java.util.Calendar.*;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MILLISECOND;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.SECOND;
+import static java.util.Calendar.YEAR;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,7 +21,6 @@ import static org.junit.Assert.assertTrue;
  * Date: 3/05/14
  * Time: 11:15
  */
-@RunWith(UnitilsJUnit4TestClassRunner.class)
 public class DateUtilTest {
 
     @Test

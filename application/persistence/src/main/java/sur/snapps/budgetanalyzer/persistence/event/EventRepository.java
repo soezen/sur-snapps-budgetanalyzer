@@ -20,16 +20,20 @@ import java.util.List;
  */
 public class EventRepository {
 
+    // TODO put in super class
     @PersistenceContext
     private EntityManager entityManager;
 
+    public void flush() {
+        entityManager.flush();
+    }
+
     public Event save(Event event) {
-        event = entityManager.merge(event);
         entityManager.persist(event);
         return event;
     }
 
-    public List<Event> getEvents(Entity entity) {
+    public List<Event> findFor(Entity entity) {
         // TODO-TECH only fetch first X results (or the next page, ...)
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> cq = cb.createQuery(Event.class);

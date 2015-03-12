@@ -87,7 +87,7 @@ public class SendGridMailSenderTest {
 
     private void expectCreateMessage() {
         expect(mail.to()).andReturn(email);
-        expect(email.getAddress()).andReturn("toEmail");
+        expect(email.address()).andReturn("toEmail");
         expect(sendGrid.addTo("toEmail")).andReturn(sendGrid);
         expect(sendGrid.setFrom(fromEmail)).andReturn(sendGrid);
         expect(sendGrid.setFromName(fromName)).andReturn(sendGrid);

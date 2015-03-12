@@ -24,7 +24,7 @@
                     <sur-form:form-property name="user" property="${user}" edit_property="${editUser}" />
                     <sur-form:form-property-output path="username" />
                     <sur-form:form-edit-group path="name" />
-                    <sur-form:form-edit-group path="email.address" input_fields="email" />
+                    <sur-form:form-edit-group path="emailAddress" input_fields="email" />
                     <sur-form:form-edit-group path="password" type="password" input_fields="newPassword,confirmPassword" />
                     <!-- TODO clean up leftovers from form-focus en form-edit group -->
                 </jsp:body>
@@ -36,7 +36,7 @@
                     <sur:accordion id="entity_accordion">
                         <sur:accordion-panel parentId="entity_accordion" id="users_accordion_panel">
                             <jsp:attribute name="title">
-                                Other users of ${user.entity.name}
+                                Other users of ${user.entity().name}
                             </jsp:attribute>
                             <jsp:body>
                                 <jsp:include page="entity_users_table.jsp" />
@@ -58,7 +58,7 @@
                     </c:if>
                 </jsp:attribute>
                 <jsp:body>
-                    <sur-form:form-property name="entity" property="${user.entity}" edit_property="${editEntity}" />
+                    <sur-form:form-property name="entity" property="${user.entity()}" edit_property="${editEntity}" />
                     <sur-form:form-edit-group path="name" />
                 </jsp:body>
             </sur-form:form-fieldset>

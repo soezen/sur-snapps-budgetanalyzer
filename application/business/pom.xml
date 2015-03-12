@@ -28,69 +28,17 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
+        <dependency><groupId>org.aspectj</groupId><artifactId>aspectjrt</artifactId></dependency>
+        <dependency><groupId>org.aspectj</groupId><artifactId>aspectjweaver</artifactId></dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
+        <dependency><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></dependency>
+        <dependency><groupId>com.sendgrid</groupId><artifactId>sendgrid-java</artifactId></dependency>
+        <dependency><groupId>com.googlecode.json-simple</groupId><artifactId>json-simple</artifactId></dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils-inject</artifactId>
-            <version>3.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils-mock</artifactId>
-            <version>3.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils-easymock</artifactId>
-            <version>3.4</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sendgrid</groupId>
-            <artifactId>sendgrid-java</artifactId>
-            <version>0.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.7.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.7.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1</version>
-        </dependency>
+        <dependency><groupId>org.unitils</groupId><artifactId>unitils-inject</artifactId></dependency>
+        <dependency><groupId>org.unitils</groupId><artifactId>unitils-mock</artifactId></dependency>
+        <dependency><groupId>org.unitils</groupId><artifactId>unitils-easymock</artifactId></dependency>
+        <dependency><groupId>org.easymock</groupId><artifactId>easymock</artifactId></dependency>
     </dependencies>
 
     <build>

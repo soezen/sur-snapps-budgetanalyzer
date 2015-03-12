@@ -20,9 +20,14 @@ public class EntityManager {
 
     @Transactional
     @LogEvent(EventType.ENTITY_UPDATE)
+    // TODO remove user argument
     public Entity update(User user, EditEntityView entity) {
         Entity managedEntity = entityRepository.findById(entity.getId());
         managedEntity.updateName(entity.getName());
         return entityRepository.attach(managedEntity);
+    }
+
+    public Entity findById(String id) {
+        return entityRepository.findById(id);
     }
 }

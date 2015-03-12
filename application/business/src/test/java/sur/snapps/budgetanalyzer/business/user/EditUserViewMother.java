@@ -37,7 +37,7 @@ public class EditUserViewMother {
                 .build();
         Token token = Token.createUserInvitationToken()
                 .generateToken()
-                .email(new Email("antonio.banderas@mail.com"))
+                .email(Email.create("antonio.banderas@mail.com"))
                 .entity(entity)
                 .build();
         return token;

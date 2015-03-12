@@ -2,9 +2,9 @@ package sur.snapps.budgetanalyzer.persistence.user;
 
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.User;
+import sur.snapps.budgetanalyzer.persistence.AbstractRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -17,10 +17,7 @@ import java.util.List;
  * Date: 22/04/14
  * Time: 19:24
  */
-public class UserRepository {
-
-    @PersistenceContext
-    private EntityManager entityManager;
+public class UserRepository extends AbstractRepository {
 
     public User attach(User user) {
         return entityManager.merge(user);
@@ -31,6 +28,10 @@ public class UserRepository {
         return user;
     }
 
+    public void flush() {
+        entityManager.flush();
+    }
+
     public List<User> findUsersOfEntity(Entity entity) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
@@ -39,7 +40,7 @@ public class UserRepository {
         return entityManager.createQuery(query).getResultList();
     }
 
-    public User findById(int userId) {
+    public User findById(String userId) {
         return entityManager.find(User.class, userId);
     }
 
@@ -52,7 +53,12 @@ public class UserRepository {
                 username);
         query.where(condition);
 
-        return entityManager.createQuery(query).getSingleResult();
+        try {
+            return entityManager.createQuery(query).getSingleResult();
+        } catch (NoResultException e) {
+            // do nothing
+        }
+        return null;
     }
 
     public boolean isUsernameUsed(String username) {

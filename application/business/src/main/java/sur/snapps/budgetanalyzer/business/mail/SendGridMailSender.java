@@ -6,8 +6,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import sur.snapps.budgetanalyzer.business.Logger;
 import sur.snapps.budgetanalyzer.domain.mail.TemplateMail;
-import sur.snapps.budgetanalyzer.util.Logger;
 
 /**
  * User: SUR
@@ -31,7 +31,7 @@ public class SendGridMailSender implements MailSender {
 
     @Override
     public void send(TemplateMail mail) {
-        String to = mail.to().getAddress();
+        String to = mail.to().address();
         String result = sendGrid.addTo(to)
                 .setFrom(fromEmail)
                 .setFromName(fromName)

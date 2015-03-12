@@ -33,7 +33,7 @@ public class Event extends BaseEntity {
     private User user;
 
     @Column(nullable = true, name = "SUBJECT_ID")
-    private Integer subjectId;
+    private String subjectId;
 
     public EventType getType() {
         return type;
@@ -59,11 +59,11 @@ public class Event extends BaseEntity {
         this.user = user;
     }
 
-    public Integer getSubjectId() {
+    public String getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(Integer subjectId) {
+    public void setSubjectId(String subjectId) {
         this.subjectId = subjectId;
     }
 

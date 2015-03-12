@@ -2,7 +2,7 @@ package sur.snapps.budgetanalyzer.web.exception;
 
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.FieldError;
-import sur.snapps.budgetanalyzer.util.exception.BusinessException;
+import sur.snapps.budgetanalyzer.business.exception.BusinessException;
 
 import java.util.List;
 

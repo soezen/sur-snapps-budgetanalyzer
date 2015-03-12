@@ -1,4 +1,4 @@
-package sur.snapps.budgetanalyzer.util.exception;
+package sur.snapps.budgetanalyzer.business.exception;
 
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 

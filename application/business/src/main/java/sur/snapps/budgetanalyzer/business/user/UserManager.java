@@ -3,13 +3,12 @@ package sur.snapps.budgetanalyzer.business.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.business.event.LogEvent;
+import sur.snapps.budgetanalyzer.business.exception.BusinessException;
 import sur.snapps.budgetanalyzer.domain.event.EventType;
-import sur.snapps.budgetanalyzer.domain.user.Email;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.UserRepository;
-import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 
 import java.util.List;
 
@@ -28,29 +27,27 @@ public class UserManager {
     @Transactional
     @LogEvent(EventType.USER_REGISTRATION)
     public User create(EditUserView inputUser) {
-        User user = new User();
-        user.setUsername(inputUser.getUsername());
-        user.setEmail(new Email(inputUser.getEmail()));
-        String name = inputUser.getName();
-        user.setName(name);
-        user.setPassword(inputUser.getNewPassword());
-        user.encodePassword();
-        user.setEnabled(true);
-        user.addAuthority(User.ROLE_USER);
-
+        User.Builder userBuilder;
         String tokenValue = inputUser.getTokenValue();
-
         if (tokenValue == null) {
-            user.setEntity(Entity.newOwnedEntity().name(name).build());
-            user.addAuthority(User.ROLE_ADMIN);
+            userBuilder = User.createAdmin()
+                .entity(Entity.newOwnedEntity().name(inputUser.getName()).build());
         } else {
             Token token = tokenManager.findTokenByValue(tokenValue);
             if (token == null) {
                 throw new BusinessException("error", "token.not.found");
             }
-            user.setEntity(token.entity());
-            tokenManager.delete(token);
+            userBuilder = User.createUser()
+                .entity(token.entity());
+            tokenManager.complete(token);
         }
+        User user = userBuilder
+            .username(inputUser.getUsername())
+            .email(inputUser.getEmail())
+            .name(inputUser.getName())
+            .password(inputUser.getNewPassword())
+            .build();
+
         return userRepository.save(user);
     }
 
@@ -58,16 +55,13 @@ public class UserManager {
     @LogEvent(EventType.USER_UPDATE)
     public User update(EditUserView user) {
         User managedUser = userRepository.findByUsername(user.getUsername());
-        managedUser.setEmail(new Email(user.getEmail()));
-        managedUser.setName(user.getName());
-        if (user.getNewPassword() != null) {
-            managedUser.setPassword(user.getNewPassword());
-            managedUser.encodePassword();
-        }
-        return userRepository.attach(managedUser);
+        managedUser.updateEmail(user.getEmail());
+        managedUser.updateName(user.getName());
+        managedUser.updatePassword(user.getNewPassword());
+        return managedUser;
     }
 
-    public User findById(int userId) {
+    public User findById(String userId) {
         return userRepository.findById(userId);
     }
 
@@ -90,13 +84,10 @@ public class UserManager {
 
     @Transactional
     @LogEvent(EventType.ADMIN_TRANSFER)
-    public User transferAdminRole(User currentAdminUser, int userId) {
+    public User transferAdminRole(User currentAdminUser, String userId) {
         User newAdminUser = userRepository.findById(userId);
-        userRepository.attach(currentAdminUser);
-        newAdminUser.addAuthority(User.ROLE_ADMIN);
-        currentAdminUser = userRepository.findById(currentAdminUser.getId());
-        currentAdminUser.removeAuthority(User.ROLE_ADMIN);
-        userRepository.save(currentAdminUser);
-        return userRepository.save(newAdminUser);
+        currentAdminUser = userRepository.attach(currentAdminUser);
+        currentAdminUser.transferAdminRoleTo(newAdminUser);
+        return newAdminUser;
     }
 }

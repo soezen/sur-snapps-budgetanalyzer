@@ -1,9 +1,13 @@
 package sur.snapps.budgetanalyzer.domain;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * User: SUR
@@ -16,16 +20,35 @@ public abstract class BaseEntity implements Serializable {
     // TODO-TECH also use uid as generated keys? see mail (gmail) sent on 17/06/2014
 
     @Id
-    @GeneratedValue
-    private int id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    private String id;
 
-    public int getId() {
+    @Version
+    private int version;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     public abstract String getDisplayValue();
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BaseEntity
+            && Objects.equals(getId(), ((BaseEntity) obj).getId());
+    }
+
 }

@@ -9,6 +9,7 @@ import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.InjectIntoByType;
 import org.unitils.inject.annotation.TestedObject;
 import org.unitils.mock.annotation.Dummy;
+import sur.snapps.budgetanalyzer.business.exception.BusinessException;
 import sur.snapps.budgetanalyzer.business.mail.MailFactory;
 import sur.snapps.budgetanalyzer.business.mail.SendGridMailSender;
 import sur.snapps.budgetanalyzer.domain.mail.Url;
@@ -19,12 +20,12 @@ import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.TokenStatus;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.TokenRepository;
-import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 
 import java.util.List;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -83,7 +84,7 @@ public class TokenManagerTest {
         String tokenValue = "tokenValue";
         Capture<Token> tokenCapture = new Capture<>();
 
-        expect(user.getEntity()).andReturn(entity);
+        expect(user.entity()).andReturn(entity);
         expect(repository.save(capture(tokenCapture))).andReturn(token);
         expect(mailFactory.createUserInvitationMail()).andReturn(userInvitationMail);
         expect(userInvitationMail.host(url.getServerName())).andReturn(userInvitationMail);
@@ -91,13 +92,13 @@ public class TokenManagerTest {
         expect(userInvitationMail.context(url.getContextPath())).andReturn(userInvitationMail);
         expect(token.value()).andReturn(tokenValue);
         expect(userInvitationMail.token(tokenValue)).andReturn(userInvitationMail);
-        expect(user.getName()).andReturn(inviter);
+        expect(user.name()).andReturn(inviter);
         expect(userInvitationMail.inviter(inviter)).andReturn(userInvitationMail);
-        expect(userInvitationMail.to(mail)).andReturn(userInvitationMail);
+        expect(userInvitationMail.to(isA(Email.class))).andReturn(userInvitationMail);
         mailSender.send(userInvitationMail);
         replay();
 
-        manager.create(user, mail, url);
+        manager.create(user, "address", url);
 
         Token token = tokenCapture.getValue();
         assertSame(entity, token.entity());
@@ -107,7 +108,7 @@ public class TokenManagerTest {
 
     @Test
     public void testFindTokenById() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         replay();
@@ -129,12 +130,15 @@ public class TokenManagerTest {
         assertSame(token, result);
     }
 
+    // TODO after transferring admin role, logout user or refresh entire page, or something
+
     @Test
-    public void testDelete() {
-        repository.delete(token);
+    public void testComplete() {
+        token.complete();
         replay();
 
-        manager.delete(token);
+        manager.complete(token);
+
     }
 
     @Test
@@ -149,7 +153,7 @@ public class TokenManagerTest {
 
     @Test
     public void testRestoreSuccess() {
-        int id = 1;
+        String id = "1";
         String tokenValue = "value";
         String inviter = "inviter";
 
@@ -164,7 +168,7 @@ public class TokenManagerTest {
         expect(userInvitationMail.context(url.getContextPath())).andReturn(userInvitationMail);
         expect(token.value()).andReturn(tokenValue);
         expect(userInvitationMail.token(tokenValue)).andReturn(userInvitationMail);
-        expect(user.getName()).andReturn(inviter);
+        expect(user.name()).andReturn(inviter);
         expect(userInvitationMail.inviter(inviter)).andReturn(userInvitationMail);
         expect(token.getEmail()).andReturn(mail);
         expect(userInvitationMail.to(mail)).andReturn(userInvitationMail);
@@ -178,7 +182,7 @@ public class TokenManagerTest {
 
     @Test
     public void testRestoreUserHasNoAccess() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(false);
@@ -195,7 +199,7 @@ public class TokenManagerTest {
 
     @Test
     public void testRestoreTokenValid() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(true);
@@ -213,7 +217,7 @@ public class TokenManagerTest {
 
     @Test
     public void testResendSuccess() {
-        int id = 1;
+        String id = "1";
         String tokenValue = "value";
         String inviter = "inviter";
 
@@ -227,7 +231,7 @@ public class TokenManagerTest {
         expect(userInvitationMail.context(url.getContextPath())).andReturn(userInvitationMail);
         expect(token.value()).andReturn(tokenValue);
         expect(userInvitationMail.token(tokenValue)).andReturn(userInvitationMail);
-        expect(user.getName()).andReturn(inviter);
+        expect(user.name()).andReturn(inviter);
         expect(userInvitationMail.inviter(inviter)).andReturn(userInvitationMail);
         expect(token.getEmail()).andReturn(mail);
         expect(userInvitationMail.to(mail)).andReturn(userInvitationMail);
@@ -241,7 +245,7 @@ public class TokenManagerTest {
 
     @Test
     public void testResendUserHasNoAccess() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(false);
@@ -258,7 +262,7 @@ public class TokenManagerTest {
 
     @Test
     public void testResendTokenRevoked() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(true);
@@ -276,7 +280,7 @@ public class TokenManagerTest {
 
     @Test
     public void testExtendSuccess() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(true);
@@ -292,7 +296,7 @@ public class TokenManagerTest {
 
     @Test
     public void testExtendUserHasNoAccess() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(false);
@@ -309,7 +313,7 @@ public class TokenManagerTest {
 
     @Test
     public void testExtendTokenExpired() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(true);
@@ -327,7 +331,7 @@ public class TokenManagerTest {
 
     @Test
     public void testRevokeSuccess() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(true);
@@ -343,7 +347,7 @@ public class TokenManagerTest {
 
     @Test
     public void testRevokeUserHasNoAccess() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(false);
@@ -360,7 +364,7 @@ public class TokenManagerTest {
 
     @Test
     public void testRevokeTokenExpired() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findTokenById(id)).andReturn(token);
         expect(user.hasAccessTo(token)).andReturn(true);

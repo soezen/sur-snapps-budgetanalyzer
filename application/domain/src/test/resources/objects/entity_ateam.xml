@@ -1,0 +1,86 @@
+<data>
+    <entities>
+        <record>
+            <id>A_TEAM</id>
+            <name>the A-Team</name>
+            <owned>true</owned>
+            <shared>false</shared>
+        </record>
+    </entities>
+    <users>
+        <record>
+            <id>HANNIBAL</id>
+            <username>hannibal</username>
+            <password translation="test">872fdc2a08772ba2c7c1cddd081bfd96</password>
+            <email><address>hannibal@a-team.com</address></email>
+            <name>John Smith</name>
+            <enabled>true</enabled>
+            <entity id="A_TEAM" />
+            <list of="authorities">
+                <authority>ROLE_ADMIN</authority>
+                <authority>ROLE_USER</authority>
+            </list>
+        </record>
+        <record>
+            <id>FACE</id>
+            <username>face</username>
+            <password translation="test">872fdc2a08772ba2c7c1cddd081bfd96</password>
+            <email><address>face@a-team.com</address></email>
+            <name>Templeton Peck</name>
+            <enabled>true</enabled>
+            <entity id="A_TEAM" />
+            <list of="authorities">
+                <authority>ROLE_USER</authority>
+            </list>
+        </record>
+        <record>
+            <id>BA</id>
+            <username>ba</username>
+            <password translation="TEST$test12">872fdc2a08772ba2c7c1cddd081bfd96</password>
+            <email><address>ba@a-team.com</address></email>
+            <name>Bosco Albert Baracus</name>
+            <enabled>true</enabled>
+            <entity id="A_TEAM" />
+            <list of="authorities">
+                <authority>ROLE_USER</authority>
+            </list>
+        </record>
+    </users>
+    <tokens>
+        <record>
+            <id>VALID_TOKEN</id>
+            <value>token-valid</value>
+            <entity id="A_TEAM" />
+            <email>valid@test.com</email>
+            <expiration_date>${today + month(1)}</expiration_date>
+            <status>VALID</status>
+            <type>USER_INVITATION</type>
+        </record>
+        <record>
+            <id>REVOKED_TOKEN</id>
+            <value>token-revoked</value>
+            <entity id="A_TEAM" />
+            <email>revoked@test.com</email>
+            <expiration_date>${today + month(1)}</expiration_date>
+            <status>REVOKED</status>
+            <type>USER_INVITATION</type>
+        </record>
+        <record>
+            <id>EXPIRED_TOKEN</id>
+            <value>token-expired</value>
+            <entity id="A_TEAM" />
+            <email>expired@test.com</email>
+            <expiration_date>${today - day(1)}</expiration_date>
+            <status>EXPIRED</status>
+            <type>USER_INVITATION</type>
+        </record>
+    </tokens>
+    <events>
+        <record>
+            <id>FACE_USER_REGISTRATION</id>
+            <type>USER_REGISTRATION</type>
+            <tms>01-01-2014</tms>
+            <user id="FACE" />
+        </record>
+    </events>
+</data>

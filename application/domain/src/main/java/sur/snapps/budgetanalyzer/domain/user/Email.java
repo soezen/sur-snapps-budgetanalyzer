@@ -14,17 +14,45 @@ public class Email {
     @Column(name = "EMAIL", nullable = false, unique = true)
     private String address;
 
-    public Email() {}
+    protected Email() {}
 
-    public Email(String address) {
-        this.address = address;
+    private Email(Builder builder) {
+        this.address = builder.address;
     }
 
-    public String getAddress() {
+    public static Email create(String address) {
+        return new Builder()
+            .address(address)
+            .build();
+    }
+
+    public static Builder create() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String address;
+
+        public Email build() {
+            Email email = new Email(this);
+            return email;
+        }
+
+        public Builder address(String address) {
+            this.address = address;
+            return this;
+        }
+    }
+
+    public String address() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    /*************************
+     * GETTERS FOR FRONTEND *
+     ************************/
+
+    public String getAddress() {
+        return address;
     }
 }

@@ -1,0 +1,38 @@
+<data>
+    <entities>
+        <record>
+            <id>SIMPSONS</id>
+            <name>the Simpsons</name>
+            <owned>true</owned>
+            <shared>false</shared>
+        </record>
+        <record transient="true">
+            <name>the Flanders</name>
+            <owned>true</owned>
+            <shared>true</shared>
+        </record>
+    </entities>
+    <users>
+        <record>
+            <id>HOMER_SIMPSON</id>
+            <username>homer</username>
+            <password translation="test">872fdc2a08772ba2c7c1cddd081bfd96</password>
+            <email><address>homer.simpson@springfield.com</address></email>
+            <name>Homer Simpson</name>
+            <enabled>true</enabled>
+            <entity id="SIMPSONS" />
+            <list of="authorities">
+                <authority>ROLE_ADMIN</authority>
+                <authority>ROLE_USER</authority>
+            </list>
+        </record>
+    </users>
+    <events>
+        <record>
+            <id>USER_REGISTRATION_HOMER</id>
+            <type>USER_REGISTRATION</type>
+            <tms>01-01-2014</tms>
+            <user id="HOMER_SIMPSON" />
+        </record>
+    </events>
+</data>

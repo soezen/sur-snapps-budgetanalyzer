@@ -57,7 +57,7 @@ public class UserController extends AbstractController {
 
     @RequestMapping("/dashboard")
     public String openUserDashboard(Model model) {
-        model.addAttribute("events", eventManager.getEvents(userContext.getCurrentUser().getEntity()));
+        model.addAttribute("events", eventManager.findFor(userContext.getCurrentUser().entity()));
         return PageLinks.DASHBOARD.page();
     }
 
@@ -68,20 +68,20 @@ public class UserController extends AbstractController {
 
     @ModelAttribute("users")
     public List<User> usersOfEntity() {
-        return userManager.findUsersOfEntity(currentUser().getEntity());
+        return userManager.findUsersOfEntity(currentUser().entity());
     }
 
     @ModelAttribute("tokens")
     public List<Token> tokensOfEntity() {
         // TODO only load these if admin user is logged in?
-        return tokenManager.findTokensForEntity(currentUser().getEntity());
+        return tokenManager.findTokensForEntity(currentUser().entity());
     }
 
     @RequestMapping("/profile")
     public String openProfilePage(Model model) {
         User currentUser = userContext.getCurrentUser();
         model.addAttribute("editUser", new EditUserView(currentUser));
-        model.addAttribute("editEntity", new EditEntityView(currentUser.getEntity()));
+        model.addAttribute("editEntity", new EditEntityView(currentUser.entity()));
         return PageLinks.PROFILE.page();
     }
 
@@ -93,7 +93,7 @@ public class UserController extends AbstractController {
     @RequestMapping("/editentityview/name")
     @NavigateTo(PageLinks.PROFILE)
     public @ResponseBody ResponseHolder<Entity> editEntityName(@RequestParam("editentityview-name") String name) {
-        EditEntityView editEntity = new EditEntityView(userContext.getCurrentUser().getEntity());
+        EditEntityView editEntity = new EditEntityView(userContext.getCurrentUser().entity());
         editEntity.setName(name);
 
         return updateEntity(editEntity);

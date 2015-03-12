@@ -1,4 +1,4 @@
-package sur.snapps.budgetanalyzer.util;
+package sur.snapps.budgetanalyzer.business;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

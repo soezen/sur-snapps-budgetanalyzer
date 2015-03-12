@@ -70,6 +70,7 @@ $(document).ready(function() {
                                 td.find("i.fa." + iconClass + "-" + iconClassValue).removeClass(iconClass + "-" + iconClassValue + " " + iconClassValues[iconClassValue]);
                             }
                         }
+                        value = value.toString();
                         td.find("i.fa").addClass(iconClass + "-" + value.toLowerCase());
                         td.find("i.fa").addClass(iconClasses[iconClass][value.toLowerCase()]);
 
@@ -88,10 +89,15 @@ $(document).ready(function() {
         tokenstatus : {
             valid: 'fa-check',
             revoked: 'fa-times',
-            expired: 'fa-clock-o'
+            expired: 'fa-clock-o',
+            complete: 'fa-check'
         },
         eventtype : {
             user_invitation: 'fa-check'
+        },
+        boolean : {
+            true: 'fa-check-circle-o',
+            false: 'fa-circle-o'
         }
     };
 
@@ -106,12 +112,11 @@ $(document).ready(function() {
             } else {
                 $(this).hide();
             }
-            // TODO if type is icon, translate icon class to actual icon class
         });
 
         // find icon cells that need to be translated
         table.find("tbody").find("[data-type='icon']").each(function() {
-            var iconClass = this.dataset['iconClass'];
+            var iconClass = $(this).data('icon-class');
             var iconClassValues = iconClasses[iconClass];
             for (var value in iconClassValues) {
                 if (iconClassValues.hasOwnProperty(value)) {
@@ -121,6 +126,8 @@ $(document).ready(function() {
             }
         });
     };
+    // TODO BUG in dashboard event user invitation shows null after user has registered because token has been deleted.
+
 
     var functions = {};
     functions.column = function(row, params) {

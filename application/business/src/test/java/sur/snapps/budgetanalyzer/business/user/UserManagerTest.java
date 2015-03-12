@@ -9,17 +9,23 @@ import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.InjectIntoByType;
 import org.unitils.inject.annotation.TestedObject;
 import org.unitils.mock.annotation.Dummy;
+import sur.snapps.budgetanalyzer.business.exception.BusinessException;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.UserRepository;
-import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 
 import java.util.List;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.unitils.easymock.EasyMockUnitils.replay;
 import static sur.snapps.budgetanalyzer.business.user.EditUserViewMother.antonioBanderas;
 import static sur.snapps.budgetanalyzer.business.user.EditUserViewMother.michellePfeiffer;
@@ -64,15 +70,16 @@ public class UserManagerTest {
         assertNotNull(result);
         User userSaved = userCapture.getValue();
         assertNotNull(userSaved);
-        assertEquals(michelle.getUsername(), userSaved.getUsername());
-        assertEquals(michelle.getName(), userSaved.getName());
-        assertEquals(michelle.getEmail(), userSaved.getEmail().getAddress());
-        assertNotNull(userSaved.getPassword());
-        assertFalse(michelle.getNewPassword().equals(userSaved.getPassword()));
+        assertEquals(michelle.getUsername(), userSaved.username());
+        assertEquals(michelle.getName(), userSaved.name());
+        assertEquals(michelle.getEmail(), userSaved.email().address());
+        assertNotNull(userSaved.encryptedPassword());
+        assertFalse(michelle.getNewPassword().equals(userSaved.encryptedPassword()));
         Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-        assertTrue(passwordEncoder.isPasswordValid(userSaved.getPassword(), michelle.getNewPassword(), "BUDGET-ANALYZER"));
+        // TODO put in util class
+        assertTrue(passwordEncoder.isPasswordValid(userSaved.encryptedPassword(), michelle.getNewPassword(), "BUDGET-ANALYZER"));
 
-        Entity entity = userSaved.getEntity();
+        Entity entity = userSaved.entity();
         assertEquals(michelle.getName(), entity.getName());
         assertTrue(entity.isOwned());
         assertFalse(entity.isShared());
@@ -85,7 +92,7 @@ public class UserManagerTest {
         Token token = valid();
 
         expect(tokenManager.findTokenByValue(antonio.getTokenValue())).andReturn(token);
-        tokenManager.delete(token);
+        tokenManager.complete(token);
         expect(repository.save(capture(userCapture))).andReturn(user);
         replay();
 
@@ -96,14 +103,14 @@ public class UserManagerTest {
 
         User userSaved = userCapture.getValue();
         assertNotNull(userSaved);
-        assertEquals(antonio.getUsername(), userSaved.getUsername());
-        assertEquals(antonio.getName(), userSaved.getName());
-        assertEquals(antonio.getEmail(), userSaved.getEmail().getAddress());
-        assertNotNull(userSaved.getPassword());
-        assertFalse(antonio.getNewPassword().equals(userSaved.getPassword()));
+        assertEquals(antonio.getUsername(), userSaved.username());
+        assertEquals(antonio.getName(), userSaved.name());
+        assertEquals(antonio.getEmail(), userSaved.email().address());
+        assertNotNull(userSaved.encryptedPassword());
+        assertFalse(antonio.getNewPassword().equals(userSaved.encryptedPassword()));
         Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-        assertTrue(passwordEncoder.isPasswordValid(userSaved.getPassword(), antonio.getNewPassword(), "BUDGET-ANALYZER"));
-        assertSame(token.entity(), userSaved.getEntity());
+        assertTrue(passwordEncoder.isPasswordValid(userSaved.encryptedPassword(), antonio.getNewPassword(), "BUDGET-ANALYZER"));
+        assertSame(token.entity(), userSaved.entity());
     }
 
     @Test
@@ -144,27 +151,26 @@ public class UserManagerTest {
     @Test
     public void testUpdate() {
         EditUserView michelle = michellePfeiffer();
-        User updatedUser = new User();
+        User updatedUser = User.createUser().build();
 
         expect(repository.findByUsername(michelle.getUsername())).andReturn(updatedUser);
-        expect(repository.attach(updatedUser)).andReturn(user);
         replay();
 
         User result = manager.update(michelle);
 
-        assertSame(user, result);
-        assertEquals(michelle.getName(), updatedUser.getName());
-        assertEquals(michelle.getEmail(), updatedUser.getEmail().getAddress());
-        assertNotNull(updatedUser.getPassword());
-        assertNotEquals(michelle.getNewPassword(), updatedUser.getPassword());
+        assertSame(updatedUser, result);
+        assertEquals(michelle.getName(), updatedUser.name());
+        assertEquals(michelle.getEmail(), updatedUser.email().address());
+        assertNotNull(updatedUser.encryptedPassword());
+        assertNotEquals(michelle.getNewPassword(), updatedUser.encryptedPassword());
 
         Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-        assertTrue(passwordEncoder.isPasswordValid(updatedUser.getPassword(), michelle.getNewPassword(), "BUDGET-ANALYZER"));
+        assertTrue(passwordEncoder.isPasswordValid(updatedUser.encryptedPassword(), michelle.getNewPassword(), "BUDGET-ANALYZER"));
     }
 
     @Test
     public void testFindById() {
-        int id = 1;
+        String id = "1";
 
         expect(repository.findById(id)).andReturn(user);
         replay();
@@ -186,18 +192,14 @@ public class UserManagerTest {
 
     @Test
     public void testTransferAdminRole() {
-        int userId = 1;
+        String userId = "1";
         // TODO use UserMother
-        User newAdminUser = new User();
-        User oldAdminUser = new User();
-        oldAdminUser.addAuthority(User.ROLE_ADMIN);
+        User newAdminUser = User.createUser().build();
+        User oldAdminUser = User.createAdmin().build();
         assertTrue(oldAdminUser.isAdmin());
 
         expect(repository.findById(userId)).andReturn(newAdminUser);
         expect(repository.attach(oldAdminUser)).andReturn(oldAdminUser);
-        expect(repository.save(oldAdminUser)).andReturn(oldAdminUser);
-        expect(repository.save(newAdminUser)).andReturn(newAdminUser);
-        expect(repository.findById(oldAdminUser.getId())).andReturn(oldAdminUser);
         replay();
 
         User result = manager.transferAdminRole(oldAdminUser, userId);

@@ -14,8 +14,9 @@
         <c:set var="isEmail" value="${className eq 'sur.snapps.budgetanalyzer.domain.user.Email'}" />
         <c:set var="isTimestamp" value="${className eq 'java.sql.Timestamp'}" />
         <c:set var="isEnum" value="${sur_property.class.enum}" />
+        <c:set var="isBoolean" value="${className eq 'java.lang.Boolean'}" />
         <c:set var="iconClass" value="data-icon-class='${fn:toLowerCase(sur_property.class.simpleName)}'" />
-        <td data-type="${isDate ? 'date' : (isEmail ? 'email' : (isEnum ? 'icon' : ''))}" ${isEnum ? iconClass : ''}>
+        <td data-type="${isDate ? 'date' : (isEmail ? 'email' : (isEnum or isBoolean ? 'icon' : ''))}" ${isEnum or isBoolean ? iconClass : ''}>
             <c:choose>
                 <c:when test="${isDate}">
                     <fmt:formatDate value="${sur_property}" pattern="dd-MM-yyyy" />
@@ -24,7 +25,7 @@
                     <fmt:formatDate value="${sur_property}" pattern="dd-MM-yyyy HH:mm" />
                 </c:when>
                 <c:when test="${className eq 'java.lang.Boolean'}">
-                    <sur:check-icon value="${sur_property}" />
+                    <i class="fa boolean-${fn:toLowerCase(sur_property)}"></i>
                 </c:when>
                 <c:when test="${isEmail}">
                     <a href="<c:url value="mailto:${sur_property.address}" />">

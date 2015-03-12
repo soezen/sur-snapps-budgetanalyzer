@@ -31,7 +31,7 @@ public class TokenRepository {
         entityManager.remove(token);
     }
 
-    public Token findTokenById(int tokenId) {
+    public Token findTokenById(String tokenId) {
         return entityManager.find(Token.class, tokenId);
     }
 

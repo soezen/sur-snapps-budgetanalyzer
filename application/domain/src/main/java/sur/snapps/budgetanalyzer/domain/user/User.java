@@ -1,8 +1,9 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.hibernate.envers.Audited;
 import sur.snapps.budgetanalyzer.domain.BaseEntity;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.List;
 
+import static sur.snapps.budgetanalyzer.util.EncryptionUtil.encrypt;
+
 /**
  * User: SUR
  * Date: 6/04/14
@@ -23,6 +26,7 @@ import java.util.List;
  */
 @javax.persistence.Entity
 @Table(name = "USERS")
+@Audited
 public class User extends BaseEntity {
 
     public static final String ROLE_USER = "ROLE_USER";
@@ -48,83 +52,159 @@ public class User extends BaseEntity {
     @JoinColumn(name = "ENTITY_ID")
     private Entity entity;
 
+    // have protected constructor no-arg
+    // have private constructor builder
+
+    protected User() {}
+
+    private User(Builder builder) {
+        this.username = builder.username;
+        this.password = builder.encryptedPassword;
+        this.name = builder.name;
+        this.entity = builder.entity;
+        this.email = builder.email;
+        this.authorities = builder.authorities;
+        this.enabled = true;
+    }
+
     public boolean hasAccessTo(Token token) {
         return isAdmin()
             && token.entity().equals(entity);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Email getEmail() {
-        return email;
-    }
-
-    public void setEmail(Email email) {
-        this.email = email;
     }
 
     public boolean isAdmin() {
         return Iterables.contains(authorities, ROLE_ADMIN);
     }
 
-    public Entity getEntity() {
+    public static Builder createAdmin() {
+        return createUser()
+            .withAdminRole();
+    }
+
+    public static Builder createUser() {
+        return new Builder()
+            .withUserRole();
+    }
+
+    public void updateEmail(String email) {
+        this.email = Email.create(email);
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updatePassword(String password) {
+        if (password != null) {
+            this.password = encrypt(password);
+        }
+    }
+
+    public void transferAdminRoleTo(User newAdminUser) {
+        authorities.remove(User.ROLE_ADMIN);
+        newAdminUser.authorities.add(User.ROLE_ADMIN);
+    }
+
+    public static class Builder {
+        private String name;
+        private Email email;
+        private Entity entity;
+        private String username;
+        private String encryptedPassword;
+        private List<String> authorities = Lists.newArrayList();
+
+        public User build() {
+            User user = new User(this);
+            // TODO validate?
+            return user;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = Email.create(email);
+            return this;
+        }
+
+        public Builder entity(Entity entity) {
+            this.entity = entity;
+            return this;
+        }
+
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.encryptedPassword = encrypt(password);
+            return this;
+        }
+
+        private Builder withAdminRole() {
+            authorities.add(ROLE_ADMIN);
+            return this;
+        }
+
+        private Builder withUserRole() {
+            authorities.add(ROLE_USER);
+            return this;
+        }
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public Email email() {
+        return email;
+    }
+
+    public Entity entity() {
         return entity;
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
+    public String username() {
+        return username;
+    }
+
+    public String encryptedPassword() {
+        return password;
+    }
+
+    public boolean enabled() {
+        return enabled;
+    }
+
+    public List<String> authorities() {
+        return ImmutableList.copyOf(authorities);
+    }
+
+    /************************
+     * GETTERS FOR FRONTEND *
+     ************************/
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmailAddress() {
+        return email.address();
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public List<String> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(List<String> authorities) {
-        this.authorities = authorities;
-    }
-
-    public void addAuthority(String authority) {
-        authorities.add(authority);
-    }
-
-    public void removeAuthority(String authority) {
-        authorities.remove(authority);
-    }
-
-    public void encodePassword() {
-        Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-        String encodedPassword = passwordEncoder.encodePassword(password, "BUDGET-ANALYZER");
-        setPassword(encodedPassword);
     }
 
     @Override

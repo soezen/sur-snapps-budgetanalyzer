@@ -8,7 +8,6 @@ import org.unitils.UnitilsJUnit4TestClassRunner;
 import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.TestedObject;
 import org.unitils.mock.annotation.Dummy;
-import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 
 import static org.easymock.EasyMock.expect;
 import static org.unitils.easymock.EasyMockUnitils.replay;

@@ -24,13 +24,13 @@ public class EditUserView implements Serializable {
 
     public EditUserView(Token token) {
         this.tokenValue = token.value();
-        this.email = token.getEmail().getAddress();
+        this.email = token.getEmail().address();
     }
 
     public EditUserView(User user) {
-        this.username = user.getUsername();
-        this.name = user.getName();
-        this.email = user.getEmail().getAddress();
+        this.username = user.username();
+        this.name = user.name();
+        this.email = user.email().address();
     }
 
     public String getTokenValue() {

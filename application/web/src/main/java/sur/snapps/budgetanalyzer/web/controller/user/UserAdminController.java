@@ -10,19 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sur.snapps.budgetanalyzer.business.exception.BusinessException;
+import sur.snapps.budgetanalyzer.business.user.EditUserView;
 import sur.snapps.budgetanalyzer.business.user.TokenManager;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
-import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 import sur.snapps.budgetanalyzer.util.validators.EmailValidator;
-import sur.snapps.budgetanalyzer.web.response.ResponseHolder;
-import sur.snapps.budgetanalyzer.web.response.SuccessResponse;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
+import sur.snapps.budgetanalyzer.web.response.ResponseHolder;
+import sur.snapps.budgetanalyzer.web.response.SuccessResponse;
 import sur.snapps.budgetanalyzer.web.util.HttpServletRequestUtil;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * User: SUR
@@ -45,13 +48,13 @@ public class UserAdminController {
 
     @RequestMapping("/inviteUser")
     public String openInviteUserPage(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new EditUserView());
         return PageLinks.INVITE_USER.page();
     }
 
     @RequestMapping(value = "/postInviteUser", method = RequestMethod.POST)
     @NavigateTo(PageLinks.INVITE_USER)
-    public String inviteUser(HttpServletRequest request, User user, BindingResult bindingResult) {
+    public String inviteUser(HttpServletRequest request, EditUserView user, BindingResult bindingResult) {
         validateUserInvitation(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -64,12 +67,11 @@ public class UserAdminController {
         return PageLinks.PROFILE.redirect();
     }
 
-    private void validateUserInvitation(User user, Errors errors) {
+    private void validateUserInvitation(EditUserView user, Errors errors) {
         EmailValidator emailValidator = new EmailValidator();
-        if (user.getEmail() == null) {
+        if (isNullOrEmpty(user.getEmail())) {
             errors.rejectValue("email", "error.field.required");
-            // TODO do not use user object here
-        } else if (!emailValidator.validate(user.getEmail().getAddress())) {
+        } else if (!emailValidator.validate(user.getEmail())) {
             errors.rejectValue("email", "error.email.invalid");
         }
     }
@@ -90,7 +92,7 @@ public class UserAdminController {
     @NavigateTo(PageLinks.PROFILE)
     // TODO-FUNC UC-1 make javascript show error message (also use this for regular error messages)
     public @ResponseBody
-    ResponseHolder<Token> invitationAction(@PathVariable int tokenId, @RequestParam String action, HttpServletRequest request) {
+    ResponseHolder<Token> invitationAction(@PathVariable String tokenId, @RequestParam String action, HttpServletRequest request) {
         Token token = null;
         switch (action) {
             case "extend":
@@ -112,11 +114,11 @@ public class UserAdminController {
 
     @RequestMapping("/transfer_admin_role/{userId}")
     @NavigateTo(PageLinks.PROFILE)
-    public @ResponseBody ResponseHolder<User> transferAdminRole(@PathVariable int userId) {
+    public @ResponseBody ResponseHolder<User> transferAdminRole(@PathVariable String userId) {
         // TODO-FUNC UC-1 transfer admin role
         // TODO-BUG UC-1 logged in user (in context also needs to be updated)
         User user = userManager.transferAdminRole(userContext.getCurrentUser(), userId);
-        return new SuccessResponse<User>(user);
+        return new SuccessResponse<>(user);
     }
 }
 

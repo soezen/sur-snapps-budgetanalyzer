@@ -13,7 +13,7 @@
 <s:authorize ifAllGranted="ROLE_ADMIN">
     <c:set var="actionColumn" value="true" />
 </s:authorize>
-<sur:table id="users" columns="name,email,enabled,admin" actionColumn="${actionColumn}">
+<sur:table id="users" columns="name,emailAddress,enabled,admin" actionColumn="${actionColumn}">
     <c:forEach var="user" items="${users}">
         <c:if test="${user.username ne principal.username}">
             <sur:row value="${user}">

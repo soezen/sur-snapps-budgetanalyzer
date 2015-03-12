@@ -21,8 +21,8 @@
                             <c:set var="subjectValue" value="${event.subject.displayValue}" />
                         </c:if>
                         <fmt:message key="events.message.${fn:toLowerCase(event.type)}">
-                            <fmt:param value="${event.user.name}" />
-                            <fmt:param value="${event.user.entity.name}" />
+                            <fmt:param value="${event.user.name()}" />
+                            <fmt:param value="${event.user.entity().name}" />
                             <fmt:param value="${subjectValue}" />
                         </fmt:message>
                     </td>

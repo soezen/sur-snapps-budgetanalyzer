@@ -1,0 +1,8 @@
+<dataset>
+    <entities id="{entity_ba}" name="Bosco Albert Baracus" owned="true" shared="false" />
+    <users id="{user_ba}" username="ba" password="872fdc2a08772ba2c7c1cddd081bfd96" email="ba@a-team.com" name="Bosco Albert Baracus" enabled="true" entity_id="{entity_ba}" />
+    <authorities user_id="{user_ba}" authority="ROLE_ADMIN" />
+    <authorities user_id="{user_ba}" authority="ROLE_USER" />
+    <tokens />
+    <events />
+</dataset>

@@ -26,6 +26,7 @@ public class EventLoggerAspect {
 
     @AfterReturning(pointcut = "logEventForUserUpdates(user, logEvent)", returning = "subject", argNames = "user,logEvent,subject")
     public void logEvent(User user, LogEvent logEvent, BaseEntity subject) {
+        // TODO get user from spring security context?
         eventManager.create(user, subject, logEvent);
     }
 

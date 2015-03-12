@@ -3,6 +3,7 @@ package sur.snapps.budgetanalyzer.business.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.business.event.LogEvent;
+import sur.snapps.budgetanalyzer.business.exception.BusinessException;
 import sur.snapps.budgetanalyzer.business.mail.MailFactory;
 import sur.snapps.budgetanalyzer.business.mail.MailSender;
 import sur.snapps.budgetanalyzer.domain.event.EventType;
@@ -14,7 +15,6 @@ import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.TokenStatus;
 import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.TokenRepository;
-import sur.snapps.budgetanalyzer.util.exception.BusinessException;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class TokenManager {
     @Autowired
     private MailSender mailSender;
 
-    public Token findTokenById(int tokenId) {
+    public Token findTokenById(String tokenId) {
         return tokenRepository.findTokenById(tokenId);
     }
 
@@ -42,8 +42,9 @@ public class TokenManager {
         return tokenRepository.findTokenByValue(tokenValue);
     }
 
-    public void delete(Token token) {
-        tokenRepository.delete(token);
+    @Transactional
+    public void complete(Token token) {
+        token.complete();
     }
 
     public List<Token> findTokensForEntity(Entity entity) {
@@ -51,7 +52,7 @@ public class TokenManager {
     }
 
     @Transactional
-    public Token restore(User user, int tokenId, Url url) {
+    public Token restore(User user, String tokenId, Url url) {
         Token token = findTokenById(tokenId);
         checkUserAccess(user, token);
         checkTokenStatus(token, TokenStatus.VALID, false);
@@ -65,14 +66,14 @@ public class TokenManager {
                 .port(url.getServerPort())
                 .context(url.getContextPath())
                 .token(token.value())
-                .inviter(user.getName())
+                .inviter(user.name())
                 .to(token.getEmail());
         mailSender.send(userInvitationMail);
         return token;
     }
 
     @Transactional
-    public Token extend(User user, int tokenId) {
+    public Token extend(User user, String tokenId) {
         Token token = findTokenById(tokenId);
         checkUserAccess(user, token);
         checkTokenStatus(token, TokenStatus.VALID, true);
@@ -96,11 +97,12 @@ public class TokenManager {
 
     @Transactional
     @LogEvent(EventType.USER_INVITATION)
-    public Token create(User user, Email mail, Url url) {
+    public Token create(User user, String emailAddress, Url url) {
+        Email email = Email.create(emailAddress);
         Token token = Token.createUserInvitationToken()
                 .generateToken()
-                .entity(user.getEntity())
-                .email(mail)
+                .entity(user.entity())
+                .email(email)
                 .build();
         token = tokenRepository.save(token);
 
@@ -109,8 +111,8 @@ public class TokenManager {
                 .port(url.getServerPort())
                 .context(url.getContextPath())
                 .token(token.value())
-                .inviter(user.getName())
-                .to(mail);
+                .inviter(user.name())
+                .to(email);
         mailSender.send(userInvitationMail);
 
         // TODO-TECH add updated tms in db
@@ -119,7 +121,7 @@ public class TokenManager {
     }
 
     @Transactional
-    public Token resend(User user, int tokenId, Url url) {
+    public Token resend(User user, String tokenId, Url url) {
         Token token = findTokenById(tokenId);
         checkUserAccess(user, token);
         checkTokenStatus(token, TokenStatus.VALID, true);
@@ -129,14 +131,14 @@ public class TokenManager {
                 .port(url.getServerPort())
                 .context(url.getContextPath())
                 .token(token.value())
-                .inviter(user.getName())
+                .inviter(user.name())
                 .to(token.getEmail());
         mailSender.send(userInvitationMail);
         return token;
     }
 
     @Transactional
-    public Token revoke(User user, int tokenId) {
+    public Token revoke(User user, String tokenId) {
         Token token = findTokenById(tokenId);
         checkUserAccess(user, token);
         checkTokenStatus(token, TokenStatus.VALID, true);

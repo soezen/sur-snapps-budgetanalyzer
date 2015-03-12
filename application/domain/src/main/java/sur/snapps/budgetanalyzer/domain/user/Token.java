@@ -61,6 +61,10 @@ public class Token extends BaseEntity {
         this.expirationDate = new Date(DateUtil.addDays(expirationDate, days).getTime());
     }
 
+    public void complete() {
+        this.status = TokenStatus.COMPLETED;
+    }
+
     public void revoke() {
         this.status = TokenStatus.REVOKED;
     }
@@ -74,7 +78,7 @@ public class Token extends BaseEntity {
 
     @Override
     public String getDisplayValue() {
-        return email.getAddress();
+        return email.address();
     }
 
     public static class Builder {

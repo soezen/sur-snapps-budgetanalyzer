@@ -26,7 +26,7 @@ public class UserContext {
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        if (user != null && username.equalsIgnoreCase(user.getUsername())) {
+        if (user != null && username.equalsIgnoreCase(user.username())) {
             return user;
         }
         user = userManager.findByUsername(username);
