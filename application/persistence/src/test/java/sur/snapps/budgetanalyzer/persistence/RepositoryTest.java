@@ -28,8 +28,9 @@ import sur.snapps.jetta.database.script.Script;
 })
 @Transactional
 @ContextConfiguration({
-    "classpath*:db-config-test.xml",
-    "classpath*:persistence-config.xml"})
+    "classpath*:datasource-config-test.xml",
+    "classpath*:persistence-config.xml",
+    "classpath*:repository-config.xml"})
 @Script("initDB.sql")
 public abstract class RepositoryTest {
 

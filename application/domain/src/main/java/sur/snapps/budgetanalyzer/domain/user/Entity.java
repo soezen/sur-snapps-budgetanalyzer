@@ -1,7 +1,7 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
 import org.hibernate.envers.Audited;
-import sur.snapps.budgetanalyzer.domain.BaseEntity;
+import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 
 import javax.persistence.Table;
 import java.util.Objects;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @javax.persistence.Entity
 @Table(name = "ENTITIES")
 @Audited
-public class Entity extends BaseEntity {
+public class Entity extends BaseAuditedEntity {
 
     private String name;
 

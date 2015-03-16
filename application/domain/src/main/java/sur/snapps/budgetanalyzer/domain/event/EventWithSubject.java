@@ -1,6 +1,6 @@
 package sur.snapps.budgetanalyzer.domain.event;
 
-import sur.snapps.budgetanalyzer.domain.BaseEntity;
+import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 
 import javax.persistence.Transient;
 
@@ -9,7 +9,7 @@ import javax.persistence.Transient;
  * Date: 19/10/14
  * Time: 17:12
  */
-public class EventWithSubject<T extends BaseEntity> extends Event {
+public class EventWithSubject<T extends BaseAuditedEntity> extends Event {
 
     @Transient
     private T subject;

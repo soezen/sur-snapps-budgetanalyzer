@@ -4,15 +4,13 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import sur.snapps.budgetanalyzer.business.user.EntityManager;
-import sur.snapps.budgetanalyzer.business.user.TokenManager;
-import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.BaseEntity;
 import sur.snapps.budgetanalyzer.domain.event.Event;
 import sur.snapps.budgetanalyzer.domain.event.EventWithSubject;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
+import sur.snapps.budgetanalyzer.persistence.HistoryRepository;
 import sur.snapps.budgetanalyzer.persistence.event.EventRepository;
 import sur.snapps.budgetanalyzer.util.DateUtil;
 
@@ -31,26 +29,24 @@ public class EventManager {
     private EventRepository eventRepository;
 
     @Autowired
-    private UserManager userManager;
-
-    @Autowired
-    private TokenManager tokenManager;
-
-    @Autowired
-    private EntityManager entityManager;
+    private HistoryRepository historyRepository;
 
     @Transactional
     public void create(User user, BaseEntity subject, LogEvent logEvent) {
         Event event = new Event();
         event.setTms(DateUtil.now());
         event.setType(logEvent.value());
+        if (user == null) {
+            user = (User) subject;
+        }
         event.setUser(user);
         event.setSubjectId(subject == null ? null : subject.getId());
         eventRepository.save(event);
     }
 
-    public List<Event> findFor(final Entity entity) {
-        List<Event> events = eventRepository.findFor(entity);
+    @Transactional
+    public List<Event> findFor(final Entity entity, int pageIndex, int pageSize) {
+        List<Event> events = eventRepository.findFor(entity, pageIndex, pageSize);
         return FluentIterable.from(events)
             .transform(ENHANCE_EVENT_WITH_SUBJECT)
             .toSortedList(BY_EVENT_TMS)
@@ -62,13 +58,17 @@ public class EventManager {
         public Event apply(Event originalEvent) {
             switch (originalEvent.getType()) {
                 case ADMIN_TRANSFER:
-                    User newAdmin = userManager.findById(originalEvent.getSubjectId());
+                case USER_REGISTRATION:
+                    User newAdmin = historyRepository.find(User.class, originalEvent.getSubjectId(), originalEvent.getTms());
                     return new EventWithSubject<>(originalEvent, newAdmin);
                 case USER_INVITATION:
-                    Token userInvitation = tokenManager.findTokenById(originalEvent.getSubjectId());
-                    return new EventWithSubject<>(originalEvent, userInvitation);
+                    Token token = historyRepository.find(Token.class, originalEvent.getSubjectId(), originalEvent.getTms());
+                    if (token != null) {
+                        return new EventWithSubject<>(originalEvent, token);
+                    }
+                    return originalEvent;
                 case ENTITY_UPDATE:
-                    Entity entity = entityManager.findById(originalEvent.getSubjectId());
+                    Entity entity = historyRepository.find(Entity.class, originalEvent.getSubjectId(), originalEvent.getTms());
                     return new EventWithSubject<>(originalEvent, entity);
                 default:
                     return originalEvent;
@@ -76,8 +76,6 @@ public class EventManager {
         }
     };
 
-    // TODO keep history (so that dashboard events remain unchanged when entities do)
-    // history tables
-    //      event.subject_id is enhanced with row of history table where id=id and date in between start and end-date
+    // TODO event subject is required and thus subclass can be merged with class
 
 }

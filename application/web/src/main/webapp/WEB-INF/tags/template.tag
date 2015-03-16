@@ -65,7 +65,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         </div>
         <div id="content-container">
             <div class="wrapper" data-alert="catch">
-                <!-- TODO style confirmation and error messages -->
                 <c:if test="${not empty success}">
                     <div id="form_response" class="alert alert-success">
                         <fmt:message key="${success_message}" />

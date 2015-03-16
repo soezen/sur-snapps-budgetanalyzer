@@ -33,7 +33,7 @@ public class EventRepository {
         return event;
     }
 
-    public List<Event> findFor(Entity entity) {
+    public List<Event> findFor(Entity entity, int pageIndex, int pageSize) {
         // TODO-TECH only fetch first X results (or the next page, ...)
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> cq = cb.createQuery(Event.class);
@@ -49,6 +49,9 @@ public class EventRepository {
         userSubQuery.where(userCondition);
         cq.where(eventRoot.get("user").in(userSubQuery));
 
-        return entityManager.createQuery(cq).getResultList();
+        return entityManager.createQuery(cq)
+            .setFirstResult(pageIndex * pageSize)
+            .setMaxResults(pageSize)
+            .getResultList();
     }
 }

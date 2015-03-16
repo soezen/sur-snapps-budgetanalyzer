@@ -48,8 +48,10 @@ public class EventRepositoryTest extends RepositoryTest {
     @Test
     @DataSet(type = Event.class)
     public void findForEntity() throws Exception {
-        List<Event> events = repository.findFor(theSimpsons);
+        List<Event> events = repository.findFor(theSimpsons, 0, 10);
         assertEquals(1, events.size());
         assertEquals("USER_REGISTRATION_HOMER", events.get(0).getId());
     }
+
+    // TODO test pagination of findFor
 }

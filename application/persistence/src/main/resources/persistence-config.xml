@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+ 	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<!--  Enable @Autowired and @PersistenceContext -->
-	<context:annotation-config />
+	<!-- Translates ORM exceptions to Spring Data Access Exceptions -->
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
-    <bean id="userRepository" class="sur.snapps.budgetanalyzer.persistence.user.UserRepository" />
-    <bean id="tokenRepository" class="sur.snapps.budgetanalyzer.persistence.user.TokenRepository" />
-    <bean id="entityRepository" class="sur.snapps.budgetanalyzer.persistence.user.EntityRepository" />
-    <bean id="eventRepository" class="sur.snapps.budgetanalyzer.persistence.event.EventRepository" />
+    <!-- A transaction manager for working with JPA Entity Managers -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+
+    <!-- TODO-TECH selenium tests are being run twice within one jenkins build (other tests too i guess) -->
+    <!-- TODO-TECH verify on jenkins that this is fixed -->
+
+    <!-- TODO check out cucumber -->
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="packagesToScan" value="sur.snapps.budgetanalyzer.domain" />
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+                <prop key="org.hibernate.envers.audit_table_prefix">H_</prop>
+                <prop key="org.hibernate.envers.audit_table_suffix"></prop>
+                <!--<prop key="org.hibernate.envers.audit_strategy">org.hibernate.envers.strategy.ValidityAuditStrategy</prop>-->
+
+            </props>
+        </property>
+        <property name="dataSource" ref="dataSource" />
+    </bean>
 
 </beans>

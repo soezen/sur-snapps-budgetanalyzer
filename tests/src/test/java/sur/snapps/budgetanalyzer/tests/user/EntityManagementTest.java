@@ -7,6 +7,7 @@ import sur.snapps.budgetanalyzer.tests.pages.user.ProfilePage;
 import sur.snapps.jetta.database.counter.RecordCounter;
 import sur.snapps.jetta.database.counter.table.Table;
 import sur.snapps.jetta.database.script.Script;
+import sur.snapps.jetta.database.script.ScriptStrategy;
 import sur.snapps.jetta.metadata.annotations.Scenario;
 import sur.snapps.jetta.metadata.annotations.UseCase;
 import sur.snapps.jetta.metadata.xml.FailureImpact;
@@ -31,7 +32,7 @@ import static sur.snapps.jetta.database.counter.expression.operation.Operations.
  * Time: 15:35
  */
 @SeleniumTestCase("04 - Manage Entity")
-@Script("users.sql")
+@Script(value = "users.sql", strategy = ScriptStrategy.CREATE_FIRST)
 @UseCase("Manage Entity")
 public class EntityManagementTest extends AbstractSeleniumTest {
 

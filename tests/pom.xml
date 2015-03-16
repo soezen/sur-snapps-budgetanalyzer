@@ -10,8 +10,8 @@
     <artifactId>budgetanalyzer-tests</artifactId>
 
     <properties>
-        <selenium.version>2.43.0</selenium.version>
-        <jetta-version>0.0.3-SNAPSHOT</jetta-version>
+        <selenium.version>2.42.2</selenium.version>
+        <jetta-version>0.0.7-SNAPSHOT</jetta-version>
     </properties>
 
     <dependencies>
@@ -21,12 +21,12 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.saucelabs</groupId>
-            <artifactId>sauce_junit</artifactId>
-            <version>2.1.1</version>
-            <scope>test</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.saucelabs</groupId>-->
+            <!--<artifactId>sauce_junit</artifactId>-->
+            <!--<version>2.1.1</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -74,22 +74,19 @@
             <artifactId>unitils-core</artifactId>
             <version>3.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.2.8</version>
+        </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>Sauce Maven Repository</id>
-            <url>https://repository-saucelabs.forge.cloudbees.com/release</url>
-        </repository>
-        <repository>
-            <id>snapps-release-repository</id>
-            <url>https://repository-snapps.forge.cloudbees.com/release/</url>
-        </repository>
-        <repository>
-            <id>snapps-snapshot-repository</id>
-            <url>https://repository-snapps.forge.cloudbees.com/snapshot/</url>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>Sauce Maven Repository</id>-->
+            <!--<url>https://repository-saucelabs.forge.cloudbees.com/release</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
     <profiles>
         <profile>
@@ -109,15 +106,20 @@
             </build>
             <dependencies>
                 <dependency>
-                    <groupId>com.oracle</groupId>
-                    <artifactId>ojdbc6</artifactId>
-                    <version>11.2.0</version>
+                    <groupId>org.hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                    <version>2.2.8</version>
                 </dependency>
-                <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>5.1.15</version>
-                </dependency>
+                <!--<dependency>-->
+                    <!--<groupId>com.oracle</groupId>-->
+                    <!--<artifactId>ojdbc6</artifactId>-->
+                    <!--<version>11.2.0.4.0</version>-->
+                <!--</dependency>-->
+                <!--<dependency>-->
+                    <!--<groupId>mysql</groupId>-->
+                    <!--<artifactId>mysql-connector-java</artifactId>-->
+                    <!--<version>5.1.15</version>-->
+                <!--</dependency>-->
             </dependencies>
         </profile>
 
@@ -137,7 +139,7 @@
                 <dependency>
                     <groupId>com.oracle</groupId>
                     <artifactId>ojdbc6</artifactId>
-                    <version>11.2.0</version>
+                    <version>11.2.0.4.0</version>
                 </dependency>
                 <!-- 
                 <dependency>

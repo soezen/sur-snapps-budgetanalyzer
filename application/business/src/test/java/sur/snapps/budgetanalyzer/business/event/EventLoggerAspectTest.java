@@ -36,6 +36,6 @@ public class EventLoggerAspectTest {
         manager.create(user, null, logEvent);
         replay();
 
-        logger.logEvent(user, logEvent, null);
+        logger.logEvent(logEvent, null);
     }
 }

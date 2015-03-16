@@ -37,56 +37,11 @@
         <dependency><groupId>org.springframework</groupId><artifactId>spring-webmvc</artifactId></dependency>
         <dependency><groupId>org.springframework</groupId><artifactId>spring-orm</artifactId></dependency>
         <dependency><groupId>org.springframework</groupId><artifactId>spring-aop</artifactId></dependency>
+        <dependency><groupId>org.springframework.security</groupId><artifactId>spring-security-config</artifactId></dependency>
+        <dependency><groupId>org.springframework.security</groupId><artifactId>spring-security-taglibs</artifactId></dependency>
+        <dependency><groupId>org.springframework.security</groupId><artifactId>spring-security-web</artifactId></dependency>
 
-
-        <!-- Spring Security -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>${spring.security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>${spring.security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-            <version>${spring.security.version}</version>
-        </dependency>
-
-        <!-- Servlet -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-        <!-- Taglibs -->
-        <dependency>
-            <groupId>taglibs</groupId>
-            <artifactId>standard</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.9</version>
-        </dependency>
+        <dependency><groupId>taglibs</groupId><artifactId>standard</artifactId></dependency>
     </dependencies>
 
     <profiles>
@@ -98,6 +53,13 @@
             <properties>
                 <webXmlPath>src/env/local/web.xml</webXmlPath>
             </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
         </profile>
         <profile>
             <id>cloudbees</id>

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.hibernate.envers.Audited;
-import sur.snapps.budgetanalyzer.domain.BaseEntity;
+import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -27,7 +27,7 @@ import static sur.snapps.budgetanalyzer.util.EncryptionUtil.encrypt;
 @javax.persistence.Entity
 @Table(name = "USERS")
 @Audited
-public class User extends BaseEntity {
+public class User extends BaseAuditedEntity {
 
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
@@ -201,6 +201,10 @@ public class User extends BaseEntity {
 
     public String getPassword() {
         return password;
+    }
+
+    public Entity getEntity() {
+        return entity;
     }
 
     public boolean isEnabled() {

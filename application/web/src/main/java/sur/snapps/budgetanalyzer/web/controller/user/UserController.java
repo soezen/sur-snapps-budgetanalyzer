@@ -57,7 +57,7 @@ public class UserController extends AbstractController {
 
     @RequestMapping("/dashboard")
     public String openUserDashboard(Model model) {
-        model.addAttribute("events", eventManager.findFor(userContext.getCurrentUser().entity()));
+        model.addAttribute("events", eventManager.findFor(userContext.getCurrentUser().entity(), 0, 10));
         return PageLinks.DASHBOARD.page();
     }
 
@@ -164,7 +164,7 @@ public class UserController extends AbstractController {
 
         // TODO events overview (choose icons or show text)
         // TODO make invite new user a popup
-        Entity updatedEntity = entityManager.update(userContext.getCurrentUser(), editEntity);
+        Entity updatedEntity = entityManager.update(editEntity);
         userContext.reset();
         return new SuccessResponse<>(updatedEntity);
     }

@@ -75,6 +75,8 @@ public class UserManagerTest {
         assertEquals(michelle.getEmail(), userSaved.email().address());
         assertNotNull(userSaved.encryptedPassword());
         assertFalse(michelle.getNewPassword().equals(userSaved.encryptedPassword()));
+        // TODO move spring security dependency out of domain and into business
+        // this means that the encryption of password is done in the business layer
         Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
         // TODO put in util class
         assertTrue(passwordEncoder.isPasswordValid(userSaved.encryptedPassword(), michelle.getNewPassword(), "BUDGET-ANALYZER"));
@@ -92,7 +94,7 @@ public class UserManagerTest {
         Token token = valid();
 
         expect(tokenManager.findTokenByValue(antonio.getTokenValue())).andReturn(token);
-        tokenManager.complete(token);
+        tokenManager.delete(token);
         expect(repository.save(capture(userCapture))).andReturn(user);
         replay();
 

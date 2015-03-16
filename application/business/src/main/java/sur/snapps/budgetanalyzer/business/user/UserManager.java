@@ -30,6 +30,8 @@ public class UserManager {
         User.Builder userBuilder;
         String tokenValue = inputUser.getTokenValue();
         if (tokenValue == null) {
+            // TODO see if it is possible to change text from 'X joined entity X' to 'new user and entity X created'
+            // for this the methods will have to be separated in manager and thus the if statement will have to happen in the front-end
             userBuilder = User.createAdmin()
                 .entity(Entity.newOwnedEntity().name(inputUser.getName()).build());
         } else {
@@ -39,7 +41,7 @@ public class UserManager {
             }
             userBuilder = User.createUser()
                 .entity(token.entity());
-            tokenManager.complete(token);
+            tokenManager.delete(token);
         }
         User user = userBuilder
             .username(inputUser.getUsername())
@@ -78,8 +80,7 @@ public class UserManager {
         return userRepository.findByUsername(username);
     }
 
-    // TODO-FUNC UC-1 when refreshing table with ajax booleans are no longer icons
-    // TODO-FUNC UC-1 order user dashboard events by time (most recent on top)
+    // TODO-FUNC UC-1 pagination for dashboard events, only fetch first X events from db
     // TODO-FUNC UC-1 confirmation popup when transferring admin role
 
     @Transactional

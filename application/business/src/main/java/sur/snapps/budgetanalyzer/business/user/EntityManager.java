@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.business.event.LogEvent;
 import sur.snapps.budgetanalyzer.domain.event.EventType;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
-import sur.snapps.budgetanalyzer.domain.user.User;
 import sur.snapps.budgetanalyzer.persistence.user.EntityRepository;
 
 /**
@@ -20,14 +19,17 @@ public class EntityManager {
 
     @Transactional
     @LogEvent(EventType.ENTITY_UPDATE)
-    // TODO remove user argument
-    public Entity update(User user, EditEntityView entity) {
+    public Entity update(EditEntityView entity) {
         Entity managedEntity = entityRepository.findById(entity.getId());
         managedEntity.updateName(entity.getName());
-        return entityRepository.attach(managedEntity);
+        return managedEntity;
     }
 
-    public Entity findById(String id) {
-        return entityRepository.findById(id);
-    }
 }
+
+// TODO after updating entity name, table header still has old entity name
+
+// TODO jquery or browser or server keeps cache of ajax request, when doing same request twice, update is not done in db
+
+// TODO tab in browser first goes to submit button and only then to cancel
+// TODO tab does not enter read only fields

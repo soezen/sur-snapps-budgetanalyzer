@@ -43,8 +43,8 @@ public class TokenManager {
     }
 
     @Transactional
-    public void complete(Token token) {
-        token.complete();
+    public void delete(Token token) {
+        tokenRepository.delete(token);
     }
 
     public List<Token> findTokensForEntity(Entity entity) {
@@ -116,7 +116,6 @@ public class TokenManager {
         mailSender.send(userInvitationMail);
 
         // TODO-TECH add updated tms in db
-        // TODO-TECH add version in db
         return token;
     }
 

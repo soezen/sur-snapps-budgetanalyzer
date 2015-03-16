@@ -1,6 +1,7 @@
 package sur.snapps.budgetanalyzer.domain.user;
 
-import sur.snapps.budgetanalyzer.domain.BaseEntity;
+import org.hibernate.envers.Audited;
+import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 import sur.snapps.budgetanalyzer.util.DateUtil;
 
 import javax.persistence.Column;
@@ -20,7 +21,8 @@ import java.util.UUID;
  */
 @javax.persistence.Entity
 @Table(name = "TOKENS")
-public class Token extends BaseEntity {
+@Audited
+public class Token extends BaseAuditedEntity {
 
     @Column(nullable = false)
     private String value;

@@ -48,7 +48,6 @@ $(document).ready(function() {
                 }, 1000);
                 var header = $(row).parentsUntil("table").siblings("thead");
 
-                // TODO-BUG UC-1 boolean values are no longer check-icon
                 var columns = header.find("th[data-column]");
                 columns.each(function() {
                     var columnName = $(this).data("column");
@@ -126,8 +125,6 @@ $(document).ready(function() {
             }
         });
     };
-    // TODO BUG in dashboard event user invitation shows null after user has registered because token has been deleted.
-
 
     var functions = {};
     functions.column = function(row, params) {

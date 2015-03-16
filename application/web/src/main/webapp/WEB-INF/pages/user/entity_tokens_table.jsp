@@ -41,6 +41,5 @@
             </td>
         </t:row>
     </c:forEach>
-    <!-- TODO-BUG ajax update rows does not use icons!!!! -->
 </t:table>
 

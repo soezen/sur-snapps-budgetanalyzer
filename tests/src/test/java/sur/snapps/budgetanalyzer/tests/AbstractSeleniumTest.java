@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.Wait;
 import sur.snapps.budgetanalyzer.tests.pages.DashboardPage;
 import sur.snapps.budgetanalyzer.tests.pages.LoginPage;
 import sur.snapps.budgetanalyzer.tests.pages.Menu;
-import sur.snapps.jetta.database.DatabaseTestRule;
+import sur.snapps.jetta.database.JettaDatabaseRule;
 import sur.snapps.jetta.metadata.MetaDataTestRule;
 import sur.snapps.jetta.metadata.MetaDataTestRunner;
 import sur.snapps.jetta.selenium.SauceTestWatcher;
@@ -39,7 +39,7 @@ public abstract class AbstractSeleniumTest implements SauceOnDemandSessionIdProv
     public SeleniumTestRule seleniumTestRule = new SeleniumTestRule(this);
 
     @Rule
-    public DatabaseTestRule databaseTestRule = new DatabaseTestRule(this);
+    public JettaDatabaseRule databaseTestRule = new JettaDatabaseRule(this);
 
     @Rule
     public MetaDataTestRule metaDataTestRule = new MetaDataTestRule(this);

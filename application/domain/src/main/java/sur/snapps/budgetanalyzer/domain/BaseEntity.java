@@ -17,8 +17,6 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
-    // TODO-TECH also use uid as generated keys? see mail (gmail) sent on 17/06/2014
-
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")

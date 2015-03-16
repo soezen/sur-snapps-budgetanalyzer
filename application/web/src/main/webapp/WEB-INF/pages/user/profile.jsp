@@ -58,10 +58,18 @@
                     </c:if>
                 </jsp:attribute>
                 <jsp:body>
-                    <sur-form:form-property name="entity" property="${user.entity()}" edit_property="${editEntity}" />
-                    <sur-form:form-edit-group path="name" />
+                    <sur-form:form-property name="entity" property="${user.entity}" edit_property="${editEntity}" />
+                    <c:choose>
+                        <c:when test="${user.admin}">
+                            <sur-form:form-edit-group path="name" />
+                        </c:when>
+                        <c:otherwise>
+                            <sur-form:form-property-output path="name" />
+                        </c:otherwise>
+                    </c:choose>
                 </jsp:body>
             </sur-form:form-fieldset>
+            <!-- TODO don't show empty tables -->
         </div>
         <!-- TODO-FUNC UC-1 in popup and make user confirm, add help text so user knows what the action implies -->
 

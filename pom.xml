@@ -45,16 +45,6 @@
          <developerConnection>scm:git:ssh://git@git.cloudbees.com/snapps/budgetanalyzer.git</developerConnection>
          <tag>HEAD</tag>
     </scm>
-    <distributionManagement>
-        <repository>
-            <id>snapps-release</id>
-            <url>git:https://repository-snapps.forge.cloudbees.com/release/</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapps-snapshot</id>
-            <url>git:https://repository-snapps.forge.cloudbees.com/snapshot/</url>
-        </snapshotRepository>
-    </distributionManagement>
     <developers>
         <developer>
             <id>1</id>

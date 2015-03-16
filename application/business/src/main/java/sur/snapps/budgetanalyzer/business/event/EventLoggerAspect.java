@@ -4,6 +4,8 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import sur.snapps.budgetanalyzer.business.user.UserManager;
 import sur.snapps.budgetanalyzer.domain.BaseEntity;
 import sur.snapps.budgetanalyzer.domain.user.User;
 
@@ -18,21 +20,16 @@ public class EventLoggerAspect {
     @Autowired
     private EventManager eventManager;
 
-    @Pointcut("execution(* sur.snapps.budgetanalyzer.business..*.*(..)) && args(user,..) && @annotation(logEvent)")
-    private void logEventForUserUpdates(User user, LogEvent logEvent) {}
+    @Autowired
+    private UserManager userManager;
 
     @Pointcut("execution(* sur.snapps.budgetanalyzer.business..*.*(..)) && args(..) && @annotation(logEvent)")
-    private void logEventForUserReturned(LogEvent logEvent) {}
+    private void logEventForUserUpdates(LogEvent logEvent) {}
 
-    @AfterReturning(pointcut = "logEventForUserUpdates(user, logEvent)", returning = "subject", argNames = "user,logEvent,subject")
-    public void logEvent(User user, LogEvent logEvent, BaseEntity subject) {
-        // TODO get user from spring security context?
+    @AfterReturning(pointcut = "logEventForUserUpdates(logEvent)", returning = "subject", argNames = "logEvent,subject")
+    public void logEvent(LogEvent logEvent, BaseEntity subject) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userManager.findByUsername(username);
         eventManager.create(user, subject, logEvent);
     }
-
-    @AfterReturning(pointcut = "logEventForUserReturned(logEvent) && !execution(* sur.snapps.budgetanalyzer.business..*.*(sur.snapps.budgetanalyzer.domain.user.User,..))", returning = "user", argNames = "user,logEvent" )
-    public void logEventWhenReturningUser(User user, LogEvent logEvent) {
-        eventManager.create(user, null, logEvent);
-    }
-
 }

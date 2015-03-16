@@ -29,10 +29,10 @@
         <dependency><groupId>org.springframework</groupId><artifactId>spring-orm</artifactId></dependency>
 
         <dependency><groupId>org.hibernate</groupId><artifactId>hibernate-envers</artifactId></dependency>
-        <!-- TODO only load this dependency when running locally -->
-        <dependency><groupId>org.hsqldb</groupId><artifactId>hsqldb</artifactId></dependency>
 
+        <!-- TEST -->
         <dependency><groupId>sur.snapps.jetta</groupId><artifactId>jetta-data</artifactId></dependency>
+        <dependency><groupId>org.hsqldb</groupId><artifactId>hsqldb</artifactId></dependency>
     </dependencies>
 
     <build>

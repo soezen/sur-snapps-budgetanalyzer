@@ -133,11 +133,11 @@ public class TokenManagerTest {
     // TODO after transferring admin role, logout user or refresh entire page, or something
 
     @Test
-    public void testComplete() {
+    public void testDelete() {
         token.complete();
         replay();
 
-        manager.complete(token);
+        manager.delete(token);
 
     }
 
