@@ -38,9 +38,15 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                         <ul>
                             <s:authorize ifAllGranted="ROLE_USER">
                                 <li>
-                                    <a id="menu_dashboard" href="<c:url value="/budgetanalyzer/user/dashboard" />"><fmt:message key="menu.dashboard" /></a>
+                                    <a id="menu_dashboard" href="<c:url value="/budgetanalyzer/user/dashboard" />">
+                                        <fmt:message key="menu.dashboard" />
+                                    </a>
                                 </li>
-                                <li>Accounts</li>
+                                <li>
+                                    <a id="menu_accounts" href="<c:url value="/budgetanalyzer/accounts/overview" />">
+                                        <fmt:message key="menu.accounts" />
+                                    </a>
+                                </li>
                                 <li>Budgets</li>
                                 <li>Products</li>
                             </s:authorize>
@@ -48,7 +54,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                     </nav>
                     <s:authorize ifAllGranted="ROLE_USER">
                         <fmt:message key="menu.logged_in.text">
-                            <fmt:param value="${principal.username}" />
+                            <fmt:param value="${user.name}" />
                         </fmt:message>
                         (<a id="menu_profile" href="<c:url value="/budgetanalyzer/user/profile" />"><fmt:message key="menu.profile" /></a>
                         |

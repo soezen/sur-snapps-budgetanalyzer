@@ -75,7 +75,6 @@ public class UserRegistrationController extends AbstractController {
         validateUserRegistrationInput(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-//            return PageLinks.USER_REGISTRATION.page();
             throw new BusinessException("form.errors.validation");
         }
 

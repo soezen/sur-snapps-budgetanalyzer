@@ -11,6 +11,9 @@
     <bean id="userRepository" class="sur.snapps.budgetanalyzer.persistence.user.UserRepository" />
     <bean id="tokenRepository" class="sur.snapps.budgetanalyzer.persistence.user.TokenRepository" />
     <bean id="entityRepository" class="sur.snapps.budgetanalyzer.persistence.user.EntityRepository" />
+
+    <bean id="accountRepository" class="sur.snapps.budgetanalyzer.persistence.account.AccountRepository" />
+
     <bean id="eventRepository" class="sur.snapps.budgetanalyzer.persistence.event.EventRepository" />
     <bean id="historyRepository" class="sur.snapps.budgetanalyzer.persistence.HistoryRepository" />
 

@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import sur.snapps.budgetanalyzer.business.user.UserManager;
+import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.User;
 
 /**
@@ -31,6 +32,13 @@ public class UserContext {
         }
         user = userManager.findByUsername(username);
         return user;
+    }
+
+    public Entity getCurrentEntity() {
+        if (user == null) {
+            getCurrentUser();
+        }
+        return user == null ? null : user.entity();
     }
 
     public String getUsername() {

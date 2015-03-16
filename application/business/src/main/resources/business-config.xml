@@ -31,6 +31,7 @@
     <bean id="userManager" class="sur.snapps.budgetanalyzer.business.user.UserManager" />
     <bean id="tokenManager" class="sur.snapps.budgetanalyzer.business.user.TokenManager" />
     <bean id="entityManager" class="sur.snapps.budgetanalyzer.business.user.EntityManager" />
+    <bean id="accountManager" class="sur.snapps.budgetanalyzer.business.account.AccountManager" />
     <bean id="eventManager" class="sur.snapps.budgetanalyzer.business.event.EventManager" />
 
     <bean id="mailFactory" class="sur.snapps.budgetanalyzer.business.mail.MailFactory" />

@@ -47,8 +47,6 @@ public class UserController extends AbstractController {
     @Autowired
     private EntityManager entityManager;
 
-    @Autowired
-    private UserContext userContext;
 
     @Autowired
     private UserValidator userValidator;
@@ -59,11 +57,6 @@ public class UserController extends AbstractController {
     public String openUserDashboard(Model model) {
         model.addAttribute("events", eventManager.findFor(userContext.getCurrentUser().entity(), 0, 10));
         return PageLinks.DASHBOARD.page();
-    }
-
-    @ModelAttribute("user")
-    public User currentUser() {
-        return userContext.getCurrentUser();
     }
 
     @ModelAttribute("users")

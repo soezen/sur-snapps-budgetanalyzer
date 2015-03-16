@@ -20,7 +20,10 @@ public enum PageLinks {
     DASHBOARD("user/dashboard", "user/dashboard"),
 
     PROFILE("user/profile", "user/profile"),
-    INVITE_USER("user/admin/user_invitation", "user/admin/inviteUser");
+    INVITE_USER("user/admin/user_invitation", "user/admin/inviteUser"),
+
+    ACCOUNTS_OVERVIEW("accounts/overview", "accounts/overview"),
+    ACCOUNTS_CREATE("accounts/create", "accounts/create");
 
     private static final String REDIRECT = "redirect:";
     private static final String CONTEXT = "/budgetanalyzer/";

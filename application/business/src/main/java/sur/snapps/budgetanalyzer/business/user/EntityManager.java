@@ -25,6 +25,10 @@ public class EntityManager {
         return managedEntity;
     }
 
+    public Entity findById(String id) {
+        return entityRepository.findById(id);
+    }
+
 }
 
 // TODO after updating entity name, table header still has old entity name
