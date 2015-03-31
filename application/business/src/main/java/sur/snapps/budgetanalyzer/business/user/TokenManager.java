@@ -78,6 +78,7 @@ public class TokenManager {
         checkUserAccess(user, token);
         checkTokenStatus(token, TokenStatus.VALID, true);
 
+        // TODO use parameters in webapp that are manageable by ???
         token.extendWithDays(5);
         return tokenRepository.save(token);
     }

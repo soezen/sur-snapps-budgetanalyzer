@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import sur.snapps.budgetanalyzer.business.account.AccountManager;
 import sur.snapps.budgetanalyzer.business.account.EditAccountView;
 import sur.snapps.budgetanalyzer.business.exception.BusinessException;
-import sur.snapps.budgetanalyzer.web.controller.AbstractController;
+import sur.snapps.budgetanalyzer.web.controller.AbstractLoggedInController;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
@@ -23,13 +23,18 @@ import javax.validation.Valid;
  */
 @Controller
 @RequestMapping("/accounts")
-public class AccountController extends AbstractController {
+public class AccountController extends AbstractLoggedInController {
 
     @Autowired
     private AccountManager accountManager;
 
     @Autowired
     private AccountValidator accountValidator;
+
+    @Override
+    public String activePage() {
+        return "accounts";
+    }
 
     // TODO link account to user instead of entity
     // owner and admin can modify accounts
@@ -42,6 +47,9 @@ public class AccountController extends AbstractController {
         model.addAttribute("accounts", accountManager.findFor(userContext.getCurrentEntity()));
         return PageLinks.ACCOUNTS_OVERVIEW.page();
     }
+
+    // TODO make response so it can be easily used in smartphone
+    // TODO look at loading times of pages
 
     @RequestMapping("/create")
     public String openCreateAccountPage(Model model) {
@@ -58,7 +66,7 @@ public class AccountController extends AbstractController {
             throw new BusinessException("form.errors.validation");
         }
 
-        account.setOwnerId(userContext.getCurrentUser().getId());
+        account.setOwnerId(currentUser().getId());
         accountManager.create(account);
         return PageLinks.ACCOUNTS_OVERVIEW.redirect();
     }

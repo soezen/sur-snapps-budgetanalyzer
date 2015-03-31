@@ -48,6 +48,7 @@ public class EventRepository {
         );
         userSubQuery.where(userCondition);
         cq.where(eventRoot.get("user").in(userSubQuery));
+        cq.orderBy(cb.desc(eventRoot.get("tms")));
 
         return entityManager.createQuery(cq)
             .setFirstResult(pageIndex * pageSize)

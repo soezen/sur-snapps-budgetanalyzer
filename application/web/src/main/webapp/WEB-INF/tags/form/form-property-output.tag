@@ -39,7 +39,7 @@
                 </c:choose>
             </span>
             <c:if test="${not empty editable and editable}">
-                <a onclick="sur.edit(event, '${edit_group}')">
+                <a onclick="sur.form.edit(event, '${edit_group}')">
                     <i class="fa fa-pencil-square-o"></i>
                 </a>
             </c:if>

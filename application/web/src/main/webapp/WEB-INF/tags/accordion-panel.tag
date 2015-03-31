@@ -3,9 +3,11 @@
 <%@attribute name="parentId" fragment="false" required="true" %>
 <%@attribute name="id" fragment="false" required="true" %>
 <%@attribute name="title" fragment="true" required="true" %>
+<%@attribute name="button" fragment="true" %>
 
 <div class="panel panel-default">
     <div class="panel-heading">
+        <jsp:invoke fragment="button" />
         <a data-toggle="collapse" data-parent="#${parentId}" href="#${id}">
             <h4 class="panel-title">
                 <jsp:invoke fragment="title" />

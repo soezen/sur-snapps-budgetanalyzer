@@ -32,10 +32,14 @@ public class AccountManager {
 
         Account account = Account.newAccount()
             .name(inputAccount.getName())
+            .iban(inputAccount.getIban())
             .owner(user)
             .build();
         return accountRepository.save(account);
     }
+
+    // TODO list sorting and filtering
+    // TODO should bank account be a sub type?
 
     public List<Account> findFor(Entity entity) {
         return accountRepository.findFor(entity.getId());

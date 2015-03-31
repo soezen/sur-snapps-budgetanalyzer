@@ -5,9 +5,8 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<sur:template >
-  <jsp:attribute name="title"><fmt:message key="title.accounts.create" /></jsp:attribute>
-  <jsp:body>
+<sur:dashboard>
+    <h1><fmt:message key="title.accounts.create" /></h1>
     <f:form modelAttribute="account" action="postCreateAccount" method="post">
       <div class="form-horizontal">
         <sur-form:form-fieldset legendKey="form.create_account.legend">
@@ -19,9 +18,10 @@
                     </jsp:attribute>
           <jsp:body>
             <sur-form:form-property-input path="name" property="account" />
+              <!-- TODO iban validation and formatting -->
+            <sur-form:form-property-input path="iban" property="account" />
           </jsp:body>
         </sur-form:form-fieldset>
       </div>
     </f:form>
-  </jsp:body>
-</sur:template>
+</sur:dashboard>

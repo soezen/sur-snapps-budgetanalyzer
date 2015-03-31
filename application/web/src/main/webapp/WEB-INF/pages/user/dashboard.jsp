@@ -9,9 +9,9 @@
 <%@taglib prefix="sur" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<sur:template>
-    <jsp:attribute name="title"><fmt:message key="title.dashboard" /></jsp:attribute>
-    <jsp:body>
+<sur:dashboard>
+    <h1 class="page-header"><fmt:message key="title.dashboard" /></h1>
+    <div class="table-responsive">
         <sur:table id="events" columns="tms,type" actionColumn="true">
             <%--@elvariable id="events" typne="java.util.List<sur.snapps.budgetanalyzer.domain.event.EventWithSubject>"--%>
             <c:forEach var="event" items="${events}">
@@ -31,6 +31,6 @@
                 </sur:row>
             </c:forEach>
         </sur:table>
-        <!-- TODO next button (and previous) or a more button on the bottom
-    </jsp:body>
-</sur:template>
+    </div>
+    <!-- TODO next button (and previous) or a more button on the bottom
+</sur:dashboard>

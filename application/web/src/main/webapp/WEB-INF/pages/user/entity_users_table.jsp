@@ -22,12 +22,12 @@
                     <c:if test="${user.enabled}">
                         <s:authorize ifAllGranted="ROLE_ADMIN">
                             <a name="transfer_admin_role"
-                               onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/transfer_admin_role/${user.id}" />');"
+                               onclick="sur.tokens.updateTokenRow(this, '<c:url value="/budgetanalyzer/user/admin/transfer_admin_role/${user.id}" />');"
                                title="<fmt:message key="form.profile.action.transfer_admin_role" />">
                                 <i class="fa fa-lg fa-hand-o-right"></i>
                             </a>
                             <a name="disable_user"
-                               onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/disable_user/${user.id}" />')"
+                               onclick="sur.tokens.updateTokenRow(this, '<c:url value="/budgetanalyzer/user/admin/disable_user/${user.id}" />')"
                                title="<fmt:message key="form.profile.action.close_user" />">
                                 <i class="fa fa-lg fa-lock"></i>
                             </a>

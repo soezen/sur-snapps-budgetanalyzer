@@ -21,6 +21,7 @@ import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
 import javax.validation.Valid;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
 /**
@@ -72,6 +73,7 @@ public class UserRegistrationController extends AbstractController {
     @RequestMapping(value = "/postUserRegistration", method = RequestMethod.POST)
     @NavigateTo(value = PageLinks.USER_REGISTRATION, successMessage = "form.user_registration.success")
     public String userRegistration(@ModelAttribute("user") @Valid EditUserView user, BindingResult bindingResult) {
+        checkNotNull(user, "User cannot be null");
         validateUserRegistrationInput(user, bindingResult);
 
         if (bindingResult.hasErrors()) {

@@ -16,3 +16,5 @@
         <input id="${path}" name="${path}" class="form-control" type="${empty type ? 'text' : type}" ${readonly ? 'readonly' : ''} />
     </div>
 </div>
+
+<!-- TODO input text is not completely visible (purchase page) only in IE (because of css on type=date) -->

@@ -15,6 +15,7 @@ import sur.snapps.jetta.selenium.elements.BaseUrl;
  */
 public class Menu {
 
+
     @WaitElement
     private FluentWait<WebDriver> wait;
 
@@ -29,6 +30,8 @@ public class Menu {
     @FindBy(id = "menu_profile")
     private WebElement profileLink;
 
+    // TODO only load what you see on page
+
     @BaseUrl
     private String baseUrl;
 
@@ -37,6 +40,7 @@ public class Menu {
     }
 
     public void register() {
+        // TODO get firefox working or find out why ie does not click on buttons or links
         registerLink.click();
         wait.until(new Predicate<WebDriver>() {
             @Override

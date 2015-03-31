@@ -15,5 +15,7 @@ public enum EventType {
 
     ENTITY_UPDATE,
 
-    ACCOUNT_CREATED
+    ACCOUNT_CREATED,
+
+    PURCHASE_CREATED
 }

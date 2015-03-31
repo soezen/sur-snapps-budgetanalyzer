@@ -15,9 +15,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <link rel="stylesheet" href="<c:url value="/resources/css/font-awesome/font-awesome.min.css" />" type="text/css" />
         <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap/bootstrap.min.css" />" type="text/css" />
-        <link rel="stylesheet" href="<c:url value="/resources/css/application.css" />" type="text/css"/>
-        <script type="text/javascript" src="<c:url value="/resources/js/jquery-2.1.1.min.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/resources/js/jquery-dateFormat.min.js" />"></script>
+        <link rel="stylesheet" href="<c:url value="/resources/css/application.old.css" />" type="text/css"/>
+        <script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery-2.1.1.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery-dateFormat.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/application.js" />"></script>
         <title><fmt:message key="application.name" /> - <jsp:invoke fragment="title" /></title>
@@ -40,6 +40,11 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                                 <li>
                                     <a id="menu_dashboard" href="<c:url value="/budgetanalyzer/user/dashboard" />">
                                         <fmt:message key="menu.dashboard" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="menu_transactions" href="<c:url value="/budgetanalyzer/transactions/overview" />">
+                                        <fmt:message key="menu.transactions" />
                                     </a>
                                 </li>
                                 <li>

@@ -42,11 +42,14 @@ alter table users
 ----------------
 --  ACCOUNTS  --
 ----------------
+-- TODO find out max length of iban
 
 drop table accounts if EXISTS CASCADE;
 create table accounts (
   id        VARCHAR(40) NOT NULL,
   name      VARCHAR(100) NOT NULL,
+  iban      VARCHAR(100),
+  balance   DOUBLE NOT NULL,
   user_id   VARCHAR(40) not NULL,
   version   int not NULL
 );
@@ -66,6 +69,8 @@ create table h_accounts (
   revtype   TINYINT,
   ID        VARCHAR(40) not NULL,
   name      VARCHAR(100),
+  iban      VARCHAR(100),
+  balance   DOUBLE NOT NULL,
   user_id   VARCHAR(40),
   PRIMARY KEY (id, rev)
 );
@@ -140,3 +145,281 @@ alter table tokens
     add CONSTRAINT FK_TOKENS_ENTITY_ID
     foreign key (entity_id)
     references entities(id);
+
+------------------
+--  CATEGORIES  --
+------------------
+
+drop table categories if EXISTS CASCADE;
+create table categories (
+  id              VARCHAR(40) not null,
+  name            VARCHAR(200) not null,
+  parent          VARCHAR(40),
+  version         int not null
+);
+
+alter table categories
+    add CONSTRAINT PK_CATEGORIES
+    PRIMARY KEY (id);
+
+alter table categories
+    add CONSTRAINT FK_CATEGORIES_PARENT
+    FOREIGN KEY (parent)
+    REFERENCES categories (id);
+
+drop table h_categories IF EXISTS CASCADE;
+create TABLE h_categories (
+  rev             int not null,
+  revtype         TINYINT,
+  id              VARCHAR(40) not null,
+  name            VARCHAR(200),
+  parent          VARCHAR(40),
+  PRIMARY KEY (id, rev)
+);
+
+
+--------------------
+--  PRODUCT_TYPES --
+--------------------
+
+drop table product_types if EXISTS CASCADE;
+create table product_types (
+  id              VARCHAR(40) not null,
+  name            VARCHAR(200) not null,
+  category_id     VARCHAR(40) not null,
+  version         int not null
+);
+
+alter table product_types
+    add CONSTRAINT PK_PRODUCT_TYPES
+    PRIMARY KEY (id);
+
+alter table product_types
+    add CONSTRAINT FK_PRODUCT_TYPES_CATEGORY
+    FOREIGN KEY (category_id)
+    REFERENCES categories (id);
+
+drop table h_product_types if EXISTS CASCADE;
+create table h_product_types (
+  rev             int not null,
+  revtype         TINYINT,
+  id              VARCHAR(40) not null,
+  name            VARCHAR(200),
+  category_id     VARCHAR(40),
+  PRIMARY KEY (id, rev)
+);
+
+----------------
+--  PRODUCTS  --
+----------------
+
+drop table products if EXISTS CASCADE;
+create table products (
+  id              VARCHAR(40) not null,
+  name            VARCHAR(200) not null,
+  type            VARCHAR(40) not null,
+  version         int not null
+);
+
+ALTER TABLE products
+    ADD CONSTRAINT PK_PRODUCTS
+    PRIMARY KEY (id);
+
+alter TABLE products
+    add CONSTRAINT FK_PRODUCTS_TYPE
+    FOREIGN KEY (type)
+    REFERENCES product_types (id);
+
+drop table h_products if EXISTS CASCADE;
+create table h_products (
+  rev             int not null,
+  retype          TINYINT,
+  ID              VARCHAR(40) not NULL,
+  name            VARCHAR(200),
+  type            VARCHAR(40),
+  PRIMARY KEY (id, rev)
+);
+
+--------------
+--  STORES  --
+--------------
+
+drop TABLE stores if EXISTS CASCADE;
+CREATE TABLE stores (
+  id              VARCHAR(40) NOT NULL,
+  name            VARCHAR(100) NOT null,
+  type            VARCHAR(50) NOT NULL,
+  version         int NOT NULL
+);
+
+ALTER TABLE stores
+    ADD CONSTRAINT PK_STORES
+    PRIMARY KEY (id);
+
+ALTER TABLE stores
+    add CONSTRAINT UQ_STORE_NAME
+    UNIQUE (name);
+
+drop table h_stores if EXISTS CASCADE;
+create table h_stores (
+  rev       int not NULL,
+  revtype   TINYINT,
+  ID        VARCHAR(40) not NULL,
+  name      VARCHAR(100),
+  type      VARCHAR(50),
+  PRIMARY KEY (id, rev)
+);
+
+----------------------
+--  STORE_LOCATIONS --
+----------------------
+
+drop table store_locations if EXISTS CASCADE;
+create TABLE store_locations (
+  id              VARCHAR(40) not null,
+  name            VARCHAR(200) not null,
+  store_id        VARCHAR(40) not null,
+  street          VARCHAR(100) not null,
+  number          VARCHAR(10) not null,
+  zip_code        VARCHAR(5) not null,
+  city            VARCHAR(100) not null,
+  country         VARCHAR(100) NOT null,
+  version         int not null
+);
+
+alter table store_locations
+    add CONSTRAINT PK_STORE_LOCATIONS
+    PRIMARY KEY (id);
+
+alter table store_locations
+    add CONSTRAINT FK_STORES_STORE_LOCATION
+    FOREIGN KEY (store_id)
+    REFERENCES stores (id);
+
+drop table h_store_locations if EXISTS CASCADE;
+create table h_store_locations (
+  rev             int not null,
+  revtype         TINYINT,
+  id              VARCHAR(40) not null,
+  name            VARCHAR(200),
+  store_id        VARCHAR(40),
+  street          VARCHAR(100),
+  number          VARCHAR(10),
+  zip_code        VARCHAR(5),
+  city            VARCHAR(100),
+  country         VARCHAR(100),
+  PRIMARY KEY (id, rev)
+);
+
+----------------------
+--  STORE_PRODUCTS  --
+----------------------
+
+drop table store_products if EXISTS CASCADE;
+create table store_products (
+  id              VARCHAR(40) not null,
+  code            VARCHAR(20) not null,
+  product_id      VARCHAR(40) not null,
+  store_id        VARCHAR(40) not null,
+  version         int not null
+);
+
+alter table store_products
+    add CONSTRAINT PK_STORE_PRODUCTS
+    PRIMARY KEY (id);
+
+alter table store_products
+    add CONSTRAINT FK_STORE_PRODUCTS_STORE
+    FOREIGN KEY (store_id)
+    REFERENCES stores (id);
+
+alter TABLE store_products
+    add CONSTRAINT FK_STORE_PRODUCTS_PRODUCT
+    FOREIGN KEY (product_id)
+    REFERENCES products (id);
+
+alter table store_products
+    add CONSTRAINT UQ_STORE_PRODUCTS_CODE_PER_STORE
+    UNIQUE (store_id, code);
+
+drop table h_store_products if EXISTS CASCADE;
+create TABLE h_store_products (
+  rev             int not null,
+  revtype         tinyint,
+  id              VARCHAR(40) not null,
+  code            VARCHAR(20),
+  product_id      VARCHAR(40),
+  store_id        VARCHAR(40),
+  primary key (id, rev)
+);
+
+----------------
+--  PURCHASES --
+----------------
+
+drop TABLE purchases if EXISTS CASCADE;
+create TABLE purchases (
+  id                VARCHAR(40) not null,
+  DATE              DATE not null,
+  store_location_id VARCHAR(40) not null,
+  version           int not null
+);
+
+alter TABLE purchases
+    add CONSTRAINT PK_PURCHASES
+    PRIMARY KEY (id);
+
+alter table purchases
+    add CONSTRAINT FK_PURCHASES
+    FOREIGN KEY (store_location_id)
+    REFERENCES store_locations (id);
+
+drop table h_purchases if EXISTS CASCADE;
+create table h_purchases (
+  rev               int not null,
+  revtype           TINYINT,
+  id                VARCHAR(40) not Null,
+  DATE              DATE,
+  store_location_id VARCHAR(40),
+  PRIMARY KEY (id, rev)
+);
+
+--------------------------
+--  PURCHASED_PRODUCTS  --
+--------------------------
+
+drop TABLE purchased_products IF EXISTS CASCADE;
+create TABLE purchased_products (
+  id                VARCHAR(40) not NULL,
+  purchase_id       VARCHAR(40),
+  product_id        VARCHAR(40) not null,
+  unit_price        DOUBLE not null,
+  amount            DOUBLE not null,
+  version           int not null
+);
+
+alter TABLE purchased_products
+    ADD CONSTRAINT PK_PURCHASED_PRODUCTS
+    PRIMARY KEY (id);
+
+alter TABLE purchased_products
+    ADD CONSTRAINT FK_PURCHASED_PRODUCTS_PURCHASE
+    FOREIGN KEY (purchase_id)
+    REFERENCES purchases (id);
+
+alter TABLE purchased_products
+    add CONSTRAINT FK_PURCHASED_PRODUCTS_PRODUCT
+    FOREIGN KEY (product_id)
+    REFERENCES products (id);
+
+drop TABLE h_purchased_products if EXISTS CASCADE;
+create table h_purchased_products (
+  rev             int not null,
+  revtype         TINYINT,
+  id              VARCHAR(40) not null,
+  purchase_id     VARCHAR(40),
+  product_id      VARCHAR(40),
+  unit_price      DOUBLE,
+  amount          DOUBLE,
+  PRIMARY KEY (id, rev)
+);

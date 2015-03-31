@@ -15,9 +15,13 @@
         <c:set var="isTimestamp" value="${className eq 'java.sql.Timestamp'}" />
         <c:set var="isEnum" value="${sur_property.class.enum}" />
         <c:set var="isBoolean" value="${className eq 'java.lang.Boolean'}" />
+        <c:set var="isDouble" value="${className eq 'java.lang.Double'}" />
         <c:set var="iconClass" value="data-icon-class='${fn:toLowerCase(sur_property.class.simpleName)}'" />
-        <td data-type="${isDate ? 'date' : (isEmail ? 'email' : (isEnum or isBoolean ? 'icon' : ''))}" ${isEnum or isBoolean ? iconClass : ''}>
+        <td data-type="${isDouble ? 'euro' : (isDate ? 'date' : (isEmail ? 'email' : (isEnum or isBoolean ? 'icon' : '')))}" ${isEnum or isBoolean ? iconClass : ''}>
             <c:choose>
+                <c:when test="${isDouble}">
+                    <fmt:formatNumber value="${sur_property}" groupingUsed="true" minFractionDigits="2" />
+                </c:when>
                 <c:when test="${isDate}">
                     <fmt:formatDate value="${sur_property}" pattern="dd-MM-yyyy" />
                 </c:when>

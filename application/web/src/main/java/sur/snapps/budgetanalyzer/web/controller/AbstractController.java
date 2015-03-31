@@ -1,12 +1,12 @@
 package sur.snapps.budgetanalyzer.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import sur.snapps.budgetanalyzer.domain.user.User;
-import sur.snapps.budgetanalyzer.web.controller.user.UserContext;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * User: SUR
@@ -15,17 +15,11 @@ import sur.snapps.budgetanalyzer.web.controller.user.UserContext;
  */
 public abstract class AbstractController {
 
-    @Autowired
-    protected UserContext userContext;
-
-    @ModelAttribute("user")
-    public User currentUser() {
-        return userContext.getCurrentUser();
-    }
-
-
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }
+
 }

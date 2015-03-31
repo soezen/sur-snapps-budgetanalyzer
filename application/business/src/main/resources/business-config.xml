@@ -26,12 +26,15 @@
     <bean id="exceptionWrapperAspect" class="sur.snapps.budgetanalyzer.business.exception.ExceptionWrapperAspect" />
     <bean id="eventLoggerAspect" class="sur.snapps.budgetanalyzer.business.event.EventLoggerAspect" />
 
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <tx:annotation-driven transaction-manager="txManager" />
 
     <bean id="userManager" class="sur.snapps.budgetanalyzer.business.user.UserManager" />
     <bean id="tokenManager" class="sur.snapps.budgetanalyzer.business.user.TokenManager" />
     <bean id="entityManager" class="sur.snapps.budgetanalyzer.business.user.EntityManager" />
     <bean id="accountManager" class="sur.snapps.budgetanalyzer.business.account.AccountManager" />
+    <bean id="storeManager" class="sur.snapps.budgetanalyzer.business.store.StoreManager" />
+    <bean id="productManager" class="sur.snapps.budgetanalyzer.business.product.ProductManager" />
+    <bean id="transactionManager" class="sur.snapps.budgetanalyzer.business.transaction.TransactionManager" />
     <bean id="eventManager" class="sur.snapps.budgetanalyzer.business.event.EventManager" />
 
     <bean id="mailFactory" class="sur.snapps.budgetanalyzer.business.mail.MailFactory" />

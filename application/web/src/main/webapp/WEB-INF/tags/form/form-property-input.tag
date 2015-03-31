@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@tag description="Form input for a property field with label and errors" pageEncoding="UTF-8"%>
+<%@tag description="Form input for a property field with label and errors" pageEncoding="UTF-8" %>
 <%@attribute name="path" fragment="false" required="true" %>
 <%@attribute name="property" fragment="false" type="java.lang.Object" %>
 <%@attribute name="type" fragment="false" required="false" %>
@@ -35,7 +35,7 @@
     </c:when>
     <c:otherwise>
         <c:set var="label_width" value="3" />
-        <c:set var="input_width" value="9" />
+        <c:set var="input_width" value="4" />
     </c:otherwise>
 </c:choose>
 <c:set var="fieldErrors">
@@ -46,7 +46,8 @@
 <c:if test="${not empty edit_group}">
     <c:set var="dataEditGroup" value="data-edit-group='${edit_group}'" />
 </c:if>
-<div ${dataEditGroup} class="form-group ${fieldErrorsClass} has-feedback">
+
+<div ${dataEditGroup} class="form-group ${fieldErrorsClass} has-feedback" data-url="${fn:toLowerCase(sur_readonly_property.class.simpleName)}">
     <c:if test="${type ne 'hidden'}">
         <c:choose>
             <c:when test="${spring_input eq 'false'}">
@@ -61,25 +62,30 @@
             </c:otherwise>
         </c:choose>
     </c:if>
-    <div class="col-sm-${input_width}">
+    <div class="col-sm-9 col-md-7 col-lg-4">
         <c:set var="readonly_attribute" value="" />
         <c:if test="${not empty readonly}">
             <c:set var="readonly_attribute" value="readonly='${readonly}'" />
         </c:if>
         <c:choose>
             <c:when test="${spring_input eq 'false'}">
-                <input id="${fn:toLowerCase(property.class.simpleName)}-${path}" type="${empty type ? 'text' : type}" ${readonly_attribute} class="form-control ${not empty edit_group ? 'edit-group': ''}" value="${property[path]}" />
+                <input id="${fn:toLowerCase(property.class.simpleName)}-${path}"
+                       type="${empty type ? 'text' : type}"
+                       ${readonly_attribute}
+                       class="form-control ${not empty edit_group ? 'edit-group': ''}"
+                       value="${property[path]}" />
             </c:when>
             <c:otherwise>
-                <f:input path="${path}" cssClass="form-control ${not empty edit_group ? 'edit-group' : '' }" type="${empty type ? 'text' : type}" readonly="${readonly}" data-form-focus="${form_focus}" />
+                <f:input path="${path}" cssClass="form-control ${not empty edit_group ? 'edit-group' : '' }" type="${empty type ? 'text' : type}" readonly="${readonly}" data-form-focus="${form_focus}" onblur="${dynamicAttributes.onblur}" />
+
             </c:otherwise>
         </c:choose>
         <!-- TODO automatically focus input when first showing it -->
         <c:if test="${not empty show_buttons and show_buttons}">
-            <a onclick="sur.submit('${edit_group}', '<c:url value="/budgetanalyzer/user/${fn:toLowerCase(edit_property.class.simpleName)}/${path}" />')">
+            <a onclick="sur.form.submitEditGroup('${edit_group}')">
                 <i class="fa fa-check fa-lg" style="color:green;"></i>
             </a>
-            <a onclick="sur.cancel('${edit_group}')">
+            <a onclick="sur.form.cancelEditGroup('${edit_group}')">
                 <i class="fa fa-times fa-lg" style="color:red;"></i>
             </a>
         </c:if>

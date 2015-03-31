@@ -9,32 +9,29 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="s" uri="http://www.springframework.org/security/tags" %>
 
-<a href="<c:url value="/budgetanalyzer/user/admin/inviteUser" />">
-    <i class="fa fa-lg fa-plus-circle"></i>
-    <fmt:message key="form.profile.action.invite" />
-</a>
 <t:table id="tokens" columns="email,expirationDate,status" actionColumn="true">
     <c:forEach var="token" items="${tokens}">
         <t:row value="${token}">
             <td>
                 <i class="fa fa-lg fa-refresh fa-spin hidden"></i>
                 <a name="resend_invitation" data-visible="hasClass(icon(status),tokenstatus-valid)"
-                   onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'resend');"
+                   onclick="sur.tokens.updateTokenRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'resend');"
                    title="<fmt:message key="form.profile.action.resend" />">
                     <i class="fa fa-lg fa-mail-forward"></i>
                 </a>
                 <a name="extend_invitation" data-visible="hasClass(icon(status),tokenstatus-valid)"
-                   onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'extend');"
+                   onclick="sur.tokens.updateTokenRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'extend');"
                    title="<fmt:message key="form.profile.action.extend" />">
                     <i class="fa fa-lg fa-history"></i>
                 </a>
                 <a name="revoke_invitation" data-visible="hasClass(icon(status),tokenstatus-valid)"
-                   onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'revoke');"
+                   onclick="sur.tokens.updateTokenRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'revoke');"
                    title="<fmt:message key="form.profile.action.revoke" />">
                     <i class="fa fa-lg fa-lock"></i>
                 </a>
+                <!-- TODO use baseUrl instead of c:url -->
                 <a name="restore_invitation" data-visible="hasClass(icon(status),[tokenstatus-expired,tokenstatus-revoked])"
-                   onclick="sur.updateRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'restore');"
+                   onclick="sur.tokens.updateTokenRow(this, '<c:url value="/budgetanalyzer/user/admin/invitation_action/${token.id}" />', 'restore');"
                    title="<fmt:message key="form.profile.action.restore" />">
                     <i class="fa fa-lg fa-unlock"></i>
                 </a>

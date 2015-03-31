@@ -16,6 +16,7 @@
     <bean id="userValidator" class="sur.snapps.budgetanalyzer.web.controller.user.UserValidator" />
     <bean id="entityValidator" class="sur.snapps.budgetanalyzer.web.controller.user.EntityValidator" />
 	<bean id="accountValidator" class="sur.snapps.budgetanalyzer.web.controller.accounts.AccountValidator" />
+	<bean id="purchaseValidator" class="sur.snapps.budgetanalyzer.web.controller.transactions.PurchaseValidator" />
 
     <!-- Resolves logical view names to JSP views -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -26,6 +27,24 @@
 	<!-- Returns messages based on a reloadable resource bundle -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basenames" value="/WEB-INF/messages/validation,/WEB-INF/messages/errors, /WEB-INF/messages/info" />
+	</bean>
+
+	<bean id="localeResolver"
+		  class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+
+	<bean id="localeChangeInterceptor"
+		  class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="language" />
+	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" >
+		<property name="interceptors">
+			<list>
+				<ref bean="localeChangeInterceptor" />
+			</list>
+		</property>
 	</bean>
 
 </beans>

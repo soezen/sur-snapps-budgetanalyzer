@@ -18,6 +18,8 @@ import javax.persistence.Table;
 public class Account extends BaseAuditedEntity {
 
     private String name;
+    private String iban;
+    private double balance;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -28,10 +30,20 @@ public class Account extends BaseAuditedEntity {
     private Account(Builder builder) {
         this.name = builder.name;
         this.owner = builder.owner;
+        this.iban = builder.iban;
+        this.balance = 0;
     }
 
     public String name() {
         return name;
+    }
+
+    public String iban() {
+        return iban;
+    }
+
+    public double balance() {
+        return balance;
     }
 
     public User owner() {
@@ -44,6 +56,7 @@ public class Account extends BaseAuditedEntity {
 
     public static class Builder {
         private String name;
+        private String iban;
         private User owner;
 
         public Account build() {
@@ -55,6 +68,11 @@ public class Account extends BaseAuditedEntity {
             return this;
         }
 
+        public Builder iban(String iban) {
+            this.iban = iban;
+            return this;
+        }
+
         public Builder owner(User owner) {
             this.owner = owner;
             return this;
@@ -63,6 +81,14 @@ public class Account extends BaseAuditedEntity {
 
     public String getName() {
         return name;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 
     @Override

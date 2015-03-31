@@ -1,3 +1,4 @@
+delete from accounts;
 delete from events;
 delete from authorities;
 delete from users;

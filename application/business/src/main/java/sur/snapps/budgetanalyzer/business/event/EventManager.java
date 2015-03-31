@@ -74,7 +74,11 @@ public class EventManager {
                 case ACCOUNT_CREATED:
                     Account account = historyRepository.find(Account.class, originalEvent.getSubjectId(), originalEvent.getTms());
                     return new EventWithSubject<>(originalEvent, account);
+                case USER_UPDATE:
+                    User updatedUser = historyRepository.find(User.class, originalEvent.getSubjectId(), originalEvent.getTms());
+                    return new EventWithSubject<>(originalEvent, updatedUser);
                 default:
+                    System.out.println("EVENT TYPE without subject: " + originalEvent.getType());
                     return originalEvent;
             }
         }

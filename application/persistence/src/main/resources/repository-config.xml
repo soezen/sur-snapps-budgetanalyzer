@@ -14,6 +14,11 @@
 
     <bean id="accountRepository" class="sur.snapps.budgetanalyzer.persistence.account.AccountRepository" />
 
+    <bean id="storeRepository" class="sur.snapps.budgetanalyzer.persistence.store.StoreRepository" />
+    <bean id="productRepository" class="sur.snapps.budgetanalyzer.persistence.product.ProductRepository" />
+
+    <bean id="transactionRepository" class="sur.snapps.budgetanalyzer.persistence.transaction.TransactionRepository" />
+
     <bean id="eventRepository" class="sur.snapps.budgetanalyzer.persistence.event.EventRepository" />
     <bean id="historyRepository" class="sur.snapps.budgetanalyzer.persistence.HistoryRepository" />
 

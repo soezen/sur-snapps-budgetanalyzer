@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class EditAccountView implements Serializable {
 
     private String name;
+    private String iban;
     private String ownerId;
 
     public String getName() {
@@ -17,6 +18,14 @@ public class EditAccountView implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 
     public String getOwnerId() {

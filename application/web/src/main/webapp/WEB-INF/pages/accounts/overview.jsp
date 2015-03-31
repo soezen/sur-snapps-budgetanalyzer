@@ -5,16 +5,16 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<sur:template >
-  <jsp:attribute name="title"><fmt:message key="title.user_invitation" /></jsp:attribute>
-  <jsp:body>
-    <a href="<c:url value="/budgetanalyzer/accounts/create" />">
-      <i class="fa fa-lg fa-plus"></i>
-    </a>
-    <sur:table id="accounts" columns="name" actionColumn="false">
+<sur:dashboard>
+  <h1><fmt:message key="title.account_overview" /></h1>
+  <sur:table id="accounts" columns="iban,name,balance" actionColumn="false">
+    <jsp:attribute name="footerActions">
+
+    </jsp:attribute>
+    <jsp:body>
       <c:forEach var="account" items="${accounts}">
         <sur:row value="${account}" />
       </c:forEach>
-    </sur:table>
-  </jsp:body>
-</sur:template>
+    </jsp:body>
+  </sur:table>
+</sur:dashboard>

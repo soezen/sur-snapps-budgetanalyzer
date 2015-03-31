@@ -11,24 +11,22 @@
 <%@taglib prefix="sur-form" tagdir="/WEB-INF/tags/form" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<sur:template>
-    <jsp:attribute name="title"><fmt:message key="title.user_invitation" /></jsp:attribute>
-    <jsp:body>
-        <f:form modelAttribute="user" action="postInviteUser" method="post">
-            <div class="form-horizontal">
-                <sur-form:form-fieldset legendKey="form.user_invitation.legend">
-                    <jsp:attribute name="formActions">
-                        <a id="btn_cancel" class="btn" href="<c:url value="/budgetanalyzer/user/profile" />"><fmt:message key="form.action.cancel" /></a>
-                        <input id="btn_submit" class="btn btn-primary" type="submit" value="<fmt:message key="form.action.submit" />" />
-                    </jsp:attribute>
-                    <jsp:body>
-                        <sur-form:form-property-input path="email" property="user" />
-                    </jsp:body>
-                </sur-form:form-fieldset>
-            </div>
-        </f:form>
-    </jsp:body>
-</sur:template>
+<sur:dashboard>
+    <h1><fmt:message key="title.user_invitation" /></h1>
+    <f:form modelAttribute="user" action="postInviteUser" method="post">
+        <div class="form-horizontal">
+            <sur-form:form-fieldset legendKey="form.user_invitation.legend">
+                <jsp:attribute name="formActions">
+                    <a id="btn_cancel" class="btn" href="<c:url value="/budgetanalyzer/user/profile" />"><fmt:message key="form.action.cancel" /></a>
+                    <input id="btn_submit" class="btn btn-primary" type="submit" value="<fmt:message key="form.action.submit" />" />
+                </jsp:attribute>
+                <jsp:body>
+                    <sur-form:form-property-input path="email" property="user" />
+                </jsp:body>
+            </sur-form:form-fieldset>
+        </div>
+    </f:form>
+</sur:dashboard>
 
 
 <!-- Scenario: -->

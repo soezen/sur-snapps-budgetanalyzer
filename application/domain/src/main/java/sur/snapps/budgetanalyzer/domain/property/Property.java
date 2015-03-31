@@ -7,7 +7,37 @@ package sur.snapps.budgetanalyzer.domain.property;
  */
 public class Property {
 
+    private String value;
     private PropertyType type;
 
-    // TODO-TECH use pattern (leaf, composite?)
+    private Property(Builder builder) {
+        this.type = builder.type;
+        this.value = builder.value;
+    }
+
+    public PropertyType type() {
+        return type;
+    }
+
+    public String value() {
+        return value;
+    }
+
+    public static class Builder {
+        private String value;
+        private PropertyType type;
+
+        public Builder(PropertyType type) {
+            this.type = type;
+        }
+
+        public Property build() {
+            return new Property(this);
+        }
+
+        public Builder value(String value) {
+            this.value = value;
+            return this;
+        }
+    }
 }

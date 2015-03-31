@@ -18,7 +18,6 @@ import sur.snapps.budgetanalyzer.business.Logger;
 import sur.snapps.budgetanalyzer.business.exception.BusinessException;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
-import sur.snapps.budgetanalyzer.web.response.ErrorResponse;
 import sur.snapps.budgetanalyzer.web.response.ResponseHolder;
 
 import java.util.List;
@@ -69,16 +68,17 @@ public class ExceptionHandlerAspect {
         try {
             return (ResponseHolder) joinPoint.proceed();
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
             List<Throwable> causalChain = Throwables.getCausalChain(throwable);
             Iterable<Throwable> throwables = Iterables.filter(causalChain, Predicates.instanceOf(BusinessException.class));
 
             if (throwables.iterator().hasNext()) {
                 BusinessException businessException = (BusinessException) throwables.iterator().next();
                 Logger.error(businessException.getErrorCode() + " : " + businessException.getErrorMessage());
-                return new ErrorResponse(businessException.translateErrorMessage(messageSource));
+                return ResponseHolder.failure(businessException.translateErrorMessage(messageSource));
             }
         }
-        return new ErrorResponse("unexpected error");
+        return ResponseHolder.failure("unexpected error");
     }
 
 
@@ -87,7 +87,7 @@ public class ExceptionHandlerAspect {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         Object shownSuccess = requestAttributes.getAttribute("shown_success", RequestAttributes.SCOPE_SESSION);
 
-        if (shownSuccess != null && (int) shownSuccess == 2) {
+        if (shownSuccess != null && (int) shownSuccess == 1) {
             requestAttributes.removeAttribute("shown_success", RequestAttributes.SCOPE_SESSION);
             requestAttributes.removeAttribute("success", RequestAttributes.SCOPE_SESSION);
             requestAttributes.removeAttribute("success_message", RequestAttributes.SCOPE_SESSION);
@@ -97,7 +97,7 @@ public class ExceptionHandlerAspect {
 
         Object shownError = requestAttributes.getAttribute("shown_error", RequestAttributes.SCOPE_SESSION);
 
-        if (shownError != null && (int) shownError == 2) {
+        if (shownError != null && (int) shownError == 1) {
             requestAttributes.removeAttribute("error", RequestAttributes.SCOPE_SESSION);
             requestAttributes.removeAttribute("error_message", RequestAttributes.SCOPE_SESSION);
             requestAttributes.removeAttribute("error_items", RequestAttributes.SCOPE_SESSION);

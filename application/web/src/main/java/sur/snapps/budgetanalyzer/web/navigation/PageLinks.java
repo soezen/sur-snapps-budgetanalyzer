@@ -21,9 +21,14 @@ public enum PageLinks {
 
     PROFILE("user/profile", "user/profile"),
     INVITE_USER("user/admin/user_invitation", "user/admin/inviteUser"),
+    ENTITY_SETTINGS("user/admin/entity_settings", "user/admin/entitySettings"),
 
     ACCOUNTS_OVERVIEW("accounts/overview", "accounts/overview"),
-    ACCOUNTS_CREATE("accounts/create", "accounts/create");
+    ACCOUNTS_CREATE("accounts/create", "accounts/create"),
+
+    TRANSACTIONS_OVERVIEW("transactions/overview", "transactions/overview"),
+    TRANSACTIONS_PURCHASE("transactions/purchase", "transactions/purchase")
+    ;
 
     private static final String REDIRECT = "redirect:";
     private static final String CONTEXT = "/budgetanalyzer/";
