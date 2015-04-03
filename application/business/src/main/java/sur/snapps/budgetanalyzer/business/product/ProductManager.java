@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import sur.snapps.budgetanalyzer.business.product.summary.CategorySummary;
 import sur.snapps.budgetanalyzer.business.product.summary.ParentCategorySummary;
 import sur.snapps.budgetanalyzer.domain.product.Product;
-import sur.snapps.budgetanalyzer.domain.product.ProductType;
+import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 import sur.snapps.budgetanalyzer.domain.store.StoreProduct;
 import sur.snapps.budgetanalyzer.persistence.product.ProductRepository;
 
+import java.util.Date;
 import java.util.List;
+
+import static sur.snapps.budgetanalyzer.util.DateUtil.firstDayOfMonth;
+import static sur.snapps.budgetanalyzer.util.DateUtil.lastDayOfMonth;
 
 /**
  * User: SUR
@@ -31,10 +35,10 @@ public class ProductManager {
         return productRepository.findById(id);
     }
 
-    public CategorySummary generateCategorySummary() {
+    public CategorySummary generateCategorySummary(Date date) {
         ParentCategorySummary summary = CategorySummary.newSummary("Category Summary for month X");
-        List<ProductType> productTypes = productRepository.findProductTypes();
-        for (ProductType productType : productTypes) {
+        List<ProductTypeForPeriod> productTypes = productRepository.findProductTypesForPeriod(firstDayOfMonth(date), lastDayOfMonth(date));
+        for (ProductTypeForPeriod productType : productTypes) {
             summary.add(productType);
         }
         return summary;

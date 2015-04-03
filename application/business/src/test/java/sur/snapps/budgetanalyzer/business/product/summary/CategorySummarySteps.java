@@ -8,7 +8,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import sur.snapps.budgetanalyzer.domain.product.Category;
-import sur.snapps.budgetanalyzer.domain.product.ProductType;
+import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class CategorySummarySteps {
         for (String category : categoryIds) {
             parent = parent.createSubCategory().id(category).name(category).build();
         }
-        ProductType productType = parent.createProductType().id(productTypeId).name(productTypeId).build();
+        ProductTypeForPeriod productType = new ProductTypeForPeriod(parent.createProductType().id(productTypeId).name(productTypeId).build(), 10);
         summary.add(productType);
     }
 
@@ -71,7 +71,7 @@ public class CategorySummarySteps {
 
         if (expected instanceof ChildCategorySummary) {
             assertTrue(actual instanceof ChildCategorySummary);
-            assertEquals(((ChildCategorySummary) expected).getSize(), ((ChildCategorySummary) actual).getSize());
+            assertEquals(((ChildCategorySummary) expected).getSize(), ((ChildCategorySummary) actual).getSize(), 0.0);
         } else if (expected instanceof ParentCategorySummary) {
             assertTrue(actual instanceof ParentCategorySummary);
             ParentCategorySummary expectedParent = (ParentCategorySummary) expected;

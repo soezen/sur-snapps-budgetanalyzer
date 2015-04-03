@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sur.snapps.budgetanalyzer.business.product.ProductManager;
 import sur.snapps.budgetanalyzer.business.product.summary.CategorySummary;
 import sur.snapps.budgetanalyzer.domain.store.StoreProduct;
+import sur.snapps.budgetanalyzer.util.DateUtil;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
@@ -42,7 +43,7 @@ public class ProductController extends AbstractController {
     @ResponseBody
     @RequestMapping("/categories-summary-month")
     public CategorySummary categoriesSummaryForMonth() {
-        CategorySummary summary = productManager.generateCategorySummary();
+        CategorySummary summary = productManager.generateCategorySummary(DateUtil.now());
         return summary;
     }
 }

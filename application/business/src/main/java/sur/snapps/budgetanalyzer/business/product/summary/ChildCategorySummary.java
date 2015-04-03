@@ -1,7 +1,7 @@
 package sur.snapps.budgetanalyzer.business.product.summary;
 
 import com.google.common.base.Objects;
-import sur.snapps.budgetanalyzer.domain.product.ProductType;
+import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 
 import static com.google.common.base.Objects.equal;
 
@@ -11,23 +11,23 @@ import static com.google.common.base.Objects.equal;
  */
 public class ChildCategorySummary extends CategorySummary {
 
-    private int size;
+    private double size;
 
-    public ChildCategorySummary(String id, String name, int size) {
+    public ChildCategorySummary(String id, String name, double size) {
         super(id, name);
         this.size = size;
     }
 
     @Override
-    protected boolean add(ProductType productType) {
+    protected boolean add(ProductTypeForPeriod productType) {
         return false;
     }
 
-    public int getSize() {
+    public double getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(double size) {
         this.size = size;
     }
 

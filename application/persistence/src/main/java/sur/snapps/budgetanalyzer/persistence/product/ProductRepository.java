@@ -1,7 +1,9 @@
 package sur.snapps.budgetanalyzer.persistence.product;
 
 import sur.snapps.budgetanalyzer.domain.product.Product;
-import sur.snapps.budgetanalyzer.domain.product.ProductType;
+import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
+import sur.snapps.budgetanalyzer.domain.purchase.Purchase;
+import sur.snapps.budgetanalyzer.domain.purchase.PurchasedProduct;
 import sur.snapps.budgetanalyzer.domain.store.Store;
 import sur.snapps.budgetanalyzer.domain.store.StoreProduct;
 import sur.snapps.budgetanalyzer.persistence.AbstractRepository;
@@ -10,8 +12,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,11 +48,23 @@ public class ProductRepository extends AbstractRepository {
         return entityManager.find(Product.class, id);
     }
 
-    public List<ProductType> findProductTypes() {
+    public List<ProductTypeForPeriod> findProductTypesForPeriod(Date startDate, Date endDate) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ProductType> query = builder.createQuery(ProductType.class);
+        CriteriaQuery<ProductTypeForPeriod> query = builder.createQuery(ProductTypeForPeriod.class);
 
-        Root<ProductType> fromProductTypes = query.from(ProductType.class);
+        Root<Purchase> fromPurchases = query.from(Purchase.class);
+        Join<Purchase, PurchasedProduct> joinPurchasedProducts = fromPurchases.join("products");
+        Join<PurchasedProduct, Product> joinProducts = joinPurchasedProducts.join("product");
+        Join<Product, ProductTypeForPeriod> joinProductTypes = joinProducts.join("type");
+
+        query.multiselect(joinProductTypes, builder.sum(joinPurchasedProducts.<Number>get("amount")));
+        query.groupBy(joinProductTypes);
+
+        Path<Date> purchaseDate = fromPurchases.get("date");
+        query.where(builder.and(
+            builder.greaterThanOrEqualTo(purchaseDate, startDate)),
+            builder.lessThanOrEqualTo(purchaseDate, endDate));
+
         return entityManager.createQuery(query).getResultList();
     }
 }

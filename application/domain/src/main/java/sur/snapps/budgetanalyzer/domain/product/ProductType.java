@@ -1,6 +1,5 @@
 package sur.snapps.budgetanalyzer.domain.product;
 
-import com.google.common.collect.Lists;
 import org.hibernate.envers.Audited;
 import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 
@@ -8,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author sur
@@ -26,44 +23,14 @@ public class ProductType extends BaseAuditedEntity {
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
-    private ProductType() {};
+    // TODO add total value per category in chart
+
+    protected ProductType() {}
 
     private ProductType(Builder builder) {
         setId(builder.id);
         this.category = builder.category;
         this.name = builder.name;
-    }
-
-    /**
-     * @param categoryId
-     * @return true when any parent category has given id
-     */
-    public boolean fallsIntoCategory(String categoryId) {
-        Category parentCategory = category;
-        while (parentCategory != null) {
-            if (parentCategory.getId().equals(categoryId)) {
-                return true;
-            }
-            parentCategory = parentCategory.parent();
-        }
-        return false;
-    }
-
-    /**
-     * @param categoryId
-     * @return list of categories that are sub categories of the given category and in which this product belongs to
-     */
-    public List<Category> subCategoriesOf(String categoryId) {
-        LinkedList<Category> categories = Lists.newLinkedList();
-        Category parentCategory = category;
-        while (parentCategory != null) {
-            if (parentCategory.getId().equals(categoryId)) {
-                break;
-            }
-            categories.addFirst(parentCategory);
-            parentCategory = parentCategory.parent();
-        }
-        return categories;
     }
 
     public String name() {

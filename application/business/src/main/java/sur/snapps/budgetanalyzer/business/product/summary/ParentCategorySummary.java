@@ -3,7 +3,7 @@ package sur.snapps.budgetanalyzer.business.product.summary;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import sur.snapps.budgetanalyzer.domain.product.Category;
-import sur.snapps.budgetanalyzer.domain.product.ProductType;
+import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 
 import java.util.List;
 
@@ -31,15 +31,15 @@ public class ParentCategorySummary extends CategorySummary {
     }
 
     @Override
-    public boolean add(ProductType productType) {
+    public boolean add(ProductTypeForPeriod productType) {
         if (!isTopLevelSummary()
-            && !productType.fallsIntoCategory(getId())) {
+            && !productType.hasAnyParentCategory(getId())) {
             // product does not belong in this category
             return false;
         }
-        if (productType.category().getId().equals(getId())) {
+        if (productType.hasDirectParentCategory(getId())) {
             // this is the category the product belongs in
-            ChildCategorySummary child = new ChildCategorySummary(productType.getId(), productType.name(), 10);
+            ChildCategorySummary child = new ChildCategorySummary(productType.id(), productType.name(), productType.totalAmount());
             children.add(child);
             return true;
         }
@@ -59,7 +59,7 @@ public class ParentCategorySummary extends CategorySummary {
             parentSummary.getChildren().add(summary);
             parentSummary = summary;
         }
-        ChildCategorySummary child = new ChildCategorySummary(productType.getId(), productType.name(), 10);
+        ChildCategorySummary child = new ChildCategorySummary(productType.id(), productType.name(), productType.totalAmount());
         parentSummary.getChildren().add(child);
         return true;
     }

@@ -1,6 +1,6 @@
 package sur.snapps.budgetanalyzer.business.product.summary;
 
-import sur.snapps.budgetanalyzer.domain.product.ProductType;
+import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 
 /**
  * @author sur
@@ -18,7 +18,7 @@ public abstract class CategorySummary {
         this.name = name;
     }
 
-    protected abstract boolean add(ProductType productType);
+    protected abstract boolean add(ProductTypeForPeriod productType);
 
     public static ParentCategorySummary newSummary(String name) {
         return new ParentCategorySummary(TOP_LEVEL, name);

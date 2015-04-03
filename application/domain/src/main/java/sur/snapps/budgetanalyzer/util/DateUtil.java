@@ -3,6 +3,12 @@ package sur.snapps.budgetanalyzer.util;
 import java.util.Calendar;
 import java.util.Date;
 
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MILLISECOND;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.SECOND;
+
 /**
  * User: SUR
  * Date: 3/05/14
@@ -37,10 +43,28 @@ public final class DateUtil {
     public static Date removeTime(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(HOUR_OF_DAY, calendar.getActualMinimum(HOUR_OF_DAY));
+        calendar.set(MINUTE, calendar.getActualMinimum(MINUTE));
+        calendar.set(SECOND, calendar.getActualMinimum(SECOND));
+        calendar.set(MILLISECOND, calendar.getActualMinimum(MILLISECOND));
+        return calendar.getTime();
+    }
+
+    public static Date firstDayOfMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(DAY_OF_MONTH, 1);
+        return removeTime(calendar.getTime());
+    }
+
+    public static Date lastDayOfMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(DAY_OF_MONTH, calendar.getActualMaximum(DAY_OF_MONTH));
+        calendar.set(HOUR_OF_DAY, calendar.getActualMaximum(HOUR_OF_DAY));
+        calendar.set(MINUTE, calendar.getActualMaximum(MINUTE));
+        calendar.set(SECOND, calendar.getActualMaximum(SECOND));
+        calendar.set(MILLISECOND, calendar.getActualMaximum(MILLISECOND));
         return calendar.getTime();
     }
 }
