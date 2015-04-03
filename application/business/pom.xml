@@ -39,6 +39,24 @@
         <dependency><groupId>org.unitils</groupId><artifactId>unitils-mock</artifactId></dependency>
         <dependency><groupId>org.unitils</groupId><artifactId>unitils-easymock</artifactId></dependency>
         <dependency><groupId>org.easymock</groupId><artifactId>easymock</artifactId></dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>1.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>1.1.1</version>
+        </dependency>
     </dependencies>
 
     <build>

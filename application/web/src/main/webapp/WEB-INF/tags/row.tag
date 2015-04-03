@@ -18,32 +18,34 @@
         <c:set var="isDouble" value="${className eq 'java.lang.Double'}" />
         <c:set var="iconClass" value="data-icon-class='${fn:toLowerCase(sur_property.class.simpleName)}'" />
         <td data-type="${isDouble ? 'euro' : (isDate ? 'date' : (isEmail ? 'email' : (isEnum or isBoolean ? 'icon' : '')))}" ${isEnum or isBoolean ? iconClass : ''}>
-            <c:choose>
-                <c:when test="${isDouble}">
-                    <fmt:formatNumber value="${sur_property}" groupingUsed="true" minFractionDigits="2" />
-                </c:when>
-                <c:when test="${isDate}">
-                    <fmt:formatDate value="${sur_property}" pattern="dd-MM-yyyy" />
-                </c:when>
-                <c:when test="${isTimestamp}">
-                    <fmt:formatDate value="${sur_property}" pattern="dd-MM-yyyy HH:mm" />
-                </c:when>
-                <c:when test="${className eq 'java.lang.Boolean'}">
-                    <i class="fa boolean-${fn:toLowerCase(sur_property)}"></i>
-                </c:when>
-                <c:when test="${isEmail}">
-                    <a href="<c:url value="mailto:${sur_property.address}" />">
-                        <i class="fa fa-envelope-o"></i>
-                        <span><c:out value="${sur_property.address}" /></span>
-                    </a>
-                </c:when>
-                <c:when test="${isEnum}">
-                    <i class="fa fa-lg ${fn:toLowerCase(sur_property.class.simpleName)}-${fn:toLowerCase(sur_property)}"></i>
-                </c:when>
-                <c:otherwise>
-                    <c:out value="${sur_property}" />
-                </c:otherwise>
-            </c:choose>
+            <span>
+                <c:choose>
+                    <c:when test="${isDouble}">
+                        <fmt:formatNumber value="${sur_property}" groupingUsed="true" minFractionDigits="2" />
+                    </c:when>
+                    <c:when test="${isDate}">
+                        <fmt:formatDate value="${sur_property}" pattern="dd-MM-yyyy" />
+                    </c:when>
+                    <c:when test="${isTimestamp}">
+                        <fmt:formatDate value="${sur_property}" pattern="dd-MM-yyyy HH:mm" />
+                    </c:when>
+                    <c:when test="${className eq 'java.lang.Boolean'}">
+                        <i class="fa boolean-${fn:toLowerCase(sur_property)}"></i>
+                    </c:when>
+                    <c:when test="${isEmail}">
+                        <a href="<c:url value="mailto:${sur_property.address}" />">
+                            <i class="fa fa-envelope-o"></i>
+                            <span><c:out value="${sur_property.address}" /></span>
+                        </a>
+                    </c:when>
+                    <c:when test="${isEnum}">
+                        <i class="fa fa-lg ${fn:toLowerCase(sur_property.class.simpleName)}-${fn:toLowerCase(sur_property)}"></i>
+                    </c:when>
+                    <c:otherwise>
+                        <c:out value="${sur_property}" />
+                    </c:otherwise>
+                </c:choose>
+            </span>
         </td>
     </c:forEach>
     <c:if test="${actionColumn}">

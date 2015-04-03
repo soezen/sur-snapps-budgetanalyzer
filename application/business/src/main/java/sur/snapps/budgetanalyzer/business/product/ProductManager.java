@@ -1,9 +1,14 @@
 package sur.snapps.budgetanalyzer.business.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import sur.snapps.budgetanalyzer.business.product.summary.CategorySummary;
+import sur.snapps.budgetanalyzer.business.product.summary.ParentCategorySummary;
 import sur.snapps.budgetanalyzer.domain.product.Product;
+import sur.snapps.budgetanalyzer.domain.product.ProductType;
 import sur.snapps.budgetanalyzer.domain.store.StoreProduct;
 import sur.snapps.budgetanalyzer.persistence.product.ProductRepository;
+
+import java.util.List;
 
 /**
  * User: SUR
@@ -25,4 +30,14 @@ public class ProductManager {
         }
         return productRepository.findById(id);
     }
+
+    public CategorySummary generateCategorySummary() {
+        ParentCategorySummary summary = CategorySummary.newSummary("Category Summary for month X");
+        List<ProductType> productTypes = productRepository.findProductTypes();
+        for (ProductType productType : productTypes) {
+            summary.add(productType);
+        }
+        return summary;
+    }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sur.snapps.budgetanalyzer.business.product.ProductManager;
+import sur.snapps.budgetanalyzer.business.product.summary.CategorySummary;
 import sur.snapps.budgetanalyzer.domain.store.StoreProduct;
 import sur.snapps.budgetanalyzer.web.controller.AbstractController;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
@@ -35,5 +36,13 @@ public class ProductController extends AbstractController {
             return ResponseHolder.success(product);
         }
         return ResponseHolder.failure("product with code " + productCode + " not found for store " + storeId);
+    }
+
+    // TODO add param for which months we want the summary
+    @ResponseBody
+    @RequestMapping("/categories-summary-month")
+    public CategorySummary categoriesSummaryForMonth() {
+        CategorySummary summary = productManager.generateCategorySummary();
+        return summary;
     }
 }

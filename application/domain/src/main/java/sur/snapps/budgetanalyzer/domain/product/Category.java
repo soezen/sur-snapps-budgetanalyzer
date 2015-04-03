@@ -27,6 +27,7 @@ public class Category extends BaseAuditedEntity {
     private Category() {}
 
     private Category(Builder builder) {
+        this.setId(builder.id);
         this.name = builder.name;
         this.parent = builder.parent;
     }
@@ -57,6 +58,7 @@ public class Category extends BaseAuditedEntity {
     }
 
     public static class Builder {
+        private String id;
         private String name;
         private Category parent;
 
@@ -71,6 +73,11 @@ public class Category extends BaseAuditedEntity {
 
         public Builder name(String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder id(String id) {
+            this.id = id;
             return this;
         }
     }

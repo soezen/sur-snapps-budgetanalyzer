@@ -17,16 +17,18 @@
             <c:forEach var="event" items="${events}">
                 <sur:row value="${event}">
                     <td>
-                        <c:if test="${not empty event.subjectId}">
-                            <c:set var="subjectValue" value="${event.subject.displayValue}" />
-                        </c:if>
-                        <fmt:message key="events.message.${fn:toLowerCase(event.type)}">
-                            <fmt:param value="${event.user.name}" />
-                            <fmt:param value="${event.user.entity.name}" />
-                            <fmt:param value="${subjectValue}" />
-                            <fmt:param value="${event.user.emailAddress}" />
-                        </fmt:message>
-                        <c:set var="subjectValue" value="${null}" />
+                        <span>
+                            <c:if test="${not empty event.subjectId}">
+                                <c:set var="subjectValue" value="${event.subject.displayValue}" />
+                            </c:if>
+                            <fmt:message key="events.message.${fn:toLowerCase(event.type)}">
+                                <fmt:param value="${event.user.name}" />
+                                <fmt:param value="${event.user.entity.name}" />
+                                <fmt:param value="${subjectValue}" />
+                                <fmt:param value="${event.user.emailAddress}" />
+                            </fmt:message>
+                            <c:set var="subjectValue" value="${null}" />
+                        </span>
                     </td>
                 </sur:row>
             </c:forEach>

@@ -1,6 +1,7 @@
 package sur.snapps.budgetanalyzer.persistence.product;
 
 import sur.snapps.budgetanalyzer.domain.product.Product;
+import sur.snapps.budgetanalyzer.domain.product.ProductType;
 import sur.snapps.budgetanalyzer.domain.store.Store;
 import sur.snapps.budgetanalyzer.domain.store.StoreProduct;
 import sur.snapps.budgetanalyzer.persistence.AbstractRepository;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  * User: SUR
@@ -40,5 +42,13 @@ public class ProductRepository extends AbstractRepository {
 
     public Product findById(String id) {
         return entityManager.find(Product.class, id);
+    }
+
+    public List<ProductType> findProductTypes() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ProductType> query = builder.createQuery(ProductType.class);
+
+        Root<ProductType> fromProductTypes = query.from(ProductType.class);
+        return entityManager.createQuery(query).getResultList();
     }
 }
