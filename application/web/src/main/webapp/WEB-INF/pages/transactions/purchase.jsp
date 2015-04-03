@@ -11,21 +11,21 @@
         <f:form modelAttribute="purchase" action="postPurchase" method="post">
             <sur-form:form-fieldset legendKey="form.purchase.legend" formActionsStyle="vertical">
                 <jsp:attribute name="formActions">
-                    <input id="btn_submit" class="btn btn-primary" type="submit" value="<fmt:message key="form.action.submit" />" tabindex="30" />
-                    <a id="btn_cancel" class="btn btn-default" href="<c:url value="/budgetanalyzer/transactions/overview" />" tabindex="31">
+                    <input id="btn_submit" class="btn btn-primary" type="submit" value="<fmt:message key="form.action.submit" />" />
+                    <a id="btn_cancel" class="btn btn-default" href="<c:url value="/budgetanalyzer/transactions/overview" />">
                         <fmt:message key="form.action.cancel" />
                     </a>
                 </jsp:attribute>
                 <jsp:body>
-                    <sur-form:form-property-input path="date" property="purchase" type="date" tabindex="1" />
-                    <sur-form:select path="storeId" labelKey="purchase.storeId" onchange="sur.purchase.findStoreLocations(this);" tabindex="2">
+                    <sur-form:form-property-input path="date" property="purchase" type="date" />
+                    <sur-form:select path="storeId" labelKey="purchase.storeId" onchange="sur.purchase.findStoreLocations(this);">
                         <c:forEach items="${stores}" var="store">
                             <option data-value="${store.id}" value="${store.displayValue}"></option>
                         </c:forEach>
                     </sur-form:select>
                     <!-- TODO add item 'new store' when selecting that item, popup with form to create new store -->
                     <!-- after store is created, it is default selected -->
-                    <sur-form:select path="storeLocationId" labelKey="purchase.storeLocationId" tabindex="3" />
+                    <sur-form:select path="storeLocationId" labelKey="purchase.storeLocationId" />
                 </jsp:body>
             </sur-form:form-fieldset>
 
@@ -55,15 +55,15 @@
                         <td><i class="fa fa-trash-o fa-lg btn-small-icon hidden" onclick="sur.purchase.removeRow(this);"></i></td>
                         <td colspan="2">
                             <input type="hidden" name="products[0].id" />
-                            <input type="text" id="code" onkeydown="sur.purchase.findProductByCode(event, this);" class="form-control" tabindex="10" />
+                            <input type="text" id="code" onkeydown="sur.purchase.findProductByCode(event, this);" class="form-control" />
                             <span ></span>
                         </td>
                         <td class="hidden"></td>
                         <td>
-                            <input type="number" name="products[0].unitPrice" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control euro" tabindex="11" />
+                            <input type="number" name="products[0].unitPrice" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control euro" step="any" />
                         </td>
                         <td>
-                            <input type="number" name="products[0].amount" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control" tabindex="12" />
+                            <input type="number" name="products[0].amount" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control" step="any" />
                         </td>
                         <td><span class="euro">0</span></td>
                     </tr>
@@ -79,7 +79,7 @@
                         </sur-form:select>
                     </td>
                     <td>
-                        <input type="number" name="payments[0].amount" class="form-control" tabindex="22" onfocus="sur.purchase.fillInUncoveredAmount(this)" />
+                        <input type="number" name="payments[0].amount" class="form-control" onfocus="sur.purchase.fillInUncoveredAmount(this)" step="any" />
                     </td>
                 </tr>
             </sur:table>

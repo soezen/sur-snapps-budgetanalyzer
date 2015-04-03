@@ -21,6 +21,8 @@ import static sur.snapps.budgetanalyzer.util.DateUtil.lastDayOfMonth;
  */
 public class ProductManager {
 
+    // TODO add legend to chart and allow user to select and deselect categories to include
+
     @Autowired
     private ProductRepository productRepository;
 

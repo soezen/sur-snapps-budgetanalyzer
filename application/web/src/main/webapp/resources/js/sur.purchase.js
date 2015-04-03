@@ -92,6 +92,7 @@ sur.purchase = (function() {
         var unitPrice = Number($(productsTable.cell('unitPrice', rowIndex)).find('input[type="number"]').val());
         var amount = Number($(productsTable.cell('amount', rowIndex)).find('input[type="number"]').val());
         var totalPrice = unitPrice * amount;
+        totalPrice = totalPrice.toFixed(2);
         // TODO format currency
         $(productsTable.cell('totalPrice', rowIndex)).find('span.euro').text(totalPrice);
 
@@ -112,6 +113,7 @@ sur.purchase = (function() {
             var rowTotal = Number($(productsTable.cell('totalPrice', i)).find('span.euro').text());
             total += rowTotal;
         }
+        total = total.toFixed(2);
 
         $("#total-amount").text(total);
         return total;

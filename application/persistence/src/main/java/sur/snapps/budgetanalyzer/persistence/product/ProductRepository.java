@@ -57,7 +57,10 @@ public class ProductRepository extends AbstractRepository {
         Join<PurchasedProduct, Product> joinProducts = joinPurchasedProducts.join("product");
         Join<Product, ProductTypeForPeriod> joinProductTypes = joinProducts.join("type");
 
-        query.multiselect(joinProductTypes, builder.sum(joinPurchasedProducts.<Number>get("amount")));
+        query.multiselect(joinProductTypes, builder.sum(
+            builder.prod(
+                joinPurchasedProducts.<Number>get("amount"),
+                joinPurchasedProducts.<Number>get("unitPrice"))));
         query.groupBy(joinProductTypes);
 
         Path<Date> purchaseDate = fromPurchases.get("date");
