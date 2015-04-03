@@ -7,6 +7,22 @@ body {
   padding-top: 50px;
 }
 
+.euro:after {
+  content: ' \20AC';
+}
+
+.btn-small-icon {
+  padding-top: 12px;
+  cursor: pointer;
+}
+
+td > span {
+  padding-top: 6px;
+  display: inline-block;
+}
+td > span.euro {
+  float: right;
+}
 
 /*
  * Global add-ons

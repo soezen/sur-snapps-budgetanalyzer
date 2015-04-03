@@ -2,6 +2,7 @@ package sur.snapps.budgetanalyzer.domain.purchase;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.hibernate.envers.Audited;
 import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 import sur.snapps.budgetanalyzer.domain.product.Product;
 import sur.snapps.budgetanalyzer.domain.store.StoreLocation;
@@ -15,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +26,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "PURCHASES")
+@Audited
 public class Purchase extends BaseAuditedEntity {
 
     @Temporal(TemporalType.DATE)
@@ -39,7 +40,8 @@ public class Purchase extends BaseAuditedEntity {
     @JoinColumn(name = "PURCHASE_ID")
     private List<PurchasedProduct> products;
 
-    @Transient
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "PURCHASE_ID")
     private List<Payment> payments;
 
     private Purchase() {}

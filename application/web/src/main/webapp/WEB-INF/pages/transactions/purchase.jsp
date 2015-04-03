@@ -11,51 +11,75 @@
         <f:form modelAttribute="purchase" action="postPurchase" method="post">
             <sur-form:form-fieldset legendKey="form.purchase.legend" formActionsStyle="vertical">
                 <jsp:attribute name="formActions">
-                    <input id="btn_submit" class="btn btn-primary" type="submit" value="<fmt:message key="form.action.submit" />" />
-                    <a id="btn_cancel" class="btn btn-default" href="<c:url value="/budgetanalyzer/transactions/overview" />">
+                    <input id="btn_submit" class="btn btn-primary" type="submit" value="<fmt:message key="form.action.submit" />" tabindex="30" />
+                    <a id="btn_cancel" class="btn btn-default" href="<c:url value="/budgetanalyzer/transactions/overview" />" tabindex="31">
                         <fmt:message key="form.action.cancel" />
                     </a>
                 </jsp:attribute>
                 <jsp:body>
-                    <sur-form:form-property-input path="date" property="purchase" type="date" />
-                    <sur-form:select id="storeId" labelKey="purchase.storeId" onchange="sur.purchase.findStoreLocations(this);">
+                    <sur-form:form-property-input path="date" property="purchase" type="date" tabindex="1" />
+                    <sur-form:select path="storeId" labelKey="purchase.storeId" onchange="sur.purchase.findStoreLocations(this);" tabindex="2">
                         <c:forEach items="${stores}" var="store">
                             <option data-value="${store.id}" value="${store.displayValue}"></option>
                         </c:forEach>
                     </sur-form:select>
                     <!-- TODO add item 'new store' when selecting that item, popup with form to create new store -->
                     <!-- after store is created, it is default selected -->
-                    <sur-form:select id="storeLocationId" labelKey="purchase.storeLocationId" />
+                    <sur-form:select path="storeLocationId" labelKey="purchase.storeLocationId" tabindex="3" />
                 </jsp:body>
             </sur-form:form-fieldset>
+
+            <!-- TODO payment table with checkbox when checked amount is disabled and entered with rest of unpaid amount -->
+            <!-- when pressing tab after checking that checkbox, we get to submit button -->
+            <!-- TODO show counters of total amount of purchase, and total amount already covered by registered payments -->
+            <!-- TODO filter select list of accounts with accounts already selected -->
+            <!-- when no more accounts available do not create a new row -->
 
             <!-- TODO this should not be in form -->
             <!-- but when do we save the amounts then? -->
             <!-- put ajax on both input fields? or see if it is possible to put whole table in form -->
             <!-- TODO input fields amount and unit price not editable when there is no product selected -->
-            <sur:table id="products" columns="code,description,unitPrice,amount,totalPrice">
-                <c:forEach var="product" items="${purchase.products}">
+            <sur:table id="products" columns="remove,code,description,unitPrice,amount,totalPrice">
+                <jsp:attribute name="footerRows">
                     <tr>
-                        <td>
-                            ${product.code}
-                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><span id="total-amount" class="euro">0</span></td>
                     </tr>
-                </c:forEach>
+                </jsp:attribute>
+                <jsp:body>
+                    <tr>
+                        <td><i class="fa fa-trash-o fa-lg btn-small-icon hidden" onclick="sur.purchase.removeRow(this);"></i></td>
+                        <td colspan="2">
+                            <input type="hidden" name="products[0].id" />
+                            <input type="text" id="code" onkeydown="sur.purchase.findProductByCode(event, this);" class="form-control" tabindex="10" />
+                            <span ></span>
+                        </td>
+                        <td class="hidden"></td>
+                        <td>
+                            <input type="number" name="products[0].unitPrice" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control euro" tabindex="11" />
+                        </td>
+                        <td>
+                            <input type="number" name="products[0].amount" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control" tabindex="12" />
+                        </td>
+                        <td><span class="euro">0</span></td>
+                    </tr>
+                </jsp:body>
+            </sur:table>
+            <sur:table id="payments" columns="account,amount">
                 <tr>
-                    <td colspan="2">
-                        <input type="hidden" name="products[0].id" />
-                        <input type="text" id="code" onkeydown="sur.purchase.findProductByCode(event, this);" />
-                        <span ></span>
-                    </td>
-                    <td class="hidden"></td>
                     <td>
-                        <input type="number" name="products[0].unitPrice" readonly disabled />
+                        <sur-form:select path="payments[0].accountId" tabindex="20">
+                            <c:forEach items="${accounts}" var="account">
+                                <option data-value="${account.id}" value="${account.displayValue}"></option>
+                            </c:forEach>
+                        </sur-form:select>
                     </td>
                     <td>
-                        <input type="number" name="products[0].amount" onblur="sur.purchase.addProduct(this)" readonly disabled />
-                    </td>
-                    <td>
-
+                        <input type="number" name="payments[0].amount" class="form-control" tabindex="22" onfocus="sur.purchase.fillInUncoveredAmount(this)" />
                     </td>
                 </tr>
             </sur:table>

@@ -1,5 +1,6 @@
 package sur.snapps.budgetanalyzer.domain.store;
 
+import org.hibernate.envers.Audited;
 import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 
 import javax.persistence.Embedded;
@@ -14,6 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "STORE_LOCATIONS")
+@Audited
 public class StoreLocation extends BaseAuditedEntity {
 
     private String name;

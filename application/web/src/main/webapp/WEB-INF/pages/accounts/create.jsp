@@ -17,9 +17,12 @@
                         <input id="btn_submit" class="btn btn-primary" type="submit" value="<fmt:message key="form.action.submit" />" />
                     </jsp:attribute>
           <jsp:body>
-            <sur-form:form-property-input path="name" property="account" />
-              <!-- TODO iban validation and formatting -->
-            <sur-form:form-property-input path="iban" property="account" />
+              <sur-form:form-property-input path="name" property="account" />
+              <sur-form:select path="type" labelKey="account.type">
+                  <c:forEach items="${accountTypes}" var="accountType">
+                      <option data-value="${accountType.name()}" value="${accountType.name()}"></option>
+                  </c:forEach>
+              </sur-form:select>
           </jsp:body>
         </sur-form:form-fieldset>
       </div>

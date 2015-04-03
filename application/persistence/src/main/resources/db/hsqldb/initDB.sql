@@ -48,7 +48,7 @@ drop table accounts if EXISTS CASCADE;
 create table accounts (
   id        VARCHAR(40) NOT NULL,
   name      VARCHAR(100) NOT NULL,
-  iban      VARCHAR(100),
+  type      VARCHAR(50) not null,
   balance   DOUBLE NOT NULL,
   user_id   VARCHAR(40) not NULL,
   version   int not NULL
@@ -69,7 +69,7 @@ create table h_accounts (
   revtype   TINYINT,
   ID        VARCHAR(40) not NULL,
   name      VARCHAR(100),
-  iban      VARCHAR(100),
+  type      VARCHAR(50),
   balance   DOUBLE NOT NULL,
   user_id   VARCHAR(40),
   PRIMARY KEY (id, rev)
@@ -422,4 +422,60 @@ create table h_purchased_products (
   unit_price      DOUBLE,
   amount          DOUBLE,
   PRIMARY KEY (id, rev)
+);
+
+drop table h_purchase_purchasedproduct if EXISTS CASCADE;
+create table h_purchase_purchasedproduct (
+  rev             int not null,
+  revtype         TINYINT,
+  ID              VARCHAR(40) not null,
+  purchase_id     VARCHAR(40) not null,
+  PRIMARY KEY (rev, id, purchase_id)
+);
+
+----------------
+--  PAYMENTS  --
+----------------
+
+drop table payments if EXISTS CASCADE;
+create table payments (
+  id              VARCHAR(40) NOT NULL,
+  purchase_id     VARCHAR(40),
+  account_id      VARCHAR(40) not NULL,
+  amount          DOUBLE not null,
+  version         int not null
+);
+
+ALTER TABLE payments
+    add CONSTRAINT PK_PAYMENTS
+    PRIMARY KEY (id);
+
+alter TABLE payments
+    add CONSTRAINT FK_PAYMENTS_PURCHASE
+    FOREIGN KEY (purchase_id)
+    REFERENCES purchases (id);
+
+alter TABLE payments
+    add CONSTRAINT FK_PAYMENTS_ACCOUNT
+    FOREIGN KEY (account_id)
+    REFERENCES accounts (id);
+
+drop table h_payments if EXISTS CASCADE;
+create table h_payments (
+  rev             int not null,
+  revtype         TINYINT,
+  id              VARCHAR(40) not null,
+  purchase_id     VARCHAR(40),
+  account_id      VARCHAR(40),
+  amount          DOUBLE,
+  PRIMARY KEY (id, rev)
+);
+
+drop table h_purchase_payment IF EXISTS CASCADE;
+create table h_purchase_payment (
+  rev             int not null,
+  revtype         TINYINT,
+  id              VARCHAR(40) not null,
+  purchase_id     VARCHAR(40) not null,
+  PRIMARY KEY (rev, id, purchase_id)
 );

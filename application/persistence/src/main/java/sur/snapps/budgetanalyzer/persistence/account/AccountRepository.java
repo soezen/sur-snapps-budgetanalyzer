@@ -39,4 +39,8 @@ public class AccountRepository extends AbstractRepository {
 
         return entityManager.createQuery(query).getResultList();
     }
+
+    public Account findById(String id) {
+        return entityManager.find(Account.class, id);
+    }
 }

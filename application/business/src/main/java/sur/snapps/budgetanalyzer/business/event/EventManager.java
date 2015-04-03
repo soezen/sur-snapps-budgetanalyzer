@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.domain.BaseEntity;
 import sur.snapps.budgetanalyzer.domain.event.Event;
 import sur.snapps.budgetanalyzer.domain.event.EventWithSubject;
+import sur.snapps.budgetanalyzer.domain.purchase.Purchase;
 import sur.snapps.budgetanalyzer.domain.user.Account;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
@@ -77,6 +78,9 @@ public class EventManager {
                 case USER_UPDATE:
                     User updatedUser = historyRepository.find(User.class, originalEvent.getSubjectId(), originalEvent.getTms());
                     return new EventWithSubject<>(originalEvent, updatedUser);
+                case PURCHASE_CREATED:
+                    Purchase purchase = historyRepository.find(Purchase.class, originalEvent.getSubjectId(), originalEvent.getTms());
+                    return new EventWithSubject<>(originalEvent, purchase);
                 default:
                     System.out.println("EVENT TYPE without subject: " + originalEvent.getType());
                     return originalEvent;

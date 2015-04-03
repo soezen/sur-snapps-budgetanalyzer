@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import sur.snapps.budgetanalyzer.business.account.AccountManager;
 import sur.snapps.budgetanalyzer.business.exception.BusinessException;
 import sur.snapps.budgetanalyzer.business.transaction.EditPurchaseView;
 import sur.snapps.budgetanalyzer.business.transaction.TransactionManager;
@@ -29,6 +30,8 @@ public class TransactionsController extends AbstractLoggedInController {
 
     @Autowired
     private TransactionManager transactionManager;
+    @Autowired
+    private AccountManager accountManager;
 
     @Autowired
     private PurchaseValidator purchaseValidator;
@@ -47,6 +50,7 @@ public class TransactionsController extends AbstractLoggedInController {
     public String openPurchasePage(Model model) {
         model.addAttribute("purchase", new EditPurchaseView());
         model.addAttribute("stores", storeController.findStores());
+        model.addAttribute("accounts", accountManager.findFor(userContext.getCurrentEntity()));
         return PageLinks.TRANSACTIONS_PURCHASE.page();
     }
 

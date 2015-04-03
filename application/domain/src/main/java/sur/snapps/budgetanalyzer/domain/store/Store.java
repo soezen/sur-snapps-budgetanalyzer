@@ -35,11 +35,6 @@ public class Store extends BaseAuditedEntity {
     }
 
     // TODO default select store location closest to user address after selecting store
-    // TODO only do lookup of product when pressing tab or enter, otherwise just erase input
-
-    // TODO implement submit to output the input, so we can verify
-    // TODO html5 autocomplete on store and store location
-    // TODO store locations loaded with ajax
 
     private Store(Builder builder) {
         this.name = builder.name;

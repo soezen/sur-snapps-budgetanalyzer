@@ -1,5 +1,7 @@
 package sur.snapps.budgetanalyzer.business.account;
 
+import sur.snapps.budgetanalyzer.domain.user.AccountType;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ import java.io.Serializable;
 public class EditAccountView implements Serializable {
 
     private String name;
-    private String iban;
+    private AccountType type;
     private String ownerId;
 
     public String getName() {
@@ -20,12 +22,12 @@ public class EditAccountView implements Serializable {
         this.name = name;
     }
 
-    public String getIban() {
-        return iban;
+    public AccountType getType() {
+        return type;
     }
 
-    public void setIban(String iban) {
-        this.iban = iban;
+    public void setType(AccountType type) {
+        this.type = type;
     }
 
     public String getOwnerId() {

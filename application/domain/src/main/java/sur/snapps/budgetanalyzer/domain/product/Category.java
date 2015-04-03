@@ -1,5 +1,6 @@
 package sur.snapps.budgetanalyzer.domain.product;
 
+import org.hibernate.envers.Audited;
 import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "CATEGORIES")
+@Audited
 public class Category extends BaseAuditedEntity {
 
     private String name;

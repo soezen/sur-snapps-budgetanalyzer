@@ -2,9 +2,12 @@ package sur.snapps.budgetanalyzer.business.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import sur.snapps.budgetanalyzer.business.account.AccountManager;
 import sur.snapps.budgetanalyzer.business.event.LogEvent;
 import sur.snapps.budgetanalyzer.business.exception.BusinessException;
 import sur.snapps.budgetanalyzer.domain.event.EventType;
+import sur.snapps.budgetanalyzer.domain.user.Account;
+import sur.snapps.budgetanalyzer.domain.user.AccountType;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
@@ -22,6 +25,8 @@ public class UserManager {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private AccountManager accountManager;
+    @Autowired
     private TokenManager tokenManager;
 
     @Transactional
@@ -29,7 +34,8 @@ public class UserManager {
     public User create(EditUserView inputUser) {
         User.Builder userBuilder;
         String tokenValue = inputUser.getTokenValue();
-        if (tokenValue == null) {
+        boolean createNewEntity = tokenValue == null;
+        if (createNewEntity) {
             // TODO see if it is possible to change text from 'X joined entity X' to 'new user and entity X created'
             // for this the methods will have to be separated in manager and thus the if statement will have to happen in the front-end
             userBuilder = User.createAdmin()
@@ -49,8 +55,13 @@ public class UserManager {
             .name(inputUser.getName())
             .password(inputUser.getNewPassword())
             .build();
+        user = userRepository.save(user);
 
-        return userRepository.save(user);
+        if (createNewEntity) {
+            Account cashAccount = Account.newAccount().type(AccountType.CASH).owner(user).name("Cash").build();
+            accountManager.save(cashAccount);
+        }
+        return user;
     }
 
     @Transactional

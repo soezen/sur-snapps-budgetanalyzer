@@ -17,6 +17,11 @@ sur.table = (function() {
         boolean : {
             true: 'fa-check-circle-o',
             false: 'fa-circle-o'
+        },
+        accounttype : {
+            cash: 'fa-euro',
+            virtual: 'fa-credit-card',
+            cheque: 'fa-money'
         }
     };
 
@@ -220,6 +225,12 @@ sur.table = (function() {
             return rows.length;
         }
 
+        // TODO see what happens when you submit and the indexes are not 0,1,2,3 but 3,5,7,...
+        function removeRow(rowIndex) {
+            $(rows.get(rowIndex)).remove();
+            refreshRows();
+        }
+
         function copyRow(rowIndex) {
             var newIndex = rowCount();
             var clone = $(rows.get(rowIndex)).clone();
@@ -241,7 +252,8 @@ sur.table = (function() {
             cell: cell,
             rowIndexOf: rowIndexOf,
             rowCount: rowCount,
-            copyRow: copyRow
+            copyRow: copyRow,
+            removeRow: removeRow
         };
     }
 

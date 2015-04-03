@@ -1,5 +1,6 @@
 package sur.snapps.budgetanalyzer.domain.purchase;
 
+import org.hibernate.envers.Audited;
 import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 import sur.snapps.budgetanalyzer.domain.product.Product;
 
@@ -15,6 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PURCHASED_PRODUCTS")
+@Audited
 public class PurchasedProduct extends BaseAuditedEntity {
 
     @ManyToOne

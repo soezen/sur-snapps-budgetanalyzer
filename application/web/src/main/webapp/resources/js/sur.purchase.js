@@ -2,10 +2,13 @@ var sur = sur || {};
 sur.purchase = (function() {
 
     var productsTable = new sur.table.Table('products');
+    var paymentsTable = new sur.table.Table('payments');
 
     function findProductByCode(event, codeInput) {
-        if (event.keyCode !== 13
-            && event.keyCode !== 9) {
+        var storeId = $("#storeId").val();
+        if ((event.keyCode !== 13 && event.keyCode !== 9)
+            || codeInput.value == ''
+            || storeId == ''){
             return;
         }
         // TODO add a little button next to input that triggers this when clicking
@@ -13,13 +16,16 @@ sur.purchase = (function() {
         var rowIndex = productsTable.rowIndexOf(codeInput);
         var data = {
             productCode: codeInput.value,
-            storeId: $("#storeId").val()
+            storeId: storeId
         };
         $.getJSON(sur.url('/products/findProductByCode'), data, function (response) {
             if (response.success) {
                 productsTable.copyRow(rowIndex);
 
                 var product = response.value['product'];
+
+                var removeButton = $(productsTable.cell('remove', rowIndex));
+                removeButton.find('i').removeClass('hidden');
 
                 var code = $(productsTable.cell('code', rowIndex));
                 code.attr('colspan', '1');
@@ -81,19 +87,60 @@ sur.purchase = (function() {
      *
      * @param element an element within the row of finished product
      */
-    function addProduct(element) {
+    function updateRowTotal(element) {
         var rowIndex = productsTable.rowIndexOf(element);
         var unitPrice = Number($(productsTable.cell('unitPrice', rowIndex)).find('input[type="number"]').val());
         var amount = Number($(productsTable.cell('amount', rowIndex)).find('input[type="number"]').val());
         var totalPrice = unitPrice * amount;
         // TODO format currency
-        $(productsTable.cell('totalPrice', rowIndex)).text(totalPrice);
+        $(productsTable.cell('totalPrice', rowIndex)).find('span.euro').text(totalPrice);
+
+        calculateTotalAmount();
+    }
+
+    function removeRow(element) {
+        var rowIndex = productsTable.rowIndexOf(element);
+        productsTable.removeRow(rowIndex);
+
+        calculateTotalAmount();
+    }
+
+    function calculateTotalAmount() {
+        var rowCount = productsTable.rowCount();
+        var total = 0;
+        for (var i = 0; i < rowCount; i++) {
+            var rowTotal = Number($(productsTable.cell('totalPrice', i)).find('span.euro').text());
+            total += rowTotal;
+        }
+
+        $("#total-amount").text(total);
+        return total;
+    }
+
+    // TODO-TECH write visitor method on rows: forEachRow(function(row) {})
+    function calculateCoveredAmount() {
+        var rowCount = paymentsTable.rowCount();
+        var total = 0;
+        for (var i = 0; i < rowCount; i++) {
+            var rowTotal = Number($(paymentsTable.cell('amount', i)).find('input').val());
+            total += rowTotal;
+        }
+        return total;
+    }
+
+    function fillInUncoveredAmount(input) {
+        if (input.value != '') {
+            return;
+        }
+        input.value = calculateTotalAmount() - calculateCoveredAmount();
     }
 
     return {
         findProductByCode: findProductByCode,
         findStoreLocations: findStoreLocations,
-        addProduct: addProduct
+        updateRowTotal: updateRowTotal,
+        removeRow: removeRow,
+        fillInUncoveredAmount: fillInUncoveredAmount
     };
 })();
 

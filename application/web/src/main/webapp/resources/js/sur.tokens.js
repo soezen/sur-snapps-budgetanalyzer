@@ -10,7 +10,7 @@ sur.tokens = (function() {
         $(clickedLink).closest("td").find("i").addClass("hidden");
         $(clickedLink).closest("td").find("i.fa-refresh").removeClass("hidden");
         $.getJSON(url, { action : action }, function(response) {
-            new Response(response, clickedLink).show();
+            new sur.form.Response(response, clickedLink).show();
             var row = $(clickedLink).closest("tr");
             $(clickedLink).closest("td").find("i").removeClass("hidden");
             $(clickedLink).closest("td").find("i.fa-refresh").addClass("hidden");

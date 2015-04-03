@@ -7,7 +7,7 @@
 
 <sur:dashboard>
   <h1><fmt:message key="title.account_overview" /></h1>
-  <sur:table id="accounts" columns="iban,name,balance" actionColumn="false">
+  <sur:table id="accounts" columns="type,name,owner,balance" actionColumn="false">
     <jsp:attribute name="footerActions">
 
     </jsp:attribute>

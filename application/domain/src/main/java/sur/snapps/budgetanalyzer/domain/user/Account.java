@@ -2,7 +2,10 @@ package sur.snapps.budgetanalyzer.domain.user;
 
 import org.hibernate.envers.Audited;
 import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
+import sur.snapps.budgetanalyzer.domain.purchase.Payment;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,9 +20,12 @@ import javax.persistence.Table;
 @Audited
 public class Account extends BaseAuditedEntity {
 
+    @Enumerated(EnumType.STRING)
+    private AccountType type;
     private String name;
-    private String iban;
     private double balance;
+
+    // TODO when type is CHEQUE we need to specify whether only certain amounts are possible
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -30,16 +36,20 @@ public class Account extends BaseAuditedEntity {
     private Account(Builder builder) {
         this.name = builder.name;
         this.owner = builder.owner;
-        this.iban = builder.iban;
+        this.type = builder.type;
         this.balance = 0;
+    }
+
+    public void registerPayment(Payment payment) {
+        balance -= payment.amount();
     }
 
     public String name() {
         return name;
     }
 
-    public String iban() {
-        return iban;
+    public AccountType type() {
+        return type;
     }
 
     public double balance() {
@@ -55,8 +65,8 @@ public class Account extends BaseAuditedEntity {
     }
 
     public static class Builder {
+        private AccountType type;
         private String name;
-        private String iban;
         private User owner;
 
         public Account build() {
@@ -68,8 +78,8 @@ public class Account extends BaseAuditedEntity {
             return this;
         }
 
-        public Builder iban(String iban) {
-            this.iban = iban;
+        public Builder type(AccountType type) {
+            this.type = type;
             return this;
         }
 
@@ -83,12 +93,16 @@ public class Account extends BaseAuditedEntity {
         return name;
     }
 
-    public String getIban() {
-        return iban;
+    public AccountType getType() {
+        return type;
     }
 
     public double getBalance() {
         return balance;
+    }
+
+    public String getOwner() {
+        return owner.getDisplayValue();
     }
 
     @Override

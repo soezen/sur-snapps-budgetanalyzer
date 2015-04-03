@@ -6,6 +6,7 @@
 <%@attribute name="columns" fragment="false" %>
 <%@attribute name="actionColumn" fragment="false" %>
 <%@attribute name="footerActions" fragment="true" %>
+<%@attribute name="footerRows" fragment="true" %>
 
 <c:set var="columns" value="${fn:split(columns, ',')}" scope="request" />
 <c:set var="actionColumn" value="${actionColumn}" scope="request" />
@@ -24,6 +25,7 @@
         <jsp:doBody />
     </tbody>
     <tfoot>
+        <jsp:invoke fragment="footerRows" />
         <tr>
             <td colspan="${fn:length(columns) + (actionColumn ? 1 : 0)}">
                 <jsp:invoke fragment="footerActions" />

@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@tag description="Form input for a property field with label and errors" pageEncoding="UTF-8" %>
+<%@tag description="Form input for a property field with label and errors" pageEncoding="UTF-8" dynamic-attributes="attributes" %>
 <%@attribute name="path" fragment="false" required="true" %>
 <%@attribute name="property" fragment="false" type="java.lang.Object" %>
 <%@attribute name="type" fragment="false" required="false" %>
@@ -73,10 +73,16 @@
                        type="${empty type ? 'text' : type}"
                        ${readonly_attribute}
                        class="form-control ${not empty edit_group ? 'edit-group': ''}"
-                       value="${property[path]}" />
+                       value="${property[path]}"
+                        tabindex="${attributes.tabindex}"/>
             </c:when>
             <c:otherwise>
-                <f:input path="${path}" cssClass="form-control ${not empty edit_group ? 'edit-group' : '' }" type="${empty type ? 'text' : type}" readonly="${readonly}" data-form-focus="${form_focus}" onblur="${dynamicAttributes.onblur}" />
+                <f:input path="${path}" cssClass="form-control ${not empty edit_group ? 'edit-group' : '' }"
+                         type="${empty type ? 'text' : type}"
+                         readonly="${readonly}"
+                         data-form-focus="${form_focus}"
+                         onblur="${dynamicAttributes.onblur}"
+                        tabindex="${attributes.tabindex}"/>
 
             </c:otherwise>
         </c:choose>

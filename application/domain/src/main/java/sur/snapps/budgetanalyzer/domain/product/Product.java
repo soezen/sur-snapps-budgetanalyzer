@@ -2,6 +2,7 @@ package sur.snapps.budgetanalyzer.domain.product;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.hibernate.envers.Audited;
 import sur.snapps.budgetanalyzer.domain.BaseAuditedEntity;
 import sur.snapps.budgetanalyzer.domain.property.Property;
 
@@ -19,6 +20,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "PRODUCTS")
+@Audited
 public class Product extends BaseAuditedEntity {
 
     private String name;

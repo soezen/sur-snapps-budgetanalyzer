@@ -1,5 +1,6 @@
 package sur.snapps.budgetanalyzer.web.controller.accounts;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import sur.snapps.budgetanalyzer.business.account.AccountManager;
 import sur.snapps.budgetanalyzer.business.account.EditAccountView;
 import sur.snapps.budgetanalyzer.business.exception.BusinessException;
+import sur.snapps.budgetanalyzer.domain.user.AccountType;
 import sur.snapps.budgetanalyzer.web.controller.AbstractLoggedInController;
 import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author sur
@@ -30,6 +33,16 @@ public class AccountController extends AbstractLoggedInController {
 
     @Autowired
     private AccountValidator accountValidator;
+
+    private List<AccountType> accountTypes;
+
+    @ModelAttribute("accountTypes")
+    public List<AccountType> accountTypes() {
+        if (accountTypes == null) {
+            accountTypes = Lists.newArrayList(AccountType.VIRTUAL, AccountType.CHEQUE);
+        }
+        return accountTypes;
+    }
 
     @Override
     public String activePage() {

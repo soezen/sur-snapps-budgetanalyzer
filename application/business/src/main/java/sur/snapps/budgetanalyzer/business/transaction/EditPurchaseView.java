@@ -21,10 +21,12 @@ public class EditPurchaseView implements Serializable {
     private Date date;
     private String storeLocationId;
     private List<EditProductView> products;
+    private List<EditPaymentView> payments;
 
     public EditPurchaseView() {
         date = removeTime(now());
         products = Lists.newArrayList();
+        payments = Lists.newArrayList();
     }
 
     public Date getDate() {
@@ -61,7 +63,21 @@ public class EditPurchaseView implements Serializable {
         this.products = products;
     }
 
-    public void addProduct(EditProductView product) {
-        products.add(product);
+    public List<EditPaymentView> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<EditPaymentView> payments) {
+        this.payments = payments;
+    }
+
+    public List<EditPaymentView> getPaymentsFiltered() {
+        return FluentIterable.from(payments)
+            .filter(new Predicate<EditPaymentView>() {
+                @Override
+                public boolean apply(EditPaymentView input) {
+                    return input.getAccountId() != null;
+                }
+            }).toList();
     }
 }

@@ -32,9 +32,14 @@ public class AccountManager {
 
         Account account = Account.newAccount()
             .name(inputAccount.getName())
-            .iban(inputAccount.getIban())
+            .type(inputAccount.getType())
             .owner(user)
             .build();
+        return accountRepository.save(account);
+    }
+
+    @Transactional
+    public Account save(Account account) {
         return accountRepository.save(account);
     }
 
@@ -43,5 +48,9 @@ public class AccountManager {
 
     public List<Account> findFor(Entity entity) {
         return accountRepository.findFor(entity.getId());
+    }
+
+    public Account findById(String id) {
+        return accountRepository.findById(id);
     }
 }

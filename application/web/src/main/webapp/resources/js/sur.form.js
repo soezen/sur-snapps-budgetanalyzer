@@ -197,7 +197,8 @@ sur.form = (function() {
         submit: submit,
         edit: edit,
         cancelEditGroup: cancelEditGroup,
-        cancelCurrentEditGroup: cancelCurrentEditGroup
+        cancelCurrentEditGroup: cancelCurrentEditGroup,
+        Response: Response
     };
 
 })();
