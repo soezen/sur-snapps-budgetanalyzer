@@ -7,3 +7,20 @@ circle {
     fill: none;
     pointer-events: all;
 }
+
+.legend {
+    list-style: none;
+}
+
+.legend > li {
+    margin: 3px;
+}
+
+.legend > li > span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    float: left;
+    margin-right: 5px;
+}

@@ -12,7 +12,8 @@
   <jsp:body>
     <h1><fmt:message key="title.transactions_overview" /></h1>
     <!-- TODO add monthly overview of transactions in categories and budgets -->
-    <div id="chart"></div>
+    <div id="chart">
+    </div>
 
     <script src="<c:url value="/resources/js/charts/d3.min.js" />"></script>
     <script src="<c:url value="/resources/js/charts/donut.js" />"></script>

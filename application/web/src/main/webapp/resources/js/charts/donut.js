@@ -8,7 +8,7 @@ sur.charts.donut = (function() {
     var margin = {top: 200, right: 200, bottom: 200, left: 200},
         radius = Math.min(margin.top, margin.right, margin.bottom, margin.left) - 10;
 
-    var hue = d3.scale.category10();
+    var hue = d3.scale.category20b();
 
     var luminance = d3.scale.sqrt()
         .domain([0, 1e6])
@@ -34,8 +34,8 @@ sur.charts.donut = (function() {
     function fill(d) {
         var p = d;
         while (p.depth > 1) p = p.parent;
-        var c = d3.lab(hue(p.name));
-        c.l = luminance(d.sum);
+        var c = d3.lab(hue(p.sum));
+        c.l = luminance(d.sum * 10000);
         return c;
     }
 
@@ -47,18 +47,45 @@ sur.charts.donut = (function() {
         };
     }
 
+    // TODO remove css from this javascript and make use of classes
+    // TODO use responsive classes
+
     function updateArc(d) {
         return {depth: d.depth, x: d.x, dx: d.dx};
     }
 
+    function updateLegend(legend, root, p) {
+        // generate legend
+        $(legend[0]).empty();
+        partition
+            .nodes(p !== root ? root : p)
+            .forEach(function (d) {
+                if (d.depth == 1) {
+                    var legendItem = legend.append('li');
+                    legendItem.text(d.name + ' (' + d.sum + ')');
+                    legendItem.append('span').style('background-color', d.fill);
+                }
+            });
+    }
+
     function show(path, element) {
-        var svg = d3.select(element).append("svg")
+
+        var svg = d3.select(element).append("div")
+            .style('display', 'inline-block')
+            .style('float', 'left')
+            .append("svg")
             .attr("width", margin.left + margin.right)
             .attr("height", margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+        var legendDiv = d3.select(element).append('div')
+            .style('display', 'inline-block');
+        var title = legendDiv.append('h3');
+        var legend = legendDiv.append('ul').attr('class', 'legend');
+
         d3.json(sur.url(path), function(error, root) {
+            title.text(root.name);
 
             // Compute the initial layout on the entire tree to sum sizes.
             // Also compute the full name and fill color for each node,
@@ -78,6 +105,8 @@ sur.charts.donut = (function() {
                 .children(function(d, depth) { return depth < 2 ? d._children : null; })
                 .value(function(d) { return d.sum; });
 
+            updateLegend(legend, root);
+
             var center = svg.append("circle")
                 .attr("r", radius / 3)
                 .on("click", zoomOut);
@@ -85,7 +114,6 @@ sur.charts.donut = (function() {
             center.append("title")
                 .text("zoom out");
 
-            // TODO place labels on chart
             var path = svg.selectAll("path")
                 .data(partition.nodes(root).slice(1))
                 .enter().append("path")
@@ -155,6 +183,8 @@ sur.charts.donut = (function() {
                         .style("fill-opacity", 1)
                         .attrTween("d", function(d) { return arcTween.call(this, updateArc(d)); });
                 });
+
+                updateLegend(legend, root, p);
             }
         });
     }
