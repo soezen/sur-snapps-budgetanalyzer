@@ -1,5 +1,6 @@
 package sur.snapps.budgetanalyzer.persistence.product;
 
+import sur.snapps.budgetanalyzer.domain.product.Category;
 import sur.snapps.budgetanalyzer.domain.product.Product;
 import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 import sur.snapps.budgetanalyzer.domain.purchase.Purchase;
@@ -67,6 +68,31 @@ public class ProductRepository extends AbstractRepository {
         query.where(builder.and(
             builder.greaterThanOrEqualTo(purchaseDate, startDate)),
             builder.lessThanOrEqualTo(purchaseDate, endDate));
+
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    // TODO put categories in application scoped controller
+
+    public List<Category> findCategoriesWithParent(Category parent) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Category> query = builder.createQuery(Category.class);
+
+        Root<Category> fromCategories = query.from(Category.class);
+        Path<Object> parentField = fromCategories.get("parent");
+        if (parent == null) {
+            query.where(builder.isNull(parentField));
+        } else {
+            query.where(builder.equal(parentField, parent));
+        }
+
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    public List<Product> findAll() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> query = builder.createQuery(Product.class);
+        query.from(Product.class);
 
         return entityManager.createQuery(query).getResultList();
     }

@@ -18,7 +18,6 @@ body {
 
 td > span {
   padding-top: 6px;
-  display: inline-block;
 }
 td > span.euro {
   float: right;
@@ -39,6 +38,13 @@ td > span.euro {
  */
 .navbar-fixed-top {
   border: 0;
+}
+
+.input-warning {
+  font-size: xx-small;
+}
+.input-warning .fa {
+  color: orange;
 }
 
 /*

@@ -39,10 +39,9 @@
             <!-- but when do we save the amounts then? -->
             <!-- put ajax on both input fields? or see if it is possible to put whole table in form -->
             <!-- TODO input fields amount and unit price not editable when there is no product selected -->
-            <sur:table id="products" columns="remove,code,description,unitPrice,amount,totalPrice">
+            <sur:table id="products" columns="remove,description,unitPrice,amount,totalPrice">
                 <jsp:attribute name="footerRows">
                     <tr>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -53,17 +52,35 @@
                 <jsp:body>
                     <tr>
                         <td><i class="fa fa-trash-o fa-lg btn-small-icon hidden" onclick="sur.purchase.removeRow(this);"></i></td>
-                        <td colspan="2">
+                        <td>
                             <input type="hidden" name="products[0].id" />
-                            <input type="text" id="code" onkeydown="sur.purchase.findProductByCode(event, this);" class="form-control" />
-                            <span ></span>
+                            <span></span>
+                            <div class="input-group">
+                                <input type="text" id="code" class="form-control" placeholder="code" disabled />
+                                <div class="input-group-btn">
+                                    <button id="btn_find_product_by_code" class="btn btn-default" onclick="sur.purchase.findProductByCode(); return false;" disabled><i class="fa fa-search"></i></button>
+                                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-chevron-down"></i></button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li><a href="#" onclick="sur.purchase.findProductByCategoryAndType();">Search by Category and Type</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <span id="no_store_selected_warning" class="input-warning">
+                                <i class="fa fa-lg fa-warning"></i>
+                                Cannot select product by code if no store is selected.
+                            </span>
                         </td>
-                        <td class="hidden"></td>
                         <td>
-                            <input type="number" name="products[0].unitPrice" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control euro" step="any" />
+                            <div class="input-group">
+                                <input type="number" name="products[0].unitPrice" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control euro" step="any" />
+                                <span class="input-group-addon">&euro; / XX</span>
+                            </div>
                         </td>
                         <td>
-                            <input type="number" name="products[0].amount" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control" step="any" />
+                            <div class="input-group">
+                                <input type="number" name="products[0].amount" onblur="sur.purchase.updateRowTotal(this)" readonly disabled class="form-control" step="any" />
+                                <span class="input-group-addon">XXes</span>
+                            </div>
                         </td>
                         <td><span class="euro">0</span></td>
                     </tr>
@@ -86,12 +103,10 @@
         </f:form>
     </div>
 
-    <!-- TODO 1. add data in db (stores and products -->
-    <!-- TODO 2. submit form with only existing products -->
-    <!-- TODO 3. add payment information -->
     <!-- TODO 4. implement search of existing product by category and type -->
     <!-- TODO 5. implement create product -->
 
+    <!-- TODO put in separate jsp page and fetch content with ajax -->
     <div id="findProductByCategoryAndTypePopup" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -100,21 +115,15 @@
                     <h4 class="modal-title"><fmt:message key="popup.find_product.title" /></h4>
                 </div>
                 <div class="modal-body">
-                    <p><fmt:message key="popup.find_product.text" /></p>
-                    <div class="form-horizontal">
-                        <!-- TODO drop down in which you can type -->
-                        <!-- TODO categories most common in that store on top -->
-                    </div>
+                    <i class="fa fa-spinner fa-spin"></i>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="form.action.cancel" /></button>
-                    <button type="button" class="btn btn-primary">Save Changes</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
     <script src="<c:url value="/resources/js/sur.table.js" />"></script>
     <script src="<c:url value="/resources/js/sur.purchase.js" />"></script>
 </sur:dashboard>

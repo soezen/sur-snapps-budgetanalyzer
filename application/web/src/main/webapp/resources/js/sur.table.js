@@ -244,8 +244,6 @@ sur.table = (function() {
             });
             body.append(clone);
             refreshRows();
-
-            $(cell('code', rowCount() - 1)).find('input').val('');
         }
 
         return {

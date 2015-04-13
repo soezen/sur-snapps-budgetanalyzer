@@ -27,7 +27,9 @@ public enum PageLinks {
     ACCOUNTS_CREATE("accounts/create", "accounts/create"),
 
     TRANSACTIONS_OVERVIEW("transactions/overview", "transactions/overview"),
-    TRANSACTIONS_PURCHASE("transactions/purchase", "transactions/purchase")
+    TRANSACTIONS_PURCHASE("transactions/purchase", "transactions/purchase"),
+
+    PRODUCT_SEARCH("transactions/search_product", "products/search")
     ;
 
     private static final String REDIRECT = "redirect:";

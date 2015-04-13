@@ -3,6 +3,7 @@ package sur.snapps.budgetanalyzer.business.product;
 import org.springframework.beans.factory.annotation.Autowired;
 import sur.snapps.budgetanalyzer.business.product.summary.CategorySummary;
 import sur.snapps.budgetanalyzer.business.product.summary.ParentCategorySummary;
+import sur.snapps.budgetanalyzer.domain.product.Category;
 import sur.snapps.budgetanalyzer.domain.product.Product;
 import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 import sur.snapps.budgetanalyzer.domain.store.StoreProduct;
@@ -35,6 +36,14 @@ public class ProductManager {
             return null;
         }
         return productRepository.findById(id);
+    }
+
+    public List<Category> findCategoriesWithParent(Category parent) {
+        return productRepository.findCategoriesWithParent(parent);
+    }
+
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     public CategorySummary generateCategorySummary(Date date) {

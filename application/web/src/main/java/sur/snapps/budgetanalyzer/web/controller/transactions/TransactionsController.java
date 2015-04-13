@@ -13,6 +13,7 @@ import sur.snapps.budgetanalyzer.business.transaction.EditPurchaseView;
 import sur.snapps.budgetanalyzer.business.transaction.TransactionManager;
 import sur.snapps.budgetanalyzer.web.controller.AbstractLoggedInController;
 import sur.snapps.budgetanalyzer.web.controller.store.StoreController;
+import sur.snapps.budgetanalyzer.web.navigation.NavigateTo;
 import sur.snapps.budgetanalyzer.web.navigation.PageLinks;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -55,6 +56,7 @@ public class TransactionsController extends AbstractLoggedInController {
     }
 
     @RequestMapping(value = "/postPurchase", method = RequestMethod.POST)
+    @NavigateTo(PageLinks.TRANSACTIONS_PURCHASE)
     public String purchase(@ModelAttribute("purchase") EditPurchaseView purchase, BindingResult bindingResult) {
         checkNotNull(purchase, "Purchase cannot be null");
         purchaseValidator.validate(purchase, bindingResult);

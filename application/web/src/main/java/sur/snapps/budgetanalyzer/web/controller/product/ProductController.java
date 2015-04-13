@@ -2,6 +2,7 @@ package sur.snapps.budgetanalyzer.web.controller.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,6 +38,13 @@ public class ProductController extends AbstractController {
             return ResponseHolder.success(product);
         }
         return ResponseHolder.failure("product with code " + productCode + " not found for store " + storeId);
+    }
+
+    @RequestMapping("search")
+    public String openSearchPopup(Model model) {
+        model.addAttribute("categories", productManager.findCategoriesWithParent(null));
+        model.addAttribute("products", productManager.findAll());
+        return PageLinks.PRODUCT_SEARCH.page();
     }
 
     // TODO add param for which months we want the summary

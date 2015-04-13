@@ -3,57 +3,32 @@ sur.purchase = (function() {
 
     var productsTable = new sur.table.Table('products');
     var paymentsTable = new sur.table.Table('payments');
+    var findProductByCategoryAndTypePopup = $('#findProductByCategoryAndTypePopup');
 
-    function findProductByCode(event, codeInput) {
+    function openFindProductByCategoryAndTypePopup() {
+        var codeInput = $("#code");
+        findProductByCategoryAndTypePopup.modal()
+            .on('hidden.bs.modal', function () {
+                codeInput.val('');
+                codeInput.focus();
+            });
+        $.get(sur.baseUrl + 'products/search', function (response) {
+            findProductByCategoryAndTypePopup.find('.modal-body').html(response);
+        });
+    }
+
+    function findProductByCode() {
         var storeId = $("#storeId").val();
-        if ((event.keyCode !== 13 && event.keyCode !== 9)
-            || codeInput.value == ''
-            || storeId == ''){
-            return;
-        }
-        // TODO add a little button next to input that triggers this when clicking
-        event.preventDefault();
-        var rowIndex = productsTable.rowIndexOf(codeInput);
         var data = {
-            productCode: codeInput.value,
+            productCode: $("#code").val(),
             storeId: storeId
         };
         $.getJSON(sur.url('/products/findProductByCode'), data, function (response) {
             if (response.success) {
-                productsTable.copyRow(rowIndex);
-
                 var product = response.value['product'];
-
-                var removeButton = $(productsTable.cell('remove', rowIndex));
-                removeButton.find('i').removeClass('hidden');
-
-                var code = $(productsTable.cell('code', rowIndex));
-                code.attr('colspan', '1');
-                code.find('input#code').remove();
-                code.find('input[name$=id]').val(product['id']);
-                code.find('span').text(response.value['code']);
-
-                var description = $(productsTable.cell('description', rowIndex));
-                description.removeClass('hidden');
-                description.text(product['name']);
-
-                var amount = $(productsTable.cell('amount', rowIndex)).find('input');
-                amount.removeAttr('disabled');
-                amount.removeAttr('readonly');
-
-                var unitPrice = $(productsTable.cell('unitPrice', rowIndex)).find('input');
-                unitPrice.removeAttr('disabled');
-                unitPrice.removeAttr('readonly');
-                unitPrice.focus();
-            }
-            if (response.success) {
+                selectProduct(product['id'], product['name']);
             } else {
-                $('#findProductByCategoryAndTypePopup').modal()
-                    .on('hidden.bs.modal', function() {
-                        var codeInput = $(productsTable.cell('code', rowIndex)).find('input');
-                        codeInput.val('');
-                        codeInput.focus();
-                    });
+                openFindProductByCategoryAndTypePopup();
             }
         });
         // TODO add euro sign in column of unit price
@@ -70,7 +45,20 @@ sur.purchase = (function() {
             storeLocationList.empty();
             $("#storeLocationId_input").val('');
 
+            var $code = $("#code");
+            var $btnFindProductByCode = $("#btn_find_product_by_code");
+            var $noStoreSelectedWarning = $("#no_store_selected_warning");
+
+            $code.attr('disabled', 'true');
+            $btnFindProductByCode.attr('disabled', 'true');
+            $noStoreSelectedWarning.show();
+
             if (response.success) {
+                if (response.value.length > 0) {
+                    $code.removeAttr('disabled');
+                    $btnFindProductByCode.removeAttr('disabled');
+                    $noStoreSelectedWarning.hide();
+                }
                 response.value.forEach(function(item) {
                     var option = document.createElement("option");
                     option.value = item.displayValue;
@@ -79,6 +67,32 @@ sur.purchase = (function() {
                 });
             }
         });
+    }
+
+    function selectProduct(productId, productDescription) {
+        var codeInput = $("#code");
+        var rowIndex = productsTable.rowIndexOf(codeInput);
+        productsTable.copyRow(rowIndex);
+
+        var removeButton = $(productsTable.cell('remove', rowIndex));
+        removeButton.find('i').removeClass('hidden');
+
+        var description = $(productsTable.cell('description', rowIndex));
+        description.find('span').text(productDescription);
+        description.find('div.input-group').remove();
+        description.find('input[name$=id]').val(productId);
+        $("#code").val('');
+
+        var amount = $(productsTable.cell('amount', rowIndex)).find('input');
+        amount.removeAttr('disabled');
+        amount.removeAttr('readonly');
+
+        var unitPrice = $(productsTable.cell('unitPrice', rowIndex)).find('input');
+        unitPrice.removeAttr('disabled');
+        unitPrice.removeAttr('readonly');
+        unitPrice.focus();
+
+        findProductByCategoryAndTypePopup.modal('hide');
     }
 
     /**
@@ -95,7 +109,6 @@ sur.purchase = (function() {
         totalPrice = totalPrice.toFixed(2);
         // TODO format currency
         $(productsTable.cell('totalPrice', rowIndex)).find('span.euro').text(totalPrice);
-
         calculateTotalAmount();
     }
 
@@ -140,6 +153,8 @@ sur.purchase = (function() {
     return {
         findProductByCode: findProductByCode,
         findStoreLocations: findStoreLocations,
+        findProductByCategoryAndType: openFindProductByCategoryAndTypePopup,
+        selectProduct: selectProduct,
         updateRowTotal: updateRowTotal,
         removeRow: removeRow,
         fillInUncoveredAmount: fillInUncoveredAmount
