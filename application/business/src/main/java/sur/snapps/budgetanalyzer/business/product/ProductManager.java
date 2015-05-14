@@ -1,10 +1,12 @@
 package sur.snapps.budgetanalyzer.business.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import sur.snapps.budgetanalyzer.business.product.summary.CategorySummary;
 import sur.snapps.budgetanalyzer.business.product.summary.ParentCategorySummary;
 import sur.snapps.budgetanalyzer.domain.product.Category;
 import sur.snapps.budgetanalyzer.domain.product.Product;
+import sur.snapps.budgetanalyzer.domain.product.ProductType;
 import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 import sur.snapps.budgetanalyzer.domain.store.StoreProduct;
 import sur.snapps.budgetanalyzer.persistence.product.ProductRepository;
@@ -27,8 +29,28 @@ public class ProductManager {
     @Autowired
     private ProductRepository productRepository;
 
+    @Transactional
+    public Category create(EditCategoryView categoryView) {
+        Category parentCategory = findCategoryById(categoryView.getParent());
+        Category category = (parentCategory != null
+            ? parentCategory.createSubCategory()
+            : Category.newCategory())
+            .name(categoryView.getName())
+            .build();
+
+        return productRepository.save(category);
+    }
+
     public StoreProduct findByCode(String store, String productCode) {
         return productRepository.findByCode(store, productCode);
+    }
+
+    public List<ProductType> findProductTypes(String categoryId) {
+        return productRepository.findProductTypes(categoryId);
+    }
+
+    public List<Product> findProductsOfType(String productTypeId) {
+        return productRepository.findProductsOfType(productTypeId);
     }
 
     public Product findById(String id) {
@@ -36,6 +58,13 @@ public class ProductManager {
             return null;
         }
         return productRepository.findById(id);
+    }
+
+    public Category findCategoryById(String id) {
+        if (id == null) {
+            return null;
+        }
+        return productRepository.findCategoryById(id);
     }
 
     public List<Category> findCategoriesWithParent(Category parent) {

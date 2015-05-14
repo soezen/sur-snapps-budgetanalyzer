@@ -134,7 +134,7 @@ public class TokenManagerTest {
 
     @Test
     public void testDelete() {
-        token.complete();
+        repository.delete(token);
         replay();
 
         manager.delete(token);

@@ -9,7 +9,10 @@ import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.InjectIntoByType;
 import org.unitils.inject.annotation.TestedObject;
 import org.unitils.mock.annotation.Dummy;
+import sur.snapps.budgetanalyzer.business.account.AccountManager;
 import sur.snapps.budgetanalyzer.business.exception.BusinessException;
+import sur.snapps.budgetanalyzer.domain.user.Account;
+import sur.snapps.budgetanalyzer.domain.user.AccountType;
 import sur.snapps.budgetanalyzer.domain.user.Entity;
 import sur.snapps.budgetanalyzer.domain.user.Token;
 import sur.snapps.budgetanalyzer.domain.user.User;
@@ -50,18 +53,26 @@ public class UserManagerTest {
     @InjectIntoByType
     private TokenManager tokenManager;
 
+    @Mock
+    @InjectIntoByType
+    private AccountManager accountManager;
+
     @Dummy
     private User user;
     @Dummy
     private List<User> users;
     @Dummy
     private Entity entity;
+    @Dummy
+    private Account account;
 
     @Test
     public void testCreateUserAdmin() {
         Capture<User> userCapture = new Capture<>();
+        Capture<Account> accountCapture = new Capture<>();
         EditUserView michelle = michellePfeiffer();
 
+        expect(accountManager.save(capture(accountCapture))).andReturn(account);
         expect(repository.save(capture(userCapture))).andReturn(user);
         replay();
 
@@ -85,6 +96,11 @@ public class UserManagerTest {
         assertEquals(michelle.getName(), entity.getName());
         assertTrue(entity.isOwned());
         assertFalse(entity.isShared());
+
+        Account actualAccount = accountCapture.getValue();
+        assertNotNull(actualAccount);
+        assertEquals(AccountType.CASH, actualAccount.type());
+        assertSame(user, actualAccount.owner());
     }
 
     @Test

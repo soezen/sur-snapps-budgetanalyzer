@@ -62,7 +62,11 @@
                             </ul>
                         </li>
                         <li><a href="#">Budgets</a></li>
-                        <li><a href="#">Products</a></li>
+                        <li data-page="products">
+                            <a id="menu_products" href="<c:url value="/budgetanalyzer/products/overview" />">
+                                <fmt:message key="menu.products" />
+                            </a>
+                        </li>
                     </ul>
                     <ul class="nav nav-sidebar">
                         <li><a href="">Reports</a></li>

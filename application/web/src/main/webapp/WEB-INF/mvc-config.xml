@@ -17,6 +17,7 @@
     <bean id="entityValidator" class="sur.snapps.budgetanalyzer.web.controller.user.EntityValidator" />
 	<bean id="accountValidator" class="sur.snapps.budgetanalyzer.web.controller.accounts.AccountValidator" />
 	<bean id="purchaseValidator" class="sur.snapps.budgetanalyzer.web.controller.transactions.PurchaseValidator" />
+	<bean id="categoryValidator" class="sur.snapps.budgetanalyzer.web.controller.product.CategoryValidator" />
 
     <!-- Resolves logical view names to JSP views -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

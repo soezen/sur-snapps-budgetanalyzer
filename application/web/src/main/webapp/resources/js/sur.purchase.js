@@ -12,6 +12,7 @@ sur.purchase = (function() {
                 codeInput.val('');
                 codeInput.focus();
             });
+        // TODO cache content of modal? but reset form
         $.get(sur.baseUrl + 'products/search', function (response) {
             findProductByCategoryAndTypePopup.find('.modal-body').html(response);
         });

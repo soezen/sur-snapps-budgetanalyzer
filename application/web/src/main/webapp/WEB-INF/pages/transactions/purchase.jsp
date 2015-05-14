@@ -106,23 +106,14 @@
     <!-- TODO 4. implement search of existing product by category and type -->
     <!-- TODO 5. implement create product -->
 
-    <!-- TODO put in separate jsp page and fetch content with ajax -->
-    <div id="findProductByCategoryAndTypePopup" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><fmt:message key="popup.find_product.title" /></h4>
-                </div>
-                <div class="modal-body">
-                    <i class="fa fa-spinner fa-spin"></i>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="form.action.cancel" /></button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <sur:popup id="findProductByCategoryAndTypePopup" title="popup.find_product.title">
+        <jsp:attribute name="footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="form.action.cancel" /></button>
+        </jsp:attribute>
+        <jsp:body>
+            <i class="fa fa-spinner fa-spin"></i>
+        </jsp:body>
+    </sur:popup>
 
     <script src="<c:url value="/resources/js/sur.table.js" />"></script>
     <script src="<c:url value="/resources/js/sur.purchase.js" />"></script>

@@ -2,6 +2,7 @@ package sur.snapps.budgetanalyzer.persistence.product;
 
 import sur.snapps.budgetanalyzer.domain.product.Category;
 import sur.snapps.budgetanalyzer.domain.product.Product;
+import sur.snapps.budgetanalyzer.domain.product.ProductType;
 import sur.snapps.budgetanalyzer.domain.product.ProductTypeForPeriod;
 import sur.snapps.budgetanalyzer.domain.purchase.Purchase;
 import sur.snapps.budgetanalyzer.domain.purchase.PurchasedProduct;
@@ -26,6 +27,11 @@ import java.util.List;
  */
 public class ProductRepository extends AbstractRepository {
 
+    public Category save(Category category) {
+        entityManager.persist(category);
+        return category;
+    }
+
     // TODO test this class
     public StoreProduct findByCode(String storeId, String productCode) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -45,8 +51,35 @@ public class ProductRepository extends AbstractRepository {
         }
     }
 
+    // TODO load all products and categories at once in context and that for entire application scope
+    public List<ProductType> findProductTypes(String categoryId) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ProductType> query = builder.createQuery(ProductType.class);
+
+        Root<ProductType> fromProductTypes = query.from(ProductType.class);
+        Predicate categoryCondition = builder.equal(fromProductTypes.get("category").get("id"), categoryId);
+        query.where(categoryCondition);
+
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    public List<Product> findProductsOfType(String productTypeId) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> query = builder.createQuery(Product.class);
+
+        Root<Product> fromProducts = query.from(Product.class);
+        Predicate productTypeCondition = builder.equal(fromProducts.get("type").get("id"), productTypeId);
+        query.where(productTypeCondition);
+
+        return entityManager.createQuery(query).getResultList();
+    }
+
     public Product findById(String id) {
         return entityManager.find(Product.class, id);
+    }
+
+    public Category findCategoryById(String id) {
+        return entityManager.find(Category.class, id);
     }
 
     public List<ProductTypeForPeriod> findProductTypesForPeriod(Date startDate, Date endDate) {

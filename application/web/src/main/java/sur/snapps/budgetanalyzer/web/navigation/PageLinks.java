@@ -29,7 +29,10 @@ public enum PageLinks {
     TRANSACTIONS_OVERVIEW("transactions/overview", "transactions/overview"),
     TRANSACTIONS_PURCHASE("transactions/purchase", "transactions/purchase"),
 
-    PRODUCT_SEARCH("transactions/search_product", "products/search")
+    PRODUCT_SEARCH("transactions/search_product", "products/search"),
+    PRODUCTS_OVERVIEW("products/overview", "products/overview"),
+
+    CATEGORY_CREATE("products/new_category", "products/openNewCategoryPopup")
     ;
 
     private static final String REDIRECT = "redirect:";

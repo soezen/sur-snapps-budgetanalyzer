@@ -35,5 +35,10 @@
         <script src="<c:url value="/resources/js/sur.core.js" />"></script>
         <script src="<c:url value="/resources/js/sur.form.js" />"></script>
         <script src="<c:url value="/resources/js/sur.table.js" />"></script>
+        <script>
+            $(document).ready(function() {
+                $(document).trigger('sur-ready');
+            });
+        </script>
     </body>
 </html>
