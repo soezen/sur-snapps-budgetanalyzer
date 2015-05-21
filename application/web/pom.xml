@@ -73,6 +73,17 @@
                 <webXmlPath>src/env/prd/web.xml</webXmlPath>
             </properties>
         </profile>
+    
+        <profile>
+            <id>deploy</id>
+            <plugins>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>1.1.0.Alpha1</version>
+                </plugin>
+            </plugins>
+        </profile>
     </profiles>
 
     <build>
@@ -104,17 +115,4 @@
             </plugin>
         </plugins>
     </build>
-    
-    <profiles>
-        <profile>
-            <id>deploy</id>
-            <plugins>
-                <plugin>
-                    <groupId>org.wildfly.plugins</groupId>
-                    <artifactId>wildfly-maven-plugin</artifactId>
-                    <version>1.1.0.Alpha1</version>
-                </plugin>
-            </plugins>
-        </profile>
-    </profiles>
 </project>
