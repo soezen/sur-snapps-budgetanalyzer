@@ -91,6 +91,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
+                    <!-- TODO remove this and replace spring active profile with a variable -->
                     <webXml>${webXmlPath}</webXml>
                 </configuration>
             </plugin>
