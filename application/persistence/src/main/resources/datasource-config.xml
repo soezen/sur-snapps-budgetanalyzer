@@ -6,6 +6,7 @@
 	    http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- TODO do not use separate profiles but variables -->
     <beans profile="local">
 
         <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -16,4 +17,12 @@
         </bean>
     </beans>
 
+    <beans profile="jenkins">
+        <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+            <property name="url" value="jdbc:mysql://sur-float:3306/tst_budgetanalyzer" />
+            <property name="username" value="tst_budget" />
+            <property name="password" value="tst_budget" />
+        </bean>
+    </beans>
 </beans>
