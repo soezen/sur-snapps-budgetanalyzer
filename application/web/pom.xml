@@ -62,18 +62,13 @@
             </dependencies>
         </profile>
         <profile>
-            <id>cloudbees</id>
+            <id>jenkins</id>
             <properties>
-                <webXmlPath>src/env/cloudbees/web.xml</webXmlPath>
+                <webXmlPath>src/env/jenkins/web.xml</webXmlPath>
+                <wildfly.username>wildfly</wildfly.username>
+                <wildfly.password>1#Password</wildfly.password>
             </properties>
         </profile>
-        <profile>
-            <id>prd</id>
-            <properties>
-                <webXmlPath>src/env/prd/web.xml</webXmlPath>
-            </properties>
-        </profile>
-    
         <profile>
             <id>deploy</id>
             <build>
