@@ -68,6 +68,13 @@
                 <wildfly.username>wildfly</wildfly.username>
                 <wildfly.password>1#Password</wildfly.password>
             </properties>
+            <dependencies>
+                <dependency>
+	                <groupId>mysql</groupId>
+	                <artifactId>mysql-connector-java</artifactId>
+	                <version>5.1.32</version>
+                </dependency>
+            </dependencies>
         </profile>
         <profile>
             <id>deploy</id>
