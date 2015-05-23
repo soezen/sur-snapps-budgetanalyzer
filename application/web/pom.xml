@@ -68,13 +68,6 @@
                 <wildfly.username>wildfly</wildfly.username>
                 <wildfly.password>1#Password</wildfly.password>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.hsqldb</groupId>
-                    <artifactId>hsqldb</artifactId>
-                    <scope>compile</scope>
-                </dependency>
-            </dependencies>
         </profile>
         <profile>
             <id>deploy</id>
@@ -83,7 +76,9 @@
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-maven-plugin</artifactId>
-                        <version>1.1.0.Alpha1</version>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
