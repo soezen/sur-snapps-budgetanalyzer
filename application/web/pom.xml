@@ -65,8 +65,6 @@
             <id>jenkins</id>
             <properties>
                 <webXmlPath>src/env/jenkins/web.xml</webXmlPath>
-                <wildfly.username>wildfly</wildfly.username>
-                <wildfly.password>1#Password</wildfly.password>
             </properties>
         </profile>
         <profile>

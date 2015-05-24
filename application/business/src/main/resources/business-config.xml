@@ -43,7 +43,7 @@
         <bean id="mailSender" class="sur.snapps.budgetanalyzer.business.mail.MockMailSender" />
     </beans>
 
-    <beans profile="cloudbees">
+    <beans profile="jenkins">
         <bean id="sendGrid" class="com.github.sendgrid.SendGrid">
             <constructor-arg name="username" value="#{systemProperties.SENDGRID_USERNAME}" />
             <constructor-arg name="password" value="#{systemProperties.SENDGRID_PASSWORD}" />
