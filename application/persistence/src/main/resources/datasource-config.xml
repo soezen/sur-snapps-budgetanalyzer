@@ -19,11 +19,8 @@
     </beans>
 
     <beans profile="jenkins">
-        <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-            <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-            <property name="url" value="jdbc:mysql://sur-float:3306/tst_budgetanalyzer" />
-            <property name="username" value="tst_budget" />
-            <property name="password" value="tst_budget" />
-        </bean>
+       <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+           <property name="jndiName" value="java:jboss/datasources/tst/budget"/>
+       </bean>
     </beans>
 </beans>
