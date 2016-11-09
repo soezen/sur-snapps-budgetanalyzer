@@ -1,0 +1,1 @@
+java -cp c:\m2repo\org\hsqldb\hsqldb\2.2.8\hsqldb-2.2.8.jar org.hsqldb.Server --database.0 db/snapps --dbname.0 snapps

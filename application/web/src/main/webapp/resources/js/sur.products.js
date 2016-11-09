@@ -66,7 +66,8 @@ sur.products = (function() {
         }
 
         function active() {
-            return div.find('li.active').data('id');
+            var active = div.find('li.active').data('id');
+            return active ? active : null;
         }
 
         return {
